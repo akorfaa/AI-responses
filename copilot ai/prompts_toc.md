@@ -1,0 +1,2 @@
+1. critique roadmap from a [different convo](<../SWE(or &AIML).docx>)
+2. 1. Turn this into a 12-month roadmap, 2. Create beginner, intermediate, and advanced versions and 3. Format it as a concise skills matrix. But beforehand, you mentioned some suggestions: some additions like technical communication, product thinking, and learning git earlier. I'd want you to give me a resources version of this roadmap, with links to youtube videos for the entire list
