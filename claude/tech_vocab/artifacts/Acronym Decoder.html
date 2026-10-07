@@ -1,0 +1,434 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Acronym Decoder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout concept: a quiet practice room. One dashboard, then one task at a time: a single card or question, big type, clear next action. */
+:root{
+  --bg:#EDF1F5; --surface:#FFFFFF; --ink:#14212C; --muted:#586979; --line:#D3DCE5; --accent:#0A6A8A; --accent-ink:#FFFFFF; --focus:#0A6A8A;
+  --good:#17803D; --bad:#B3261E; --warn:#B26A00;
+  --c-ds:#2A5DB0; --c-ml:#5B49B8; --c-de:#0B7566; --c-dt:#7A6300; --c-sw:#A8501B; --c-ar:#A33A3A; --c-sys:#1B7A99; --c-se:#7B5A2E; --c-ai:#A12E63; --c-cm:#4F7A1E;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F171F; --surface:#16212B; --ink:#E5ECF2; --muted:#9AAAB8; --line:#2A3947; --accent:#52B6D6; --accent-ink:#071218; --focus:#52B6D6;
+    --good:#52C27B; --bad:#F2877F; --warn:#E6A93A;
+    --c-ds:#7DA6EC; --c-ml:#A99CF0; --c-de:#4CC2AE; --c-dt:#D9BB52; --c-sw:#E59A66; --c-ar:#EE8A8A; --c-sys:#6FC3E0; --c-se:#CFA878; --c-ai:#EE86B3; --c-cm:#A8CF72;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F171F; --surface:#16212B; --ink:#E5ECF2; --muted:#9AAAB8; --line:#2A3947; --accent:#52B6D6; --accent-ink:#071218; --focus:#52B6D6;
+  --good:#52C27B; --bad:#F2877F; --warn:#E6A93A;
+  --c-ds:#7DA6EC; --c-ml:#A99CF0; --c-de:#4CC2AE; --c-dt:#D9BB52; --c-sw:#E59A66; --c-ar:#EE8A8A; --c-sys:#6FC3E0; --c-se:#CFA878; --c-ai:#EE86B3; --c-cm:#A8CF72;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:0 56px;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin-inline:auto}
+header.top{padding-block:28px 12px;display:flex;flex-direction:column;gap:8px}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.1;font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.sub{margin:0;color:var(--muted);max-width:60ch}
+h2{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+button{font:inherit;color:inherit}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--line);margin-block:10px 22px}
+.stat{padding:14px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.stat + .stat{border-left:1px solid var(--line)}
+.stat b{font-family:var(--font-mono);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{font-size:12px;color:var(--muted)}
+.stat.due b{color:var(--accent)}
+.start{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:16px 18px;cursor:pointer;font-size:17px;font-weight:600;text-align:left}
+.start small{font-weight:400;font-size:13px;opacity:.9;display:block}
+.start:hover{filter:brightness(1.07)}
+.section{margin-top:26px}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.mode{all:unset;box-sizing:border-box;cursor:pointer;padding:14px 16px;display:flex;flex-direction:column;gap:3px;border-bottom:1px solid var(--line)}
+.mode:nth-child(odd){border-right:1px solid var(--line)}
+.mode:nth-last-child(-n+2){border-bottom:0}
+.mode:hover{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.mode:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.mode b{font-weight:600}
+.mode span{font-size:13px;color:var(--muted)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.chip{flex:0 0 auto;font-size:13px;background:transparent;border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.settings{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:12px;align-items:center;font-size:14px}
+.settings label{display:flex;align-items:center;gap:8px;color:var(--muted)}
+select{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent)}
+.note{margin:12px 0 0;color:var(--warn);font-size:14px}
+
+.tracks{display:flex;flex-direction:column}
+.trow{display:grid;grid-template-columns:minmax(0,170px) 1fr 64px;gap:12px;align-items:center;padding-block:7px;border-bottom:1px solid var(--line);font-size:14px}
+.trow .nm{overflow-wrap:anywhere}
+.tbar{display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--line)}
+.tbar i{display:block;height:100%}
+.tbar .m{background:var(--good)}.tbar .l{background:var(--warn)}
+.trow .ct{font-family:var(--font-mono);font-size:12px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:8px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+
+.sbar{display:flex;align-items:center;gap:12px;margin-block:18px 14px}
+.prog{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .2s}
+.sbar .n{font-family:var(--font-mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.linkbtn{background:none;border:0;color:var(--muted);cursor:pointer;font-size:14px;padding:6px 4px;text-decoration:underline}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:clamp(18px,4vw,30px);min-height:280px;display:flex;flex-direction:column;gap:16px}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:4px;color:var(--tc);background:color-mix(in srgb,var(--tc) 13%,transparent);white-space:nowrap}
+.tag.cat{color:var(--muted);background:transparent;border:1px solid var(--line)}
+.t-ds{--tc:var(--c-ds)}.t-ml{--tc:var(--c-ml)}.t-de{--tc:var(--c-de)}.t-dt{--tc:var(--c-dt)}.t-sw{--tc:var(--c-sw)}.t-ar{--tc:var(--c-ar)}.t-sys{--tc:var(--c-sys)}.t-se{--tc:var(--c-se)}.t-ai{--tc:var(--c-ai)}.t-cm{--tc:var(--c-cm)}
+.big{font-family:var(--font-mono);font-size:clamp(22px,5vw,30px);font-weight:600;line-height:1.2;margin:0;overflow-wrap:anywhere;text-wrap:balance}
+.q{font-size:clamp(17px,3.2vw,20px);line-height:1.45;margin:0;overflow-wrap:anywhere}
+.qlab{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.center{flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.hint{color:var(--muted);font-size:14px;margin:0}
+.fld{display:flex;flex-direction:column;gap:3px}
+.lab{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ex{margin:0;font-style:italic;overflow-wrap:anywhere}
+.rels{display:flex;flex-wrap:wrap;gap:5px}
+.rel{font-size:13px;padding:2px 9px;border-radius:4px;background:color-mix(in srgb,var(--muted) 14%,transparent)}
+.opp{margin:0;overflow-wrap:anywhere}
+.det{display:flex;flex-direction:column;gap:12px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.btn{font-size:15px;font-weight:500;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:11px 18px;cursor:pointer;flex:1 1 120px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.again{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}
+.btn.easy{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,var(--line))}
+.btn kbd{font-family:var(--font-mono);font-size:11px;opacity:.65;margin-left:6px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;cursor:pointer;overflow-wrap:anywhere}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt .k{font-family:var(--font-mono);font-size:12px;color:var(--muted);flex:0 0 auto;padding-top:2px}
+.opt.right{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.opt[disabled]{cursor:default}
+.verdict{font-weight:600}
+.verdict.ok{color:var(--good)}.verdict.no{color:var(--bad)}
+.fb{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line);padding-top:14px}
+.big2{font-family:var(--font-mono);font-size:44px;font-weight:600;line-height:1;margin:0;font-variant-numeric:tabular-nums}
+.miss{display:flex;flex-direction:column}
+.miss .mi{padding-block:10px;border-bottom:1px solid var(--line)}
+.miss .mi b{font-family:var(--font-mono);font-size:14px}
+.miss .mi p{margin:2px 0 0;color:var(--muted);font-size:14px}
+details.bk{margin-top:30px;color:var(--muted);font-size:14px}
+details.bk summary{cursor:pointer}
+details.bk textarea{width:100%;min-height:90px;margin-top:10px;font-family:var(--font-mono);font-size:12px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.small{font-size:13px;padding:7px 12px;flex:0 0 auto}
+footer{margin-top:26px;color:var(--muted);font-size:13px;max-width:62ch}
+@media (max-width:560px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(3){border-left:0}
+  .stat:nth-child(n+3){border-top:1px solid var(--line)}
+  .modes{grid-template-columns:1fr}
+  .mode:nth-child(odd){border-right:0}
+  .mode:nth-last-child(-n+2){border-bottom:1px solid var(--line)}
+  .mode:last-child{border-bottom:0}
+  .trow{grid-template-columns:minmax(0,1fr) 56px}
+  .trow .tbar{grid-column:1 / -1;order:3}
+}
+.tabs{display:flex;border-bottom:1px solid var(--line);margin-block:6px 18px}
+.tab{background:none;border:0;border-bottom:2px solid transparent;padding:10px 16px;cursor:pointer;font-weight:500;color:var(--muted);margin-bottom:-1px}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.search{width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:11px 14px;margin-bottom:10px}
+.list{border:1px solid var(--line);border-radius:8px;background:var(--surface);overflow:hidden;margin-top:12px}
+.ar{border-bottom:1px solid var(--line)}
+.ar:last-child{border-bottom:0}
+.arh{all:unset;box-sizing:border-box;width:100%;cursor:pointer;padding:12px 14px;display:grid;grid-template-columns:minmax(78px,110px) 1fr auto;gap:10px;align-items:baseline}
+.arh:hover{background:color-mix(in srgb,var(--accent) 7%,transparent)}
+.arh:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.arh b{font-family:var(--font-mono);font-size:15px;font-weight:600;overflow-wrap:anywhere}
+.arh span.x{font-size:14px;color:var(--muted);overflow-wrap:anywhere}
+.arh i{font-style:normal;font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+.arb{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px}
+.arb p{margin:0;overflow-wrap:anywhere}
+.rel.lk{cursor:pointer;border:0;font:inherit;font-size:13px;color:var(--ink)}
+.rel.lk:hover{outline:1px solid var(--accent)}
+.cnt{font-size:13px;color:var(--muted);margin:2px 0 0}
+.opt.g2{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.opt.g0{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.lbl{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:4px;display:inline-block}
+.lbl.g2{color:var(--good);background:color-mix(in srgb,var(--good) 14%,transparent)}
+.lbl.g0{color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.reuse{font-style:italic}
+.mono{font-family:var(--font-mono)}
+[hidden]{display:none!important}
+@media (max-width:480px){.arh{grid-template-columns:minmax(70px,92px) 1fr auto}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Acronym Decoder</h1>
+    <p class="sub">Every abbreviation worth knowing across data, software, systems, security, AI and the office: what it stands for, what it means, and how it sounds in a sentence.</p>
+  </header>
+  <div class="tabs" role="tablist"><button class="tab" role="tab" id="tB" aria-selected="true">Browse</button><button class="tab" role="tab" id="tQ" aria-selected="false">Quiz</button></div>
+  <main id="app"></main>
+  <footer>Quiz results are saved in this browser only. Acronyms you miss come up more often.</footer>
+</div>
+<script>
+var AC=[];
+(function(){
+var raw=[
+"SLI|Service Level Indicator|sys|The measured number, such as the share of requests that succeed.|Our availability SLI dropped to 99.2% this hour.|SLO,SLA,error budget",
+"SLO|Service Level Objective|sys|The internal target for an SLI, such as 99.9% success over 30 days.|We're at 40% of this month's error budget against the SLO.|SLI,SLA,error budget",
+"SLA|Service Level Agreement|sys|The contractual promise to customers, usually with penalties if missed.|Breaching the SLA triggers service credits.|SLO,SLI",
+"MTTR|Mean Time To Recovery|sys|Average time to restore service after a failure.|The rollback automation cut MTTR from 40 to 9 minutes.|MTBF,MTTD",
+"MTBF|Mean Time Between Failures|sys|Average time a system runs between failures.|MTBF is rising, but MTTR is what customers feel.|MTTR",
+"MTTD|Mean Time To Detect|sys|Average time between a failure starting and someone noticing.|Our MTTD is 20 minutes because we alert on averages, not p99.|MTTR",
+"RTO|Recovery Time Objective|sys|How long a service may be down after a disaster.|The RTO for billing is one hour.|RPO,DR",
+"RPO|Recovery Point Objective|sys|How much data loss, measured in time, is acceptable.|An RPO of five minutes means backups or replication every five minutes.|RTO,DR",
+"DR|Disaster Recovery|sys|The plan and tooling to restore systems after a major outage.|We test DR failover to the second region twice a year.|RTO,RPO,HA",
+"HA|High Availability|sys|Designing so a single failure does not take the service down.|The database is HA across three zones.|DR,SPOF",
+"SPOF|Single Point Of Failure|sys|A component whose failure takes down the whole system.|The lone message broker is a SPOF.|HA",
+"P99|99th percentile|sys|The value below which 99% of observations fall; used for tail latency.|Average is fine, but p99 latency is 6 s.|p50,SLO",
+"RPS|Requests Per Second|sys|Throughput of a service.|The API sustains 4k RPS before latency climbs.|QPS,TPS",
+"QPS|Queries Per Second|sys|Throughput measured in queries, common for databases and search.|The read replica handles 12k QPS.|RPS,TPS",
+"TPS|Transactions Per Second|sys|Throughput measured in completed transactions.|Payments peak at 800 TPS on sale days.|RPS,QPS",
+"TTL|Time To Live|sys|How long a cache entry, DNS record or message stays valid.|Set the cache TTL to 60 seconds.|CDN,DNS",
+"CDN|Content Delivery Network|sys|Servers spread worldwide that cache content near users.|Static assets are served from the CDN.|TTL,DNS",
+"DNS|Domain Name System|sys|Translates domain names into IP addresses.|It was DNS again: the record had a stale TTL.|TTL,CDN",
+"LB|Load Balancer|sys|Spreads incoming traffic across multiple servers.|The LB health check removed the failing node.|HA",
+"VPC|Virtual Private Cloud|sys|A private, isolated network inside a cloud provider.|The database lives in a private subnet of the VPC.|VPN,IAM",
+"VPN|Virtual Private Network|sys|An encrypted tunnel between a user or site and a private network.|You need the VPN to reach the staging cluster.|VPC",
+"K8s|Kubernetes|sys|Open-source system for running and scaling containers; the 8 stands for the eight letters between K and s.|The service runs on K8s with three replicas.|Docker,CI/CD",
+"IaC|Infrastructure as Code|sys|Defining servers and networks in versioned files rather than clicking in a console.|All of it is IaC, reviewed through pull requests.|Terraform,CI/CD",
+"CI (build)|Continuous Integration|sw|Automatically building and testing every change merged into the main branch.|CI fails because a flaky test timed out.|CD,PR",
+"CD|Continuous Delivery / Deployment|sw|Automatically releasing tested changes; delivery needs an approval, deployment does not.|We moved from manual releases to CD.|CI",
+"PR|Pull Request|sw|A proposal to merge a code change, used for review.|Can you review my PR before standup?|CI,LGTM",
+"LGTM|Looks Good To Me|sw|The standard reviewer approval.|LGTM, just one nit on naming.|PR,nit",
+"WIP|Work In Progress|sw|Not ready for review or release.|Marked the PR WIP until tests pass.|PR",
+"TDD|Test-Driven Development|sw|Writing a failing test first, then the code to pass it.|With TDD, I wrote the edge case test before the fix.|BDD,CI",
+"BDD|Behavior-Driven Development|sw|Specifying behavior in plain language examples that double as tests.|Given/When/Then scenarios written with product are BDD.|TDD",
+"DRY|Don't Repeat Yourself|sw|Avoid duplicating the same knowledge in several places.|This is not DRY: the validation exists in three services.|YAGNI,KISS",
+"KISS|Keep It Simple, Stupid|sw|Prefer the simplest solution that works.|KISS: a cron job beats a streaming platform here.|YAGNI,DRY",
+"YAGNI|You Aren't Gonna Need It|sw|Don't build features for hypothetical future needs.|YAGNI, we have one customer and one region.|KISS",
+"SOLID|Single responsibility, Open-closed, Liskov, Interface segregation, Dependency inversion|sw|Five object-oriented design principles.|The class violates SOLID: it parses, validates and stores.|DRY",
+"OOP|Object-Oriented Programming|sw|Organising code around objects that bundle data and behavior.|The domain model is OOP, the pipeline is functional.|FP",
+"FP|Functional Programming|sw|Building programs from pure functions and immutable data.|FP makes this transformation easier to test.|OOP",
+"API|Application Programming Interface|sw|A defined way for programs to talk to each other.|We expose a public REST API.|SDK,REST",
+"SDK|Software Development Kit|sw|A library and tools that wrap an API for developers.|The Python SDK handles retries for you.|API,CLI",
+"CLI|Command-Line Interface|sw|Text-based interface for running tools.|There's a CLI for kicking off backfills.|SDK,GUI",
+"GUI|Graphical User Interface|sw|Visual interface using windows, buttons and menus.|Ops prefers a GUI; engineers prefer the CLI.|CLI",
+"REST|Representational State Transfer|sw|Style of HTTP APIs built around resources and standard verbs.|A REST endpoint returns the order as JSON.|gRPC,GraphQL",
+"gRPC|Google Remote Procedure Call|sw|Fast binary RPC framework, often for service-to-service calls.|Internal services talk over gRPC.|REST,RPC",
+"RPC|Remote Procedure Call|sw|Calling a function on another machine as if it were local.|The RPC timed out after 3 seconds.|gRPC,REST",
+"JSON|JavaScript Object Notation|sw|Lightweight text format for structured data.|The API returns JSON.|YAML,CSV",
+"YAML|YAML Ain't Markup Language|sw|Human-friendly format used in config files.|The pipeline config is in YAML; indentation matters.|JSON",
+"CSV|Comma-Separated Values|de|Plain text table format.|Export a CSV and open it in a spreadsheet.|JSON,Parquet",
+"CRUD|Create, Read, Update, Delete|sw|The four basic data operations.|It's a simple CRUD app over one table.|REST",
+"ORM|Object-Relational Mapper|sw|Library that maps database rows to objects in code.|The ORM issued 200 queries: classic N+1.|SQL",
+"SQL|Structured Query Language|de|Standard language for querying relational databases.|Write the join in SQL instead of in pandas.|NoSQL,ORM",
+"NoSQL|Not only SQL|de|Databases that don't use the relational table model.|We put the session data in a NoSQL store.|SQL",
+"ACID|Atomicity, Consistency, Isolation, Durability|de|Guarantees of reliable database transactions.|The payment write needs ACID guarantees.|BASE,CAP",
+"BASE|Basically Available, Soft state, Eventual consistency|de|Looser consistency model favouring availability.|The feed is BASE; the ledger is ACID.|ACID,CAP",
+"CAP|Consistency, Availability, Partition tolerance|ar|Theorem: during a network partition you must choose consistency or availability.|It's AP under CAP, so reads may be stale.|ACID,BASE",
+"ETL|Extract, Transform, Load|de|Transform data before loading it into the warehouse.|The legacy ETL runs nightly.|ELT,CDC",
+"ELT|Extract, Load, Transform|de|Load raw data first, then transform it in the warehouse.|With ELT we keep raw data and model it with dbt.|ETL",
+"CDC|Change Data Capture|de|Streaming row-level changes from a database as they happen.|CDC from Postgres feeds the warehouse in near real time.|ETL,Kafka",
+"DAG|Directed Acyclic Graph|de|Tasks with dependencies and no cycles, as in an orchestrator.|The Airflow DAG has a failing upstream task.|ETL",
+"OLTP|Online Transaction Processing|de|Systems built for many small, fast reads and writes.|The orders DB is OLTP; analytics goes to the warehouse.|OLAP",
+"OLAP|Online Analytical Processing|de|Systems built for large aggregations and analysis.|Run the heavy aggregations on the OLAP store.|OLTP",
+"DWH|Data Warehouse|de|Central store of cleaned, modelled data for analytics.|Finance reads revenue from the DWH.|OLAP,ELT",
+"SCD|Slowly Changing Dimension|de|Technique for tracking changes in dimension attributes over time.|We use SCD type 2 to keep customer address history.|DWH",
+"PII|Personally Identifiable Information|se|Data that can identify a person.|Mask PII before it reaches the analytics layer.|GDPR,DLP",
+"GDPR|General Data Protection Regulation|se|EU data-protection law.|Deletion requests are required under GDPR.|PII",
+"DLP|Data Loss Prevention|se|Controls that stop sensitive data leaving the organisation.|DLP blocked the export of customer files.|PII",
+"IAM|Identity and Access Management|se|Controlling who can do what in a system.|The role needs least-privilege IAM.|RBAC,SSO",
+"RBAC|Role-Based Access Control|se|Permissions assigned to roles, not individuals.|Analysts have a read-only role under RBAC.|IAM",
+"SSO|Single Sign-On|se|One login for many applications.|SSO means one fewer password to leak.|MFA,OAuth",
+"MFA|Multi-Factor Authentication|se|Requiring two or more proofs of identity.|MFA is mandatory for production access.|SSO,2FA",
+"2FA|Two-Factor Authentication|se|MFA with exactly two factors.|Enable 2FA with an authenticator app.|MFA",
+"OAuth|Open Authorization|se|Standard for granting an app limited access without sharing a password.|The integration uses OAuth scopes for read-only access.|SSO,JWT",
+"JWT|JSON Web Token|se|Signed token carrying claims, often used for sessions.|The JWT expires after 15 minutes.|OAuth",
+"TLS|Transport Layer Security|se|Encryption for data in transit (successor to SSL).|All traffic is encrypted with TLS.|SSL,HTTPS",
+"SSL|Secure Sockets Layer|se|Older name for TLS, still used colloquially.|Renew the SSL certificate.|TLS",
+"HTTPS|HyperText Transfer Protocol Secure|se|HTTP over TLS.|The site redirects HTTP to HTTPS.|TLS",
+"XSS|Cross-Site Scripting|se|Injecting malicious script into pages other users view.|Unescaped input caused an XSS vulnerability.|CSRF,SQLi",
+"CSRF|Cross-Site Request Forgery|se|Tricking a logged-in user's browser into sending unwanted requests.|Anti-CSRF tokens protect the form.|XSS",
+"SQLi|SQL Injection|se|Attacker input altering a database query.|Use parameterized queries to prevent SQLi.|XSS",
+"CVE|Common Vulnerabilities and Exposures|se|Public identifier for a known vulnerability.|The library has a critical CVE; patch today.|SBOM",
+"SBOM|Software Bill Of Materials|se|Inventory of the components inside software.|We need an SBOM to see where the vulnerable library is used.|CVE",
+"SOC|Security Operations Center|se|Team that monitors and responds to security events.|The SOC escalated the alert.|SIEM",
+"SIEM|Security Information and Event Management|se|Tool that collects and correlates security logs.|The SIEM flagged impossible-travel logins.|SOC",
+"MSE|Mean Squared Error|ds|Average of squared prediction errors.|MSE punishes large errors heavily.|RMSE,MAE",
+"RMSE|Root Mean Squared Error|ds|Square root of MSE, in the units of the target.|RMSE is 4.2 dollars per order.|MSE,MAE",
+"MAE|Mean Absolute Error|ds|Average of absolute prediction errors.|MAE is easier to explain than RMSE.|RMSE",
+"MAPE|Mean Absolute Percentage Error|ds|Average error as a percentage of actual values.|MAPE breaks down when actuals are near zero.|MAE",
+"AUC|Area Under the Curve|ds|Summary of a classifier's ranking quality across thresholds.|AUC is 0.91, but precision at our threshold is low.|ROC",
+"ROC|Receiver Operating Characteristic|ds|Curve of true-positive rate against false-positive rate.|The ROC curve shows the trade-off by threshold.|AUC",
+"PR curve|Precision-Recall curve|ds|Precision versus recall across thresholds; better for imbalanced data.|Use a PR curve here, because positives are 1%.|ROC",
+"TPR|True Positive Rate (recall)|ds|Share of actual positives that are caught.|TPR is 82% at that threshold.|FPR,recall",
+"FPR|False Positive Rate|ds|Share of actual negatives wrongly flagged.|Raising the threshold lowers the FPR.|TPR",
+"CI (stats)|Confidence Interval|ds|Range likely to contain the true value under repeated sampling.|The lift is 3% with a 95% CI of 1% to 5%.|p-value",
+"p-value|probability value|ds|Probability of data this extreme if there were no real effect.|p = 0.03, but the effect is tiny.|CI,alpha",
+"MLE|Maximum Likelihood Estimation|ds|Choosing parameters that make the observed data most probable.|Logistic regression is fit by MLE.|MAP",
+"MAP|Maximum A Posteriori|ds|MLE with a prior; Bayesian point estimate.|MAP with a Gaussian prior equals L2 regularization.|MLE",
+"PCA|Principal Component Analysis|ds|Reducing dimensions while keeping most variance.|PCA cut 300 features to 20.|t-SNE,UMAP",
+"t-SNE|t-distributed Stochastic Neighbor Embedding|ds|Nonlinear projection for visualising clusters.|The t-SNE plot shows clear clusters; don't over-read distances.|PCA,UMAP",
+"UMAP|Uniform Manifold Approximation and Projection|ds|Faster nonlinear projection that keeps more global structure.|UMAP of the embeddings reveals topic clusters.|t-SNE",
+"EDA|Exploratory Data Analysis|ds|Initial investigation of data to find patterns and problems.|EDA showed 12% missing values in key columns.|ETL",
+"KPI|Key Performance Indicator|cm|A metric that tracks progress against a goal.|Which KPI does this project move?|OKR",
+"OKR|Objectives and Key Results|cm|Goal-setting: an objective plus measurable results.|Our Q3 OKR is to cut churn by 10%.|KPI",
+"ROI|Return On Investment|cm|Benefit gained relative to cost.|The ROI of the migration is positive after 8 months.|TCO",
+"TCO|Total Cost of Ownership|cm|Full cost over time, including operation and maintenance.|The cheap option has a worse TCO.|ROI",
+"MVP|Minimum Viable Product|cm|Smallest version that tests the core idea with real users.|Ship an MVP in two weeks.|POC",
+"POC|Proof Of Concept|cm|Quick prototype showing something is feasible.|The POC proved the model can run under 100 ms.|MVP",
+"ETA|Estimated Time of Arrival|cm|When you expect to deliver.|What's the ETA on the fix?|TBD",
+"TBD|To Be Determined|cm|Not decided yet.|Owner: TBD.|TBC",
+"TBC|To Be Confirmed|cm|Likely but not final.|Launch date TBC pending legal.|TBD",
+"EOD|End Of Day|cm|By the close of the working day.|I'll send the draft EOD.|COB",
+"COB|Close Of Business|cm|Same as end of the working day.|Need sign-off by COB Friday.|EOD",
+"ASAP|As Soon As Possible|cm|Top priority; use sparingly.|Please review ASAP; production is down.|EOD",
+"FYI|For Your Information|cm|Sharing without requiring action.|FYI, the release moved to Thursday.|TL;DR",
+"TL;DR|Too Long; Didn't Read|cm|Short summary of a long text.|TL;DR: roll back, then investigate.|FYI",
+"IMO|In My Opinion|cm|Flags a view, not a fact.|IMO we should cache here.|IMHO",
+"AFAIK|As Far As I Know|cm|Hedge: you may be missing information.|AFAIK the job runs hourly.|IIRC",
+"IIRC|If I Recall Correctly|cm|Hedge about a memory.|IIRC we dropped that column last year.|AFAIK",
+"OOO|Out Of Office|cm|Away from work.|I'm OOO until Monday; ping Sam.|PTO",
+"PTO|Paid Time Off|cm|Leave from work.|She's on PTO this week.|OOO",
+"RACI|Responsible, Accountable, Consulted, Informed|cm|Chart clarifying who does what in a project.|The RACI says Sam is accountable for sign-off.|DRI",
+"DRI|Directly Responsible Individual|cm|The one person accountable for an outcome.|Who is the DRI for the migration?|RACI",
+"LLM|Large Language Model|ai|A neural network trained on huge text to predict and generate language.|We call an LLM to summarise tickets.|SLM,RAG",
+"SLM|Small Language Model|ai|A compact language model, cheaper and faster to run.|An SLM is enough for classification.|LLM",
+"RAG|Retrieval-Augmented Generation|ai|Fetching relevant documents and giving them to the model to ground its answer.|RAG reduces hallucinations on our docs.|fine-tuning,vector DB",
+"RLHF|Reinforcement Learning from Human Feedback|ai|Training a model using human preference judgments.|RLHF made the assistant more helpful and less toxic.|DPO",
+"DPO|Direct Preference Optimization|ai|Simpler way to train on preference pairs without a separate reward model.|We used DPO on 20k preference pairs.|RLHF",
+"SFT|Supervised Fine-Tuning|ai|Training a model on input-output examples.|SFT taught it our support tone.|RLHF",
+"LoRA|Low-Rank Adaptation|ai|Parameter-efficient fine-tuning that trains small added matrices.|LoRA lets us fine-tune on one GPU.|PEFT",
+"PEFT|Parameter-Efficient Fine-Tuning|ai|Family of methods that tune few parameters.|PEFT cut training cost by 90%.|LoRA",
+"MoE|Mixture of Experts|ai|Model design that routes each token to a few specialist sub-networks.|MoE gives a large model with lower inference cost.|LLM",
+"KV cache|Key-Value cache|ai|Stored attention keys and values that speed up token generation.|The KV cache grows with context length.|TTFT",
+"TTFT|Time To First Token|ai|Delay before the first output token appears.|TTFT is 1.2 s because of the long prompt.|TPOT",
+"TPOT|Time Per Output Token|ai|Average time to generate each token after the first.|TPOT is 30 ms, so streaming feels smooth.|TTFT",
+"NLP|Natural Language Processing|ai|Computing with human language.|The classic NLP pipeline used tokenization and tagging.|LLM",
+"NER|Named Entity Recognition|ai|Finding names, places and organisations in text.|NER extracts company names from emails.|NLP",
+"OCR|Optical Character Recognition|ai|Reading text from images.|OCR failed on the skewed scan.|NLP",
+"CV|Computer Vision|ai|Machine understanding of images and video.|The CV model flags defective parts.|OCR",
+"GPU|Graphics Processing Unit|ai|Parallel processor used to train and run models.|Training is GPU-bound.|TPU,CPU",
+"TPU|Tensor Processing Unit|ai|Google's accelerator for machine learning.|We trained on TPUs.|GPU",
+"CPU|Central Processing Unit|sys|General-purpose processor.|Preprocessing is CPU-bound.|GPU",
+"RAM|Random Access Memory|sys|Fast working memory.|The job ran out of RAM during the join.|VRAM",
+"VRAM|Video RAM|ai|GPU memory; limits model and batch size.|The model needs 40 GB of VRAM.|RAM",
+"MLOps|Machine Learning Operations|ai|Practices for deploying, monitoring and retraining models reliably.|MLOps adds drift monitoring and retraining.|DevOps",
+"DevOps|Development and Operations|sys|Culture and tooling that joins building and running software.|DevOps automated our deploys.|MLOps,SRE",
+"SRE|Site Reliability Engineering|sys|Engineering discipline applying software practice to reliability.|SRE owns the error budget policy.|DevOps,SLO",
+"SaaS|Software as a Service|cm|Software delivered by subscription over the internet.|It's a SaaS product, so we manage the infra.|PaaS,IaaS",
+"PaaS|Platform as a Service|sys|Cloud platform where you deploy code without managing servers.|We deploy on a PaaS.|SaaS,IaaS",
+"IaaS|Infrastructure as a Service|sys|Rented virtual machines, storage and networks.|IaaS gives control but more operational burden.|PaaS",
+"ADR|Architecture Decision Record|ar|Short document recording a design decision and its reasoning.|See ADR 12 for why we chose Postgres.|RFC",
+"RFC|Request For Comments|ar|A proposal circulated for feedback before building.|Write an RFC before changing the schema.|ADR",
+"PRD|Product Requirements Document|cm|Describes what to build and why.|The PRD defines success metrics.|RFC",
+"SOP|Standard Operating Procedure|cm|Documented steps for a routine task.|Follow the SOP for onboarding data sources.|Runbook",
+"RCA|Root Cause Analysis|sys|Finding the underlying reason for a failure.|The RCA traced the outage to an expired certificate.|postmortem",
+"WAF|Web Application Firewall|se|Filters malicious HTTP traffic.|The WAF blocked the injection attempts.|DDoS",
+"DDoS|Distributed Denial of Service|se|Flooding a service with traffic to knock it offline.|The DDoS protection absorbed the spike.|WAF",
+"UAT|User Acceptance Testing|sw|Final testing by users or business owners before release.|UAT sign-off is due Friday.|QA",
+"QA|Quality Assurance|sw|Process and team ensuring quality.|QA found a regression.|UAT",
+"E2E|End-to-End|sw|Testing or tracing a flow across the whole system.|E2E tests cover signup to payment.|UAT",
+"BAU|Business As Usual|cm|Normal, routine operations.|Migration work is on top of BAU.|SOP",
+];
+raw.forEach(function(r,i){var p=r.split('|');AC.push({id:'a'+i,a:p[0],x:p[1],k:p[2],m:p[3],e:p[4],r:(p[5]||'').split(',').filter(Boolean)})});
+})();
+var NAMES={ds:'Data science',de:'Data eng.',sw:'Software',ar:'Architecture',sys:'Systems',se:'Security',ai:'LLM / AI',cm:'Communication'};
+var KEY='acr-v1',st={s:{}},app=document.getElementById('app'),tab='B',filter='all',query='',open={},quiz=null,cfg={mode:'mixed',k:'all',n:10};
+try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&o.s)st=o}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function tag(k){return '<span class="tag t-'+k+'">'+esc(NAMES[k]||k)+'</span>'}
+function byA(a){var l=a.toLowerCase();return AC.filter(function(x){return x.a.toLowerCase()===l||x.a.toLowerCase().split(' (')[0]===l})[0]}
+function keys(){var k=[];AC.forEach(function(x){if(k.indexOf(x.k)<0)k.push(x.k)});return k}
+function setTab(t){tab=t;document.getElementById('tB').setAttribute('aria-selected',t==='B');document.getElementById('tQ').setAttribute('aria-selected',t==='Q');t==='B'?browse():qhome()}
+document.getElementById('tB').onclick=function(){setTab('B')};
+document.getElementById('tQ').onclick=function(){quiz=null;setTab('Q')};
+function rows(){
+  var q=query.trim().toLowerCase();
+  return AC.filter(function(x){return (filter==='all'||x.k===filter)&&(!q||(x.a+' '+x.x+' '+x.m).toLowerCase().indexOf(q)>=0)}).sort(function(a,b){return a.a.toLowerCase()<b.a.toLowerCase()?-1:1});
+}
+function browse(){
+  var h='<input class="search" id="q" type="search" placeholder="Search acronyms or meanings" aria-label="Search" value="'+esc(query)+'"><div class="chips" role="group" aria-label="Filter by track"><button class="chip" aria-pressed="'+(filter==='all')+'" data-f="all">All</button>';
+  keys().forEach(function(k){h+='<button class="chip" aria-pressed="'+(filter===k)+'" data-f="'+k+'">'+esc(NAMES[k]||k)+'</button>'});
+  h+='</div><p class="cnt" id="cnt"></p><div class="list" id="lst"></div>';
+  app.innerHTML=h;
+  document.getElementById('q').oninput=function(e){query=e.target.value;list()};
+  app.querySelectorAll('[data-f]').forEach(function(b){b.onclick=function(){filter=b.dataset.f;browse()}});
+  list();
+}
+function list(){
+  var r=rows(),h='';
+  r.forEach(function(x){
+    var o=open[x.id],s=st.s[x.id];
+    h+='<div class="ar"><button class="arh" data-id="'+x.id+'" aria-expanded="'+!!o+'"><b>'+esc(x.a)+'</b><span class="x">'+esc(x.x)+'</span><i>'+(s?s.r+'/'+(s.r+s.w):'')+'</i></button>';
+    if(o){h+='<div class="arb"><div class="tags">'+tag(x.k)+'</div><p>'+esc(x.m)+'</p><p class="reuse">“'+esc(x.e)+'”</p>';
+      var rel=x.r.map(function(n){var t=byA(n);return t?'<button class="rel lk" data-go="'+t.id+'">'+esc(t.a)+'</button>':'<span class="rel">'+esc(n)+'</span>'}).join('');
+      if(rel)h+='<div class="fld"><span class="lab">See also</span><div class="rels">'+rel+'</div></div>';
+      h+='</div>'}
+    h+='</div>';
+  });
+  if(!r.length)h='<div class="ar"><p class="hint" style="padding:14px">No matches.</p></div>';
+  document.getElementById('lst').innerHTML=h;
+  document.getElementById('cnt').textContent=r.length+' of '+AC.length+' acronyms';
+  app.querySelectorAll('.arh').forEach(function(b){b.onclick=function(){open[b.dataset.id]=!open[b.dataset.id];list()}});
+  app.querySelectorAll('[data-go]').forEach(function(b){b.onclick=function(){var t=AC.filter(function(x){return x.id===b.dataset.go})[0];filter='all';query=t.a;open[t.id]=true;browse();window.scrollTo(0,0)}});
+}
+function qhome(){
+  var h='<div class="card"><div class="fld"><span class="lab">Question type</span><select id="cm"><option value="mixed">Mixed</option><option value="dec">Decode: what does it stand for?</option><option value="rec">Recognise: which acronym fits this meaning?</option><option value="use">Usage: which acronym fits this sentence?</option></select></div>'
+   +'<div class="fld"><span class="lab">Track</span><select id="ck"><option value="all">All tracks</option>'+keys().map(function(k){return '<option value="'+k+'">'+esc(NAMES[k]||k)+'</option>'}).join('')+'</select></div>'
+   +'<div class="fld"><span class="lab">Questions</span><select id="cn"><option>10</option><option>20</option><option>30</option></select></div>'
+   +'<button class="btn primary" id="go">Start quiz</button></div>';
+  app.innerHTML=h;
+  document.getElementById('cm').value=cfg.mode;document.getElementById('ck').value=cfg.k;document.getElementById('cn').value=cfg.n;
+  document.getElementById('go').onclick=function(){cfg.mode=document.getElementById('cm').value;cfg.k=document.getElementById('ck').value;cfg.n=+document.getElementById('cn').value;start()};
+}
+function weight(x){var s=st.s[x.id];if(!s)return 2;return 1+Math.max(0,s.w-s.r)+(s.w>0&&s.r===0?1:0)}
+function start(){
+  var pool=AC.filter(function(x){return cfg.k==='all'||x.k===cfg.k});
+  var bag=[];pool.forEach(function(x){for(var i=0;i<weight(x);i++)bag.push(x)});
+  var picked=[],seen={};shuffle(bag).forEach(function(x){if(!seen[x.id]&&picked.length<cfg.n){seen[x.id]=1;picked.push(x)}});
+  var modes=['dec','rec','use'];
+  quiz={qs:picked.map(function(x){var m=cfg.mode==='mixed'?modes[Math.floor(Math.random()*3)]:cfg.mode;return build(x,m,pool)}),i:0,score:0,miss:[],ans:false};
+  ask();
+}
+function build(x,m,pool){
+  var others=shuffle(pool.filter(function(y){return y.id!==x.id}));
+  if(others.length<3)others=shuffle(AC.filter(function(y){return y.id!==x.id}));
+  var ds=others.slice(0,3);
+  var opts=shuffle([x].concat(ds)).map(function(y){return {id:y.id,t:m==='dec'?y.x:y.a,ok:y.id===x.id}});
+  var q=m==='dec'?'What does <b class="mono">'+esc(x.a)+'</b> stand for?':m==='rec'?'Which acronym fits this meaning?<br><span class="hint">'+esc(x.m)+'</span>':'Which acronym fits this sentence?<br><span class="hint">“'+esc(maskA(x))+'”</span>';
+  return {x:x,m:m,q:q,opts:opts};
+}
+function maskA(x){var e=x.e,a=x.a.split(' (')[0];var re=new RegExp('\\b'+a.replace(/[.*+?^${}()|[\]\\\/]/g,'\\$&')+'\\b','gi');var r=e.replace(re,'_____');return r===e?x.m:r}
+function ask(){
+  var q=quiz.qs[quiz.i];quiz.ans=false;
+  var h='<div class="sbar"><div class="prog"><i style="width:'+(quiz.i/quiz.qs.length*100)+'%"></i></div><span class="n">'+(quiz.i+1)+'/'+quiz.qs.length+'</span><button class="linkbtn" id="qt">Quit</button></div><div class="card"><div class="tags">'+tag(q.x.k)+'</div><p class="q">'+q.q+'</p><div class="opts">'
+   +q.opts.map(function(o,i){return '<button class="opt" data-i="'+i+'"><span class="k">'+(i+1)+'</span><span>'+esc(o.t)+'</span></button>'}).join('')+'</div><div id="fb"></div></div>';
+  app.innerHTML=h;document.getElementById('qt').onclick=function(){quiz=null;qhome()};
+  app.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){pick(+b.dataset.i)}});window.scrollTo(0,0);
+}
+function pick(i){
+  if(!quiz||quiz.ans)return;quiz.ans=true;
+  var q=quiz.qs[quiz.i],o=q.opts[i],x=q.x,s=st.s[x.id]||(st.s[x.id]={r:0,w:0});
+  if(o.ok){quiz.score++;s.r++}else{s.w++;quiz.miss.push(x)}save();
+  app.querySelectorAll('.opt').forEach(function(b,j){b.disabled=true;if(q.opts[j].ok)b.classList.add('g2');else if(j===i)b.classList.add('g0')});
+  var last=quiz.i===quiz.qs.length-1;
+  document.getElementById('fb').innerHTML='<div class="fb"><div><span class="lbl '+(o.ok?'g2':'g0')+'">'+(o.ok?'Correct':'Not quite')+'</span></div><p style="margin:0"><b class="mono">'+esc(x.a)+'</b>: '+esc(x.x)+'. '+esc(x.m)+'</p><p class="reuse" style="margin:0">“'+esc(x.e)+'”</p><div class="actions"><button class="btn primary" id="nx">'+(last?'See result':'Next')+'</button></div></div>';
+  var nx=document.getElementById('nx');nx.onclick=function(){quiz.i++;last?fin():ask()};nx.focus();
+}
+function fin(){
+  var n=quiz.qs.length,h='<div class="card"><p class="big2">'+quiz.score+'/'+n+'</p><p class="q">'+(quiz.score===n?'Perfect round.':quiz.score>=n*.8?'Strong. Review the misses below.':'Keep going; the misses come back more often.')+'</p>';
+  if(quiz.miss.length){h+='<div><h2>To review</h2><div class="miss">'+quiz.miss.map(function(x){return '<div class="mi"><b>'+esc(x.a)+'</b> · '+esc(x.x)+'<p>'+esc(x.m)+'</p></div>'}).join('')+'</div></div>'}
+  h+='</div><div class="actions"><button class="btn" id="hm">Back</button><button class="btn primary" id="ag">Another round</button></div>';
+  app.innerHTML=h;document.getElementById('hm').onclick=function(){quiz=null;qhome()};document.getElementById('ag').onclick=start;window.scrollTo(0,0);
+}
+document.addEventListener('keydown',function(e){if(tab==='Q'&&quiz&&!quiz.ans&&e.key>='1'&&e.key<='4')pick(+e.key-1)});
+browse();
+</script>
+
+</body></html>

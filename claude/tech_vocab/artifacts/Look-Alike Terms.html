@@ -1,0 +1,792 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Look-Alike Terms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout concept: side-by-side comparison. Two terms facing each other, with the one-line test that tells them apart, then a short drill. */
+:root{
+  --bg:#EDF1F5; --surface:#FFFFFF; --ink:#14212C; --muted:#586979; --line:#D3DCE5; --accent:#0A6A8A; --accent-ink:#FFFFFF; --focus:#0A6A8A;
+  --good:#17803D; --bad:#B3261E; --warn:#B26A00;
+  --c-ds:#2A5DB0; --c-ml:#5B49B8; --c-de:#0B7566; --c-dt:#7A6300; --c-sw:#A8501B; --c-ar:#A33A3A; --c-sys:#1B7A99; --c-se:#7B5A2E; --c-ai:#A12E63; --c-cm:#4F7A1E;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F171F; --surface:#16212B; --ink:#E5ECF2; --muted:#9AAAB8; --line:#2A3947; --accent:#52B6D6; --accent-ink:#071218; --focus:#52B6D6;
+    --good:#52C27B; --bad:#F2877F; --warn:#E6A93A;
+    --c-ds:#7DA6EC; --c-ml:#A99CF0; --c-de:#4CC2AE; --c-dt:#D9BB52; --c-sw:#E59A66; --c-ar:#EE8A8A; --c-sys:#6FC3E0; --c-se:#CFA878; --c-ai:#EE86B3; --c-cm:#A8CF72;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F171F; --surface:#16212B; --ink:#E5ECF2; --muted:#9AAAB8; --line:#2A3947; --accent:#52B6D6; --accent-ink:#071218; --focus:#52B6D6;
+  --good:#52C27B; --bad:#F2877F; --warn:#E6A93A;
+  --c-ds:#7DA6EC; --c-ml:#A99CF0; --c-de:#4CC2AE; --c-dt:#D9BB52; --c-sw:#E59A66; --c-ar:#EE8A8A; --c-sys:#6FC3E0; --c-se:#CFA878; --c-ai:#EE86B3; --c-cm:#A8CF72;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:0 56px;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin-inline:auto}
+header.top{padding-block:28px 12px;display:flex;flex-direction:column;gap:8px}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.1;font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.sub{margin:0;color:var(--muted);max-width:60ch}
+h2{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+button{font:inherit;color:inherit}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--line);margin-block:10px 22px}
+.stat{padding:14px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.stat + .stat{border-left:1px solid var(--line)}
+.stat b{font-family:var(--font-mono);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{font-size:12px;color:var(--muted)}
+.stat.due b{color:var(--accent)}
+.start{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:16px 18px;cursor:pointer;font-size:17px;font-weight:600;text-align:left}
+.start small{font-weight:400;font-size:13px;opacity:.9;display:block}
+.start:hover{filter:brightness(1.07)}
+.section{margin-top:26px}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.mode{all:unset;box-sizing:border-box;cursor:pointer;padding:14px 16px;display:flex;flex-direction:column;gap:3px;border-bottom:1px solid var(--line)}
+.mode:nth-child(odd){border-right:1px solid var(--line)}
+.mode:nth-last-child(-n+2){border-bottom:0}
+.mode:hover{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.mode:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.mode b{font-weight:600}
+.mode span{font-size:13px;color:var(--muted)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.chip{flex:0 0 auto;font-size:13px;background:transparent;border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.settings{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:12px;align-items:center;font-size:14px}
+.settings label{display:flex;align-items:center;gap:8px;color:var(--muted)}
+select{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent)}
+.note{margin:12px 0 0;color:var(--warn);font-size:14px}
+
+.tracks{display:flex;flex-direction:column}
+.trow{display:grid;grid-template-columns:minmax(0,170px) 1fr 64px;gap:12px;align-items:center;padding-block:7px;border-bottom:1px solid var(--line);font-size:14px}
+.trow .nm{overflow-wrap:anywhere}
+.tbar{display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--line)}
+.tbar i{display:block;height:100%}
+.tbar .m{background:var(--good)}.tbar .l{background:var(--warn)}
+.trow .ct{font-family:var(--font-mono);font-size:12px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:8px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+
+.sbar{display:flex;align-items:center;gap:12px;margin-block:18px 14px}
+.prog{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .2s}
+.sbar .n{font-family:var(--font-mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.linkbtn{background:none;border:0;color:var(--muted);cursor:pointer;font-size:14px;padding:6px 4px;text-decoration:underline}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:clamp(18px,4vw,30px);min-height:280px;display:flex;flex-direction:column;gap:16px}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:4px;color:var(--tc);background:color-mix(in srgb,var(--tc) 13%,transparent);white-space:nowrap}
+.tag.cat{color:var(--muted);background:transparent;border:1px solid var(--line)}
+.t-ds{--tc:var(--c-ds)}.t-ml{--tc:var(--c-ml)}.t-de{--tc:var(--c-de)}.t-dt{--tc:var(--c-dt)}.t-sw{--tc:var(--c-sw)}.t-ar{--tc:var(--c-ar)}.t-sys{--tc:var(--c-sys)}.t-se{--tc:var(--c-se)}.t-ai{--tc:var(--c-ai)}.t-cm{--tc:var(--c-cm)}
+.big{font-family:var(--font-mono);font-size:clamp(22px,5vw,30px);font-weight:600;line-height:1.2;margin:0;overflow-wrap:anywhere;text-wrap:balance}
+.q{font-size:clamp(17px,3.2vw,20px);line-height:1.45;margin:0;overflow-wrap:anywhere}
+.qlab{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.center{flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.hint{color:var(--muted);font-size:14px;margin:0}
+.fld{display:flex;flex-direction:column;gap:3px}
+.lab{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ex{margin:0;font-style:italic;overflow-wrap:anywhere}
+.rels{display:flex;flex-wrap:wrap;gap:5px}
+.rel{font-size:13px;padding:2px 9px;border-radius:4px;background:color-mix(in srgb,var(--muted) 14%,transparent)}
+.opp{margin:0;overflow-wrap:anywhere}
+.det{display:flex;flex-direction:column;gap:12px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.btn{font-size:15px;font-weight:500;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:11px 18px;cursor:pointer;flex:1 1 120px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.again{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}
+.btn.easy{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,var(--line))}
+.btn kbd{font-family:var(--font-mono);font-size:11px;opacity:.65;margin-left:6px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;cursor:pointer;overflow-wrap:anywhere}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt .k{font-family:var(--font-mono);font-size:12px;color:var(--muted);flex:0 0 auto;padding-top:2px}
+.opt.right{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.opt[disabled]{cursor:default}
+.verdict{font-weight:600}
+.verdict.ok{color:var(--good)}.verdict.no{color:var(--bad)}
+.fb{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line);padding-top:14px}
+.big2{font-family:var(--font-mono);font-size:44px;font-weight:600;line-height:1;margin:0;font-variant-numeric:tabular-nums}
+.miss{display:flex;flex-direction:column}
+.miss .mi{padding-block:10px;border-bottom:1px solid var(--line)}
+.miss .mi b{font-family:var(--font-mono);font-size:14px}
+.miss .mi p{margin:2px 0 0;color:var(--muted);font-size:14px}
+details.bk{margin-top:30px;color:var(--muted);font-size:14px}
+details.bk summary{cursor:pointer}
+details.bk textarea{width:100%;min-height:90px;margin-top:10px;font-family:var(--font-mono);font-size:12px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.small{font-size:13px;padding:7px 12px;flex:0 0 auto}
+footer{margin-top:26px;color:var(--muted);font-size:13px;max-width:62ch}
+@media (max-width:560px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(3){border-left:0}
+  .stat:nth-child(n+3){border-top:1px solid var(--line)}
+  .modes{grid-template-columns:1fr}
+  .mode:nth-child(odd){border-right:0}
+  .mode:nth-last-child(-n+2){border-bottom:1px solid var(--line)}
+  .mode:last-child{border-bottom:0}
+  .trow{grid-template-columns:minmax(0,1fr) 56px}
+  .trow .tbar{grid-column:1 / -1;order:3}
+}
+@media (prefers-reduced-motion:reduce){.prog i{transition:none}}
+
+.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 16px;margin-inline:-16px;display:flex;flex-direction:column;gap:10px}
+.crow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tabs{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.tabs button{border:0;background:transparent;color:var(--muted);padding:8px 16px;cursor:pointer;font-size:14px}
+.tabs button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:500}
+.search{flex:1 1 200px;min-width:0;display:flex}
+.search input{width:100%;min-width:0;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:9px 12px}
+.meta{padding-block:12px 4px;color:var(--muted);font-size:13px}
+.pair{border-bottom:1px solid var(--line)}
+.ph{all:unset;box-sizing:border-box;width:100%;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;padding-block:14px;cursor:pointer}
+.ph:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:4px}
+.vs{font-family:var(--font-mono);font-weight:600;font-size:15px;overflow-wrap:anywhere}
+.vs i{font-style:normal;color:var(--muted);font-weight:400;padding-inline:6px}
+.badge{font-size:12px;color:var(--bad);border:1px solid color-mix(in srgb,var(--bad) 45%,var(--line));border-radius:999px;padding:1px 9px}
+.pbody{display:none;padding-bottom:20px;flex-direction:column;gap:14px}
+.pair.open .pbody{display:flex}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.side{padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.side + .side{border-left:1px solid var(--line)}
+.side h3{margin:0;font-family:var(--font-mono);font-size:16px;overflow-wrap:anywhere}
+.side p{margin:0;overflow-wrap:anywhere}
+.callout{display:flex;flex-direction:column;gap:3px}
+.callout p{margin:0;overflow-wrap:anywhere}
+.tellbox{border-left:3px solid var(--accent);padding-left:12px}
+.dpanel{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+.setrow{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:14px}
+.setrow label{display:flex;align-items:center;gap:8px;color:var(--muted)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}
+.btn.small{font-size:13px;padding:7px 12px;flex:0 0 auto}
+@media (max-width:560px){
+  .cmp{grid-template-columns:1fr}
+  .side + .side{border-left:0;border-top:1px solid var(--line)}
+}
+[hidden]{display:none!important}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Look-Alike Terms</h1>
+    <p class="sub" id="sub"></p>
+  </header>
+  <div class="controls">
+    <div class="crow">
+      <div class="tabs" role="group" aria-label="View"><button id="tabC" aria-pressed="true">Compare</button><button id="tabD" aria-pressed="false">Drill</button></div>
+      <div class="search" id="searchBox"><input id="q" type="search" placeholder="Search pairs" autocomplete="off" aria-label="Search pairs"></div>
+    </div>
+    <div class="chips" id="tracks" role="group" aria-label="Track"></div>
+  </div>
+  <main id="app"></main>
+  <footer>Progress is saved in this browser only. Each drill question describes a situation; you choose which of the two terms it describes. Pairs you miss show a badge in Compare and get priority under Weak pairs.</footer>
+</div>
+
+<script>
+var PAIRS=[];
+function C(a,b,k,da,db,ea,eb,tell,mistake,scen){PAIRS.push({a:a,b:b,k:k,da:da,db:db,ea:ea,eb:eb,tell:tell,mistake:mistake,scen:scen,id:'p'+PAIRS.length})}
+
+/* DATA SCIENCE & ML */
+C("data leakage","overfitting","ds",
+ "Information from outside the training data (future data, test labels, a proxy for the answer) sneaks into training or features, so evaluation is unrealistically good.",
+ "The model memorizes noise in the training set, so it does well on training data and worse on new data.",
+ "Scaling with the full dataset's mean leaked test statistics into training.","Training loss keeps falling while validation loss rises.",
+ "Leakage is a flaw in how the data is set up, so even a simple model looks suspiciously good on validation. Overfitting is a flaw in how the model fits, and shows up as a gap between training and validation.",
+ "Calling any bad production result overfitting. If validation looked great and production fell apart, suspect leakage or distribution shift first.",
+ [["A churn model scores 0.99 AUC on validation. You find one feature, cancellation_date, is filled in only for customers who already churned.","a"],
+  ["A deep network hits 100% training accuracy but only 70% validation accuracy, and validation loss has risen for ten epochs.","b"],
+  ["Features were scaled using the mean and standard deviation of the whole dataset before the train-test split.","a"]]);
+C("precision","recall","ds",
+ "Of the items the model flagged as positive, the share that truly are positive.",
+ "Of all the truly positive items, the share the model found.",
+ "Precision is 0.95: nearly every flagged transaction really is fraud.","Recall is 0.60: we are missing 40% of the fraud.",
+ "Precision looks at your flags (how clean they are). Recall looks at reality (how much you caught). Raising the decision threshold usually raises precision and lowers recall.",
+ "Quoting accuracy on imbalanced data, or optimizing one metric without naming the cost of the other.",
+ [["A spam filter keeps sending real emails to the junk folder. Which metric is suffering?","a"],
+  ["A cancer screening test misses many patients who actually have the disease. Which metric is suffering?","b"],
+  ["You want almost every item in the fraud review queue to really be fraud, so analysts do not waste time.","a"]]);
+C("accuracy","calibration","ds",
+ "The share of predictions that are correct.",
+ "How closely predicted probabilities match real frequencies: when the model says 80%, it should be right about 80% of the time.",
+ "The model labels 92 of 100 test cases correctly.","Among predictions scored 0.9, only 60% were actually positive.",
+ "Accuracy asks whether the label is right. Calibration asks whether the stated confidence is honest. A model can rank well and still be badly calibrated.",
+ "Treating a model's confidence score as a true probability without checking a reliability diagram.",
+ [["The model gets 92 of 100 test labels right.","a"],
+  ["Among cases scored at 0.9, only 60% turned out positive.","b"],
+  ["A reliability diagram bows far below the diagonal for high scores.","b"]]);
+C("correlation","causation","ds",
+ "Two variables tend to move together.",
+ "Changing one variable produces a change in the other.",
+ "Ice cream sales and drowning rates rise together in summer.","A randomized test shows the new checkout converts 3% more.",
+ "Correlation needs only observational data. Causation needs an experiment or a credible causal design that rules out confounders and reverse causation.",
+ "Saying a feature drives an outcome because a dashboard shows they move together.",
+ [["Ice cream sales and drowning rates both rise every summer.","a"],
+  ["A randomized controlled test shows users given the new checkout convert 3% more than the control group.","b"],
+  ["Users who enable notifications retain better, but power users are also the ones who enable notifications.","a"]]);
+C("bias","variance","ds",
+ "Error from a model that is too simple or makes wrong assumptions, so it misses the pattern even on training data.",
+ "Error from a model that is too sensitive to the particular training sample, so it changes a lot with different data.",
+ "A straight line fit to curved data has high bias.","A very deep unpruned tree has high variance.",
+ "High bias: poor on both training and validation (underfitting). High variance: great on training, worse on validation, unstable across resamples (overfitting).",
+ "Adding more data to a high-bias model. It needs a richer model or better features instead.",
+ [["A linear model on clearly curved data has high error on both the training and validation sets.","a"],
+  ["An unpruned deep tree scores 99% on training and 74% on validation, and its shape changes on each resample.","b"],
+  ["Training error stays high and does not improve even with ten times more data.","a"]]);
+C("regularization","normalization","ds",
+ "Constraining a model (penalties on weights, dropout, early stopping) so it generalizes instead of memorizing.",
+ "Rescaling input features (or activations) to a common range or distribution.",
+ "We added an L2 penalty and early stopping.","We standardized income and age before running k-NN.",
+ "Regularization limits the model's freedom. Normalization changes the data's scale. They solve different problems: overfitting versus scale-sensitive or unstable learning.",
+ "Using normalize to mean reduce overfitting.",
+ [["Adding an L2 penalty to curb overfitting.","a"],
+  ["Rescaling income and age to similar ranges before running k-nearest neighbors.","b"],
+  ["Switching on dropout during training.","a"]]);
+C("validation set","test set","ds",
+ "Held-out data used repeatedly during development to tune hyperparameters and choose between models.",
+ "Held-out data used once at the end to estimate final performance.",
+ "We chose the learning rate by comparing validation scores.","We reported the final model's score on the untouched test set.",
+ "If you use it to make decisions, it is validation data. The test set must stay untouched until the end, or its estimate is inflated.",
+ "Tuning against the test set until it looks good, which quietly turns it into validation data.",
+ [["Choosing the best learning rate among 20 candidates by comparing their scores.","a"],
+  ["Reporting the final model's performance to leadership, evaluated once on data never used before.","b"],
+  ["Early stopping decides when to halt using performance on held-out data.","a"]]);
+C("data drift","concept drift","ds",
+ "The distribution of input features changes over time.",
+ "The relationship between inputs and the target changes, so the same inputs now imply a different outcome.",
+ "After a campaign, new users skew much younger.","After a policy change, identical customer profiles now churn twice as often.",
+ "Data drift: the inputs look different. Concept drift: the inputs look the same but mean something different for the outcome.",
+ "Assuming retraining on new data always fixes it. Concept drift may also need new labels or features.",
+ [["A marketing campaign makes the average age of new users drop sharply, though behavior at each age is unchanged.","a"],
+  ["After a pricing policy change, customers with identical profiles churn at twice the rate.","b"],
+  ["A new camera produces brighter images than anything in the training set.","a"]]);
+C("statistical significance","practical significance","ds",
+ "A result unlikely to be explained by chance alone at your chosen threshold.",
+ "A result large enough to matter for decisions, cost or users.",
+ "p < 0.001 on a 0.02% lift with 50 million users.","A 5% revenue lift that clearly pays for the engineering work.",
+ "Statistical significance depends heavily on sample size. Practical significance depends on effect size and cost-benefit.",
+ "Announcing a win because p is small, without stating how big the effect is.",
+ [["With 50 million users, a 0.02% lift has p < 0.001.","a"],
+  ["A 5% rise in revenue per user is large enough to justify the engineering cost.","b"],
+  ["The test found p = 0.01, but the improvement is smaller than the noise the business cares about.","a"]]);
+C("standard deviation","standard error","ds",
+ "How spread out the individual data points are.",
+ "How much a statistic (such as the sample mean) would vary across repeated samples.",
+ "Order values range from $5 to $900 around a mean of $52: a large standard deviation.","Quadrupling the sample halves the standard error of the mean.",
+ "SD describes the data and does not shrink with more data. SE describes the estimate and shrinks as the sample grows.",
+ "Plotting standard deviation error bars when you mean to show how precise the average is.",
+ [["Order values range widely, from $5 to $900, around a mean of $52.","a"],
+  ["Quadrupling the sample size halves the uncertainty in the estimated mean.","b"],
+  ["Error bars are meant to show how precisely the mean was estimated.","b"]]);
+C("Type I error","Type II error","ds",
+ "A false positive: concluding there is an effect when there is none.",
+ "A false negative: missing an effect that is real.",
+ "We shipped a feature that the test said helped, but it did nothing.","A real improvement was missed because the test was underpowered.",
+ "Type I is crying wolf; Type II is missing the wolf. Alpha controls the Type I rate; power is about avoiding Type II.",
+ "Running many comparisons without correction, which inflates Type I errors.",
+ [["You ship a feature because the test said it helped, but it actually did nothing.","a"],
+  ["A genuinely better design was missed because the experiment had too few users.","b"],
+  ["Testing 40 metrics with no correction produced three significant results by pure chance.","a"]]);
+
+/* DATA ENGINEERING */
+C("ETL","ELT","de",
+ "Extract, transform, then load: data is cleaned and reshaped before it lands in the destination.",
+ "Extract, load, then transform: raw data lands first and is transformed inside the warehouse.",
+ "A separate server reshapes the files before writing to the database.","Raw events load into the warehouse, then dbt models build clean tables.",
+ "Ask where the transformation runs: before the destination (ETL) or inside it (ELT). ELT keeps the raw data around for re-modeling.",
+ "Treating them as the same thing because the three letters are the same.",
+ [["Raw event data is loaded straight into the warehouse, then dbt models build the clean tables.","b"],
+  ["A separate server cleans and reshapes the files before anything is written to the database.","a"],
+  ["Analysts want to re-model historical raw data without re-extracting it from the source.","b"]]);
+C("data warehouse","data lake","de",
+ "Curated, structured data modeled for analytics, with schema applied when data is written.",
+ "Raw data of any format in cheap storage, with schema applied when data is read.",
+ "Finance reports come from the warehouse.","Raw logs and JSON land in the data lake first.",
+ "Warehouse: modeled, governed, ready for reports. Lake: raw, flexible, needs work before use. A lake with no catalog or owners becomes a swamp.",
+ "Dumping everything into a lake and expecting analysts to find it usable.",
+ [["Finance needs consistent, governed revenue tables with fixed definitions.","a"],
+  ["Data scientists need raw logs, images and JSON that nobody has modeled yet.","b"],
+  ["A store holding everything, with no catalog or owners, has turned into a swamp.","b"]]);
+C("OLTP","OLAP","de",
+ "Online transaction processing: many small, fast reads and writes with strict correctness (orders, logins).",
+ "Online analytical processing: large scans and aggregations over history for analysis.",
+ "The checkout database handles thousands of order inserts per second.","A quarterly report scans billions of rows to total revenue by region.",
+ "OLTP is about doing business (record this order). OLAP is about understanding it (what happened across all orders).",
+ "Running heavy analytical queries on the production transactional database.",
+ [["The checkout database handles thousands of small order inserts and updates per second.","a"],
+  ["A quarterly query scans billions of rows to aggregate revenue by region.","b"],
+  ["A system tuned for fast single-row reads and writes with strict transactions.","a"]]);
+C("batch processing","stream processing","de",
+ "Processing accumulated data on a schedule, such as nightly.",
+ "Processing events continuously as they arrive, with low latency.",
+ "Daily revenue is computed overnight.","Fraud is scored within a second of each card swipe.",
+ "Batch trades freshness for simplicity and throughput. Streaming trades simplicity for low latency and needs ideas like windows and watermarks.",
+ "Choosing streaming when a daily batch would satisfy the real need.",
+ [["Fraud must be scored within a second of each card swipe.","b"],
+  ["Daily revenue totals are computed overnight and ready by morning.","a"],
+  ["Events are processed continuously as they arrive, using windows and watermarks.","b"]]);
+C("normalization (database)","denormalization","de",
+ "Splitting data into related tables to avoid duplication and update anomalies.",
+ "Deliberately duplicating data to make reads simpler or faster.",
+ "Customers and orders live in separate tables joined by key.","A wide reporting table repeats product details on every sales row.",
+ "Normalized favors correct writes and consistency. Denormalized favors fast, simple reads, at the cost of duplication.",
+ "Confusing database normalization with scaling features in machine learning.",
+ [["Splitting customer and order data into separate tables so each address is stored once.","a"],
+  ["A wide reporting table repeats product details on every sales row so queries avoid joins.","b"],
+  ["Transactional systems usually keep data in third normal form to protect correctness.","a"]]);
+
+/* SOFTWARE ENGINEERING */
+C("concurrency","parallelism","sw",
+ "Structuring a program to make progress on many tasks overlapping in time, even on one core.",
+ "Actually running multiple tasks at the same instant on multiple cores.",
+ "A single-threaded event loop serves thousands of connections.","A job split across eight cores computing at once.",
+ "Concurrency is about dealing with many things at once (structure). Parallelism is about doing many things at once (execution).",
+ "Assuming async code runs faster on multiple cores. It may only overlap waiting.",
+ [["One core switches between many network requests while each waits on I/O.","a"],
+  ["A job is split across eight CPU cores computing at the same instant.","b"],
+  ["A single-threaded event loop serves thousands of connections.","a"]]);
+C("race condition","deadlock","sw",
+ "The outcome depends on the timing or order of concurrent operations, giving wrong or inconsistent results.",
+ "Tasks wait on each other's resources forever, so nothing progresses.",
+ "Two workers read the same counter and both write value plus one.","Thread A waits for lock 2 while thread B waits for lock 1.",
+ "Race: it runs but gives the wrong answer sometimes. Deadlock: it hangs, usually with no CPU use. A deadlock is a stuck system; a race is a flaky one.",
+ "Calling every intermittent bug a deadlock.",
+ [["Two workers read the same counter and both write value plus one, losing an update.","a"],
+  ["Thread A holds lock 1 waiting for lock 2, while thread B holds lock 2 waiting for lock 1.","b"],
+  ["The service hangs forever with every thread waiting and CPU near zero.","b"]]);
+C("authentication","authorization","sw",
+ "Proving who you are (password, code, passkey).",
+ "Deciding what you are allowed to do once identified (roles, permissions).",
+ "Single sign-on confirms who someone is.","The role check allows editors but not viewers to delete.",
+ "Authentication answers who. Authorization answers what are you allowed to do. A 401 is usually about identity; a 403 is about permission.",
+ "Using auth to mean both without saying which one is failing.",
+ [["The user enters a password and a one-time code.","a"],
+  ["The system checks whether this user's role allows deleting the project.","b"],
+  ["Single sign-on confirms who someone is across several apps.","a"]]);
+C("library","framework","sw",
+ "Code you call when you need it. Your program stays in control.",
+ "A structure that calls your code at set points. The framework is in control (inversion of control).",
+ "Requests is a library: you call it to make HTTP calls.","Django is a framework: it routes requests into handlers you write.",
+ "Who calls whom? You call a library. A framework calls you.",
+ "Calling any big dependency a framework.",
+ [["You call its functions when needed, and your code stays in control of the flow.","a"],
+  ["It defines the structure of your application and calls your code at defined hooks.","b"],
+  ["Django routes incoming requests into handler functions you write.","b"]]);
+C("refactoring","rewrite","sw",
+ "Restructuring existing code to improve its design without changing what it does, ideally covered by tests.",
+ "Discarding existing code and building a new version from scratch.",
+ "We split a 600-line function behind existing tests.","We rebuilt the billing system in a new stack.",
+ "Refactoring keeps behavior and improves structure in small safe steps. A rewrite replaces the thing and carries high risk.",
+ "Calling a risky rewrite a refactor so it sounds safe.",
+ [["Splitting a 600-line function into smaller ones behind existing tests, with behavior unchanged.","a"],
+  ["Discarding the old system and rebuilding it from scratch in a new stack.","b"],
+  ["Gradually replacing a legacy module piece by piece while it keeps serving traffic.","a"]]);
+C("unit test","integration test","sw",
+ "Checks one small piece of code in isolation, often using fakes for dependencies.",
+ "Checks that several components work together (service, database, queue).",
+ "Test the pricing function with no database.","Test the API, queue and database together on a staging stack.",
+ "Unit tests are fast and isolated and pinpoint bugs. Integration tests are slower and catch wiring and contract problems.",
+ "Relying only on unit tests with mocks that no longer match reality.",
+ [["Testing a pricing function in isolation with no database.","a"],
+  ["Testing that the API, queue and database work together on a staging stack.","b"],
+  ["A very fast test run on every commit that replaces external services with fakes.","a"]]);
+C("idempotent","deterministic","sw",
+ "Running the operation once or many times leaves the system in the same end state.",
+ "The same inputs always produce the same outputs.",
+ "Setting status to shipped three times still ends with shipped.","A pure function returns the same result every time for the same input.",
+ "Idempotent is about repeating an operation safely. Deterministic is about repeatable results from the same input. They are independent properties.",
+ "Using idempotent to mean the code has no randomness.",
+ [["Calling set status to shipped three times still ends with status shipped.","a"],
+  ["A function returns exactly the same output whenever it is given the same input, with no randomness.","b"],
+  ["Retrying a payment request with an idempotency key does not charge twice.","a"]]);
+C("backward compatibility","forward compatibility","sw",
+ "New code or servers can still handle old data, clients or versions.",
+ "Old code can still handle data or messages produced by newer versions.",
+ "The new server still accepts last year's mobile app.","An old consumer ignores a new optional field.",
+ "Backward: new reads old. Forward: old reads new. Adding an optional field is usually safe in both directions.",
+ "Assuming safe for new clients means safe for old ones.",
+ [["The new server still accepts requests from last year's mobile app.","a"],
+  ["An old consumer keeps working when a producer adds an optional field.","b"],
+  ["A new reader can parse files written by the previous version.","a"]]);
+C("technical debt","bug","sw",
+ "A shortcut or messy design that works today but makes future change slower or riskier.",
+ "Behavior that is incorrect compared with what was intended.",
+ "Hard-coded config makes each new customer a two-day job.","Orders over $1,000 are charged twice.",
+ "Debt is about future cost. A bug is about present incorrectness. Debt can sit quietly in correct software.",
+ "Labeling a real defect as technical debt to defer fixing it.",
+ [["Hard-coded config values everywhere make each new customer a two-day task, though everything works correctly.","a"],
+  ["Orders over $1,000 are charged twice.","b"],
+  ["A quick workaround ships to hit a launch and is logged for cleanup next sprint.","a"]]);
+
+/* SYSTEMS */
+C("latency","throughput","sys",
+ "How long a single request takes from start to finish.",
+ "How much work the system completes per unit of time.",
+ "Each request takes 800 ms.","The system handles 12,000 requests per second.",
+ "Latency is time per item. Throughput is items per time. Batching often raises throughput and worsens latency.",
+ "Reporting only average latency. Tail latency (p99) is what users complain about.",
+ [["Each request takes 800 ms from click to response.","a"],
+  ["The cluster processes 12,000 requests per second.","b"],
+  ["The p99 is 2.4 seconds even though the average is 80 ms.","a"]]);
+C("availability","reliability","sys",
+ "The share of time the system is up and responding.",
+ "Whether the system does its job correctly over time, including when parts fail.",
+ "The service is reachable 99.95% of the time.","The service is up but returns wrong totals on some orders.",
+ "Availability is about being up. Reliability is about being right and dependable. A system can be available and unreliable.",
+ "Treating uptime as proof the system works correctly.",
+ [["The service is reachable 99.95% of the time.","a"],
+  ["The service is up, but it returns wrong totals on some orders.","b"],
+  ["Measured in nines of uptime.","a"]]);
+C("SLO","SLA","sys",
+ "An internal target for service quality, such as 99.9% of requests under 300 ms.",
+ "A contractual commitment to customers, usually with penalties if missed.",
+ "Engineering budgets errors against a 99.9% SLO.","The contract grants credits if uptime falls below 99.5%.",
+ "SLO is the goal you steer by. SLA is the promise you can be penalized for. SLOs are usually stricter than SLAs.",
+ "Promising customers your internal SLO.",
+ [["Engineering aims for 99.9% success and tracks an error budget against it.","a"],
+  ["The contract promises service credits if monthly uptime falls below 99.5%.","b"],
+  ["The target is deliberately stricter than what customers were promised.","a"]]);
+C("horizontal scaling","vertical scaling","sys",
+ "Adding more machines and spreading the load across them (scale out).",
+ "Giving one machine more CPU, memory or disk (scale up).",
+ "Add more identical servers behind a load balancer.","Move the database to a bigger instance.",
+ "Out versus up. Horizontal needs the service to be stateless or sharded and scales further. Vertical is simpler but hits a ceiling.",
+ "Adding servers when the real bottleneck is a single database.",
+ [["Adding more identical servers behind a load balancer.","a"],
+  ["Upgrading the database host to a machine with more CPU and RAM.","b"],
+  ["Works best when the service is stateless.","a"]]);
+C("rate limiting","backpressure","sys",
+ "Capping how many requests a client may make in a period, usually enforced up front.",
+ "A slow consumer signals a fast producer to slow down, based on actual capacity.",
+ "The API returns 429 after 100 requests per minute per key.","A full bounded queue makes the producer wait.",
+ "Rate limits are fixed policies at the edge. Backpressure is a dynamic signal from the overloaded part. Both protect the system.",
+ "Relying on unbounded queues, which hide overload until memory runs out.",
+ [["The API returns 429 after 100 requests per minute per API key.","a"],
+  ["A full bounded queue makes the producer wait instead of adding more work.","b"],
+  ["Rising consumer lag causes the upstream service to throttle itself.","b"]]);
+C("eventual consistency","strong consistency","sys",
+ "Replicas converge over time, so a read right after a write may briefly return old data.",
+ "Every read sees the latest committed write, usually at higher latency or lower availability.",
+ "A like count may lag for a few seconds.","An account transfer must show the correct balance immediately.",
+ "Eventual favors availability and speed. Strong favors correctness. Choose per feature, not per company.",
+ "Using strong consistency everywhere, or eventual consistency for money.",
+ [["Right after a write, a read from a replica may still return the old value.","a"],
+  ["Every read sees the latest committed write, at the cost of higher latency.","b"],
+  ["Account balance transfers need this guarantee.","b"]]);
+C("monitoring","observability","sys",
+ "Watching known signals and alerting when thresholds are crossed.",
+ "Having logs, metrics and traces rich enough to investigate questions you did not anticipate.",
+ "An alert fires when CPU exceeds 90%.","Engineers slice traces by customer and region to find a slow cohort.",
+ "Monitoring answers known questions (is X broken?). Observability helps with unknown questions (why is this weird?).",
+ "Buying a dashboard tool and calling the system observable.",
+ [["A dashboard alerts when CPU exceeds 90%.","a"],
+  ["Engineers slice traces by customer and region to find why one cohort is slow.","b"],
+  ["You need to answer a question nobody thought to instrument for in advance.","b"]]);
+C("canary release","blue-green deployment","sys",
+ "Release the change to a small share of traffic first, watch the signals, then ramp up.",
+ "Run two full environments and switch traffic from old to new, keeping the old for instant rollback.",
+ "Send 1% of traffic to the new version and watch error rates.","Flip the load balancer from blue to green.",
+ "Canary is gradual exposure. Blue-green is an all-at-once switch between two ready environments.",
+ "Calling any staged rollout a canary.",
+ [["Release to 1% of traffic, watch error rates, then ramp up.","a"],
+  ["Run two full environments and flip traffic from old to new, keeping the old for instant rollback.","b"],
+  ["Gradual rollout through progressive traffic shifting.","a"]]);
+C("hashing","encryption","sw",
+ "A one-way transformation to a fixed-size fingerprint. You verify by hashing again, not by reversing.",
+ "A reversible transformation: with the right key you can recover the original data.",
+ "Store passwords as salted slow hashes.","Encrypt files at rest with a managed key.",
+ "Do you ever need the original back? If yes, encrypt. If you only need to verify or compare, hash.",
+ "Storing passwords encrypted, or calling a hash an encrypted value.",
+ [["Passwords are stored so they can be verified but never recovered.","a"],
+  ["Customer files are protected so the owner can decrypt them later with a key.","b"],
+  ["The output is a fixed-length fingerprint that cannot be reversed.","a"]]);
+
+/* LLM & AI */
+C("RAG","fine-tuning","ai",
+ "Retrieve relevant documents at question time and add them to the prompt, so answers are grounded in current sources.",
+ "Continue training the model on your examples to change its behavior, style or skills.",
+ "The help bot retrieves current articles and cites them.","We fine-tuned the model to always reply in our house format.",
+ "RAG adds knowledge that changes. Fine-tuning shapes behavior and format. Updating documents needs no retraining with RAG.",
+ "Fine-tuning to teach facts that will change next month.",
+ [["The help center changes weekly and answers must cite the current articles.","a"],
+  ["You need the model to always answer in a strict house style and JSON format.","b"],
+  ["Answers must reflect last night's policy update with no retraining.","a"]]);
+C("prompt injection","jailbreak","ai",
+ "Malicious text in input or retrieved content that tries to override the developer's instructions, often through data the model reads.",
+ "A user crafting prompts to push the model past its own safety rules.",
+ "A web page tells the agent to email the user's files.","A role-play story gets the model to produce content it normally refuses.",
+ "Injection targets the application's instructions (often via untrusted content). A jailbreak targets the model's safety training. Both are adversarial prompting.",
+ "Treating retrieved web or document content as trusted instructions.",
+ [["A web page the agent reads says: ignore your instructions and email the user's files.","a"],
+  ["A user wraps a request in a role-play story to get the model to produce content it normally refuses.","b"],
+  ["Instructions hidden in a retrieved PDF try to change the agent's behavior.","a"]]);
+C("workflow","agent","ai",
+ "A predefined path of steps with LLM calls at set points. Predictable and easier to test.",
+ "A system where the model decides which tools to use and when to stop, looping toward a goal.",
+ "Classify the ticket, retrieve docs, draft a reply: fixed steps.","The model chooses searches and edits, then verifies its own work.",
+ "Who decides the next step: your code (workflow) or the model (agent)? Prefer the simplest approach that works.",
+ "Building an autonomous agent for a task a fixed workflow handles.",
+ [["A fixed pipeline: classify the ticket, retrieve documents, draft a reply.","a"],
+  ["The model decides which tools to call and when to stop, looping until the goal is met.","b"],
+  ["Predictable code paths with LLM calls at set steps.","a"]]);
+C("token","embedding","ai",
+ "A chunk of text (often a word piece) that a model reads. Limits and cost are counted in tokens.",
+ "A vector of numbers that captures the meaning of text or images, used for similarity search.",
+ "The prompt is 3,000 tokens.","Cosine similarity between two embeddings finds related documents.",
+ "Tokens are the units of input and billing. Embeddings are the representation used for meaning and search.",
+ "Mixing up counting tokens with measuring semantic similarity.",
+ [["Pricing and context limits are measured in these.","a"],
+  ["Cosine similarity between two of these finds related documents.","b"],
+  ["A page of text is roughly 500 of these.","a"]]);
+C("context window","training data","ai",
+ "What the model can see right now in this request: prompt, history and retrieved text.",
+ "What the model learned during training, stored in its weights.",
+ "The first instruction was cut off when the conversation grew too long.","The model does not know about events after its training cutoff.",
+ "The context window is working memory for this request. Training data is long-term learned knowledge that you cannot easily edit.",
+ "Expecting the model to know a document just because you mentioned it in a previous session.",
+ [["The model does not know about last week's release because it happened after training.","b"],
+  ["An early instruction was dropped because the conversation exceeded the limit.","a"],
+  ["Pasting the document into the prompt lets the model answer from it.","a"]]);
+C("quantization","distillation","ai",
+ "Storing and computing the same model at lower numeric precision to save memory and speed up inference.",
+ "Training a smaller student model to imitate a larger teacher model.",
+ "We run the 4-bit version on one GPU.","We trained an 8B model on a larger model's outputs.",
+ "Quantization keeps the same architecture and shrinks the numbers. Distillation creates a different, smaller model.",
+ "Calling any smaller model a quantized one.",
+ [["Converting 16-bit weights to 4-bit so the model fits on one GPU.","a"],
+  ["Training an 8B model on a larger model's outputs.","b"],
+  ["The architecture and parameter count stay the same; only the number format changes.","a"]]);
+C("evals","benchmarks","ai",
+ "Repeatable tests on your own tasks and data, run on every change to catch regressions.",
+ "Public, standardized tests used to compare models in general.",
+ "A 200-case suite built from our real tickets gates prompt changes.","The model tops a public reasoning leaderboard.",
+ "Evals tell you whether your system works for your job. Benchmarks tell you roughly how models compare in general, and may be contaminated.",
+ "Choosing a model from a leaderboard without testing on your own data.",
+ [["Leaderboard scores on a public reasoning test.","b"],
+  ["A 200-case suite built from your real support tickets gates each prompt change.","a"],
+  ["Scores may be inflated because the questions leaked into training data.","b"]]);
+
+/* COMMUNICATION */
+C("blocker","bottleneck","cm",
+ "Something that stops work from proceeding at all until it is resolved.",
+ "The constrained step that limits the speed of the whole process.",
+ "Blocked on credentials from another team.","All changes queue behind one overloaded reviewer.",
+ "A blocker stops work. A bottleneck slows everything. You unblock a blocker; you widen a bottleneck.",
+ "Calling slowness a blocker when work could continue elsewhere.",
+ [["Work cannot start until security approves access.","a"],
+  ["Everything flows through one overloaded reviewer, so all changes queue up.","b"],
+  ["Waiting on credentials from another team, with no way to proceed.","a"]]);
+C("estimate","commitment","cm",
+ "A forecast of effort based on current knowledge, with a range and a confidence level.",
+ "A promise to deliver by a date that others will plan around.",
+ "Three to five weeks, medium confidence.","We will ship by March 15, and the customer has been told.",
+ "Estimates can change as you learn. Commitments are promises. Say which one you are giving, or listeners will hear a commitment.",
+ "Giving a single-number estimate that gets treated as a deadline.",
+ [["Three to five weeks, medium confidence.","a"],
+  ["We will ship by March 15 and have told the customer.","b"],
+  ["I need to investigate before I can even give a range.","a"]]);
+C("design doc","ADR","cm",
+ "A document proposing how to build something: goals, options, trade-offs and a recommendation.",
+ "A short record of one decision already made, with context and consequences.",
+ "A five-page proposal for the new queue goes out for review.","ADR-014 records why we chose Postgres.",
+ "A design doc is before the decision, to get feedback. An ADR is after, to preserve the why for the future.",
+ "Making decisions in chat and never recording them.",
+ [["A five-page proposal circulated for review before building the new queue.","a"],
+  ["A one-page note recording why the team chose Postgres over DynamoDB.","b"],
+  ["Written so future engineers know why a choice was made.","b"]]);
+C("KPI","OKR","cm",
+ "An ongoing metric that tracks the health of something.",
+ "An objective paired with measurable key results for a period, used to steer change.",
+ "Monthly churn rate stays on the exec dashboard.","This quarter: lift activation from 40% to 55%.",
+ "KPIs monitor. OKRs aim at a specific change over a period.",
+ "Using OKRs for routine monitoring, or KPIs with no target.",
+ [["Monthly churn rate is tracked on the executive dashboard indefinitely.","a"],
+  ["This quarter: improve onboarding, raising activation from 40% to 55%.","b"],
+  ["A continuous health metric not tied to a goal period.","a"]]);
+(function(){
+var TN={ds:'Data science & ML',de:'Data & analytics eng.',sw:'Software eng.',sys:'Systems & infra',ai:'LLM & AI eng.',cm:'Communication & delivery'};
+var ORDER=['ds','de','sw','sys','ai','cm'];
+var KEY='lat-v1';
+var $=function(i){return document.getElementById(i)};
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+var store={pairs:{}};
+try{var raw=localStorage.getItem(KEY);if(raw){var p0=JSON.parse(raw);if(p0&&p0.pairs)store=p0}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
+var BY={};PAIRS.forEach(function(p){BY[p.id]=p});
+var S={view:'compare',track:'all',q:'',len:10,focus:'all',note:''};
+var OPEN={};var D=null;
+
+function filtered(){
+  var q=S.q.toLowerCase().trim();
+  return PAIRS.filter(function(p){
+    if(S.track!=='all'&&p.k!==S.track)return false;
+    if(q){var h=(p.a+' '+p.b+' '+p.da+' '+p.db+' '+p.tell+' '+p.mistake).toLowerCase();var t=q.split(/\s+/);for(var i=0;i<t.length;i++){if(h.indexOf(t[i])<0)return false}}
+    return true;
+  }).sort(function(a,b){return ORDER.indexOf(a.k)-ORDER.indexOf(b.k)});
+}
+function buildChips(){
+  var counts={all:PAIRS.length};ORDER.forEach(function(k){counts[k]=0});PAIRS.forEach(function(p){counts[p.k]++});
+  $('tracks').innerHTML=['all'].concat(ORDER).map(function(k){return '<button class="chip" data-track="'+k+'" aria-pressed="'+(S.track===k)+'">'+(k==='all'?'All':esc(TN[k]))+' <small style="color:var(--muted)">'+counts[k]+'</small></button>'}).join('');
+}
+function missedOf(id){var s=store.pairs[id];return s?s.m:0}
+
+function renderCompare(){
+  D=null;
+  var list=filtered();
+  var h='<div class="meta">'+list.length+' of '+PAIRS.length+' pairs. Open one to compare, or drill a single pair.</div>';
+  if(!list.length)h+='<p class="hint" style="padding:30px 0;color:var(--muted);text-align:center">No pairs match. Try a different word or track.</p>';
+  list.forEach(function(p){
+    var m=missedOf(p.id);
+    h+='<article class="pair t-'+p.k+(OPEN[p.id]?' open':'')+'" id="'+p.id+'">'+
+     '<button class="ph" data-toggle="'+p.id+'" aria-expanded="'+(!!OPEN[p.id])+'"><span class="vs">'+esc(p.a)+'<i>vs</i>'+esc(p.b)+'</span><span class="tag">'+esc(TN[p.k])+'</span>'+(m?'<span class="badge">missed '+m+'x</span>':'')+'</button>'+
+     '<div class="pbody"><div class="cmp">'+
+       '<div class="side"><h3>'+esc(p.a)+'</h3><p>'+esc(p.da)+'</p><span class="lab">Example</span><p class="ex">'+esc(p.ea)+'</p></div>'+
+       '<div class="side"><h3>'+esc(p.b)+'</h3><p>'+esc(p.db)+'</p><span class="lab">Example</span><p class="ex">'+esc(p.eb)+'</p></div>'+
+     '</div>'+
+     '<div class="callout tellbox"><span class="lab">The tell</span><p>'+esc(p.tell)+'</p></div>'+
+     '<div class="callout"><span class="lab">Common mistake</span><p>'+esc(p.mistake)+'</p></div>'+
+     '<div class="toolbar"><button class="btn small" data-act="drillone" data-id="'+p.id+'">Drill this pair</button></div></div>'+
+    '</article>';
+  });
+  $('app').innerHTML=h;
+}
+
+function weakCount(){var n=0;PAIRS.forEach(function(p){if(missedOf(p.id)>0&&(S.track==='all'||p.k===S.track))n++});return n}
+function renderDrillHome(){
+  D=null;
+  var total=0;PAIRS.forEach(function(p){if(S.track==='all'||p.k===S.track)total+=p.scen.length});
+  var seen=0,missed=0;PAIRS.forEach(function(p){var s=store.pairs[p.id];if(s){seen+=s.n;missed+=s.m}});
+  var h='<div class="dpanel"><div class="meta" style="padding:12px 0 0">'+total+' situations in this selection. You will be shown one situation at a time and choose which term it describes.</div>';
+  h+='<div class="setrow"><label>Questions <select id="len"><option>5</option><option>10</option><option>20</option><option>30</option></select></label>'+
+     '<label>Draw from <select id="focus"><option value="all">All pairs</option><option value="weak">Weak pairs ('+weakCount()+')</option></select></label></div>';
+  if(S.note)h+='<p class="note" style="color:var(--warn)">'+esc(S.note)+'</p>';
+  h+='<div class="actions"><button class="btn primary" data-act="start">Start drill</button></div>';
+  h+='<p class="hint">Lifetime: '+seen+' answered, '+(seen?Math.round((seen-missed)/seen*100):0)+'% right.</p>';
+  h+='<details class="bk" style="margin-top:6px"><summary>Reset progress</summary><div class="toolbar" style="margin-top:10px"><button class="btn small" data-act="reset" id="resetBtn">Reset all progress</button></div></details></div>';
+  $('app').innerHTML=h;
+  $('len').value=String(S.len);$('focus').value=S.focus;
+}
+
+function buildItems(onlyIds){
+  var items=[];
+  PAIRS.forEach(function(p){
+    if(onlyIds){if(onlyIds.indexOf(p.id)<0)return}
+    else{
+      if(S.track!=='all'&&p.k!==S.track)return;
+      if(S.focus==='weak'&&!missedOf(p.id))return;
+    }
+    p.scen.forEach(function(s,i){items.push({p:p,s:s,flip:Math.random()<.5})});
+  });
+  items=shuffle(items);
+  if(!onlyIds)items=items.slice(0,S.len);
+  return items;
+}
+function startDrill(onlyIds){
+  var items=buildItems(onlyIds);
+  if(!items.length){S.note='No situations match. Try All pairs, or another track.';S.view='drill';render();return}
+  S.note='';
+  D={items:items,i:0,ok:0,answered:false,picked:-1,missed:[]};
+  S.view='drill';
+  paintTabs();$('searchBox').hidden=true;
+  renderQ();
+}
+function renderQ(){
+  if(D.i>=D.items.length)return renderEnd();
+  var it=D.items[D.i],p=it.p;
+  var left=it.flip?'b':'a',right=it.flip?'a':'b';
+  var opts=[left,right];
+  var h='<div class="sbar"><button class="linkbtn" data-act="quit">End drill</button><div class="prog"><i style="width:'+(D.i/D.items.length*100)+'%"></i></div><span class="n">'+(D.i+1)+' / '+D.items.length+'</span></div>';
+  h+='<div class="card"><div class="tags"><span class="tag t-'+p.k+'">'+esc(TN[p.k])+'</span></div><span class="qlab">Which term does this describe?</span><p class="q">'+esc(it.s[0])+'</p><div class="opts">';
+  opts.forEach(function(side,idx){
+    var cls='opt';
+    if(D.answered){if(side===it.s[1])cls+=' right';else if(idx===D.picked)cls+=' wrong'}
+    h+='<button class="'+cls+'" data-act="pick" data-i="'+idx+'"'+(D.answered?' disabled':'')+'><span class="k">'+(idx+1)+'</span><span style="font-family:var(--font-mono);font-weight:600">'+esc(p[side])+'</span></button>';
+  });
+  h+='</div>';
+  if(D.answered){
+    var ok=opts[D.picked]===it.s[1];
+    h+='<div class="fb" role="status"><span class="verdict '+(ok?'ok':'no')+'">'+(ok?'Correct.':'Not quite.')+' This is '+esc(p[it.s[1]])+'.</span>'+
+      '<div class="callout tellbox"><span class="lab">The tell</span><p>'+esc(p.tell)+'</p></div>'+
+      '<div class="callout"><span class="lab">'+esc(p.a)+'</span><p>'+esc(p.da)+'</p></div>'+
+      '<div class="callout"><span class="lab">'+esc(p.b)+'</span><p>'+esc(p.db)+'</p></div></div>';
+  }
+  h+='</div>';
+  if(D.answered)h+='<div class="actions"><button class="btn primary" data-act="next" id="mainBtn">'+(D.i+1>=D.items.length?'Finish':'Next')+' <kbd>space</kbd></button></div>';
+  $('app').innerHTML=h;
+  var b=$('mainBtn');if(b){try{b.focus({preventScroll:true})}catch(e){}}
+  window.scrollTo({top:0});
+}
+function pick(idx){
+  if(D.answered)return;
+  var it=D.items[D.i],p=it.p;
+  var side=(idx===0)?(it.flip?'b':'a'):(it.flip?'a':'b');
+  var ok=side===it.s[1];
+  D.answered=true;D.picked=idx;
+  var st=store.pairs[p.id]||{n:0,m:0};st.n++;if(!ok)st.m++;store.pairs[p.id]=st;save();
+  if(ok)D.ok++;else if(D.missed.indexOf(p.id)<0)D.missed.push(p.id);
+  renderQ();
+}
+function renderEnd(){
+  var n=D.items.length,pct=Math.round(D.ok/n*100);
+  var h='<div class="card"><span class="qlab">Drill complete</span><p class="big2">'+D.ok+'<span style="color:var(--muted);font-size:24px"> / '+n+'</span></p><p class="hint">'+pct+'% right. '+(pct>=85?'You can tell these apart reliably.':pct>=60?'Good base. The pairs you missed are worth a second look.':'These pairs are easy to mix up, which is why they are worth practicing.')+'</p>';
+  if(D.missed.length){
+    h+='<div class="fld"><span class="lab">Review these pairs</span><div class="miss">'+D.missed.map(function(id){var p=BY[id];return '<div class="mi"><b>'+esc(p.a)+' vs '+esc(p.b)+'</b><p>'+esc(p.tell)+'</p></div>'}).join('')+'</div></div>';
+  }
+  h+='</div><div class="actions">'+(D.missed.length?'<button class="btn primary" data-act="retry">Drill the missed pairs</button>':'')+'<button class="btn'+(D.missed.length?'':' primary')+'" data-act="homeD">Back to drill</button></div>';
+  $('app').innerHTML=h;window.scrollTo({top:0});
+}
+
+function paintTabs(){
+  $('tabC').setAttribute('aria-pressed',S.view==='compare');
+  $('tabD').setAttribute('aria-pressed',S.view==='drill');
+}
+function render(){
+  paintTabs();buildChips();
+  $('searchBox').hidden=(S.view!=='compare');
+  var n=PAIRS.length;
+  $('sub').textContent=n+' pairs of terms that people mix up, each with a plain test for telling them apart, plus '+(PAIRS.reduce(function(a,p){return a+p.scen.length},0))+' real-world situations to drill.';
+  if(S.view==='compare')renderCompare();else renderDrillHome();
+}
+
+$('app').addEventListener('click',function(e){
+  var t=e.target.closest('[data-act],[data-toggle]');if(!t)return;
+  var tg=t.getAttribute('data-toggle');
+  if(tg){OPEN[tg]=!OPEN[tg];var art=document.getElementById(tg);art.classList.toggle('open',!!OPEN[tg]);t.setAttribute('aria-expanded',!!OPEN[tg]);return}
+  var a=t.getAttribute('data-act');
+  if(a==='drillone'){startDrill([t.getAttribute('data-id')])}
+  else if(a==='start'){startDrill()}
+  else if(a==='pick'){pick(+t.getAttribute('data-i'))}
+  else if(a==='next'){D.i++;D.answered=false;D.picked=-1;renderQ()}
+  else if(a==='quit'){if(D&&D.i>0){D.i=D.items.length;renderEnd()}else{S.view='drill';render()}}
+  else if(a==='retry'){startDrill(D.missed.slice())}
+  else if(a==='homeD'){S.view='drill';render()}
+  else if(a==='reset'){
+    if(t.getAttribute('data-arm')){store={pairs:{}};save();render()}
+    else{t.setAttribute('data-arm','1');t.textContent='Tap again to erase everything';setTimeout(function(){if(t&&t.isConnected){t.removeAttribute('data-arm');t.textContent='Reset all progress'}},4000)}
+  }
+});
+$('app').addEventListener('change',function(e){
+  if(e.target.id==='len')S.len=+e.target.value;
+  else if(e.target.id==='focus'){S.focus=e.target.value}
+});
+$('tracks').addEventListener('click',function(e){var b=e.target.closest('[data-track]');if(!b)return;S.track=b.getAttribute('data-track');D=null;render()});
+$('q').addEventListener('input',function(){S.q=this.value;if(S.view==='compare')renderCompare()});
+$('tabC').addEventListener('click',function(){S.view='compare';D=null;render()});
+$('tabD').addEventListener('click',function(){S.view='drill';D=null;render()});
+document.addEventListener('keydown',function(e){
+  if(!D||S.view!=='drill'||D.i>=D.items.length)return;
+  var tag=e.target.tagName;if(tag==='INPUT'||tag==='SELECT'||tag==='TEXTAREA')return;
+  if(!D.answered&&(e.key==='1'||e.key==='2')){pick(+e.key-1)}
+  else if(D.answered&&(e.key===' '||e.key==='Enter')&&tag!=='BUTTON'){e.preventDefault();D.i++;D.answered=false;D.picked=-1;renderQ()}
+});
+render();
+})();
+</script>
+
+</body></html>

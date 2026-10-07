@@ -1,0 +1,645 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Tech Vocabulary Inventory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout concept: a flat, scannable reference index. Hairline-separated rows, sticky search and filters, track colors as small tags only. */
+:root{
+  --bg:#EDF1F5; --surface:#FFFFFF; --ink:#14212C; --muted:#586979; --line:#D3DCE5; --accent:#0A6A8A; --accent-ink:#FFFFFF; --focus:#0A6A8A;
+  --c-ds:#2A5DB0; --c-de:#0B7566; --c-sw:#A8501B; --c-sys:#6A4FA3; --c-ai:#A12E63;
+  --st-new:#6C7C8A; --st-shaky:#B26A00; --st-solid:#17803D;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F171F; --surface:#16212B; --ink:#E5ECF2; --muted:#9AAAB8; --line:#2A3947; --accent:#52B6D6; --accent-ink:#071218; --focus:#52B6D6;
+    --c-ds:#7DA6EC; --c-de:#4CC2AE; --c-sw:#E59A66; --c-sys:#B4A1E6; --c-ai:#EE86B3;
+    --st-new:#8696A5; --st-shaky:#E6A93A; --st-solid:#52C27B;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F171F; --surface:#16212B; --ink:#E5ECF2; --muted:#9AAAB8; --line:#2A3947; --accent:#52B6D6; --accent-ink:#071218; --focus:#52B6D6;
+  --c-ds:#7DA6EC; --c-de:#4CC2AE; --c-sw:#E59A66; --c-sys:#B4A1E6; --c-ai:#EE86B3;
+  --st-new:#8696A5; --st-shaky:#E6A93A; --st-solid:#52C27B;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:0 48px;-webkit-text-size-adjust:100%}
+.wrap{max-width:920px;margin-inline:auto}
+header.top{padding-block:28px 14px;display:flex;flex-direction:column;gap:12px}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.1;font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.sub{margin:0;color:var(--muted);max-width:66ch}
+.progress{display:flex;flex-direction:column;gap:6px}
+.bar{display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--line)}
+.bar span{display:block;height:100%;transition:width .25s}
+.bar .b-solid{background:var(--st-solid)}
+.bar .b-shaky{background:var(--st-shaky)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.legend b{color:var(--ink);font-weight:600}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:baseline}
+
+.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding-block:10px;margin-inline:-16px;padding-inline:16px;display:flex;flex-direction:column;gap:10px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.search{flex:1 1 220px;min-width:0;display:flex}
+.search input{width:100%;min-width:0;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:9px 12px}
+select{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 10px;max-width:100%}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 12px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.tabs{display:flex;gap:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.tabs button{font:inherit;font-size:14px;border:0;background:transparent;color:var(--muted);padding:8px 14px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:500}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
+.chip{flex:0 0 auto;font:inherit;font-size:13px;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer;white-space:nowrap;font-variant-numeric:tabular-nums}
+.chip small{color:var(--muted);margin-left:4px;font-size:12px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip[aria-pressed="true"] small{color:inherit;opacity:.75}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+
+.meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:12px 4px;color:var(--muted);font-size:13px}
+.letter{font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--accent);padding-block:18px 6px;border-bottom:1px solid var(--line);margin:0}
+.term{border-bottom:1px solid var(--line)}
+.head{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:start;padding-block:12px}
+.hit{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;cursor:pointer;min-width:0}
+.hit:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:4px}
+.name{font-family:var(--font-mono);font-weight:600;font-size:15px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.name .tt{overflow-wrap:anywhere}
+.tag{font-family:var(--font-body);font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:4px;color:var(--tc);background:color-mix(in srgb,var(--tc) 13%,transparent);white-space:nowrap}
+.tag.cat{color:var(--muted);background:transparent;border:1px solid var(--line)}
+.tag.taught{color:var(--accent);background:color-mix(in srgb,var(--accent) 13%,transparent)}
+.t-ds{--tc:var(--c-ds)}.t-de{--tc:var(--c-de)}.t-sw{--tc:var(--c-sw)}.t-sys{--tc:var(--c-sys)}.t-ai{--tc:var(--c-ai)}
+.mean{color:var(--ink);margin:0;max-width:72ch;overflow-wrap:anywhere}
+.st{font:inherit;font-size:12px;font-weight:500;border-radius:999px;padding:4px 11px;cursor:pointer;border:1px solid currentColor;background:transparent;min-width:62px}
+.st-0{color:var(--st-new)}
+.st-1{color:var(--st-shaky);background:color-mix(in srgb,var(--st-shaky) 14%,transparent)}
+.st-2{color:var(--st-solid);background:color-mix(in srgb,var(--st-solid) 14%,transparent)}
+.more{display:none;padding:0 0 16px;gap:10px;flex-direction:column;max-width:72ch}
+.term.open .more{display:flex}
+.fld{display:flex;flex-direction:column;gap:3px}
+.lab{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ex{margin:0;font-style:italic;color:var(--ink);overflow-wrap:anywhere}
+.rels{display:flex;flex-wrap:wrap;gap:5px}
+.rel{font-size:13px;padding:2px 9px;border-radius:4px;background:color-mix(in srgb,var(--muted) 14%,transparent);color:var(--ink);border:0;font-family:inherit}
+button.rel.link{cursor:pointer;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+button.rel.link:hover{text-decoration:underline}
+.opp{margin:0;overflow-wrap:anywhere}
+.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%{background:color-mix(in srgb,var(--accent) 22%,transparent)}100%{background:transparent}}
+@media (prefers-reduced-motion:reduce){.flash{animation:none}.bar span{transition:none}}
+
+.pb{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid var(--line);padding-block:14px;gap:14px}
+.pb > div{min-width:0}
+.pb .lab{display:block;margin-bottom:4px}
+.pb .before p{color:var(--muted);margin:0;text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--muted) 50%,transparent)}
+.pb .after p{margin:0;font-weight:500}
+.empty{padding:36px 0;color:var(--muted);text-align:center}
+footer{margin-top:28px;color:var(--muted);font-size:13px;max-width:70ch}
+@media (max-width:560px){
+  .head{grid-template-columns:1fr}
+  .st{justify-self:start}
+  .pb{grid-template-columns:1fr}
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Tech Vocabulary Inventory</h1>
+    <p class="sub" id="sub"></p>
+    <div class="progress" aria-live="polite">
+      <div class="bar" id="bar"><span class="b-solid" id="bSolid"></span><span class="b-shaky" id="bShaky"></span></div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="row">
+      <div class="tabs" role="group" aria-label="View">
+        <button id="tabTerms" aria-pressed="true">Glossary</button>
+        <button id="tabPhrase" aria-pressed="false">Say it like a senior</button>
+      </div>
+      <div class="search"><input id="q" type="search" placeholder="Search terms, meanings, related words" autocomplete="off" aria-label="Search"></div>
+    </div>
+    <div class="chips" id="tracks" role="group" aria-label="Track"></div>
+    <div class="row" id="filters">
+      <select id="cat" aria-label="Category"></select>
+      <select id="status" aria-label="Status">
+        <option value="all">All status</option>
+        <option value="0">New</option>
+        <option value="1">Shaky</option>
+        <option value="2">Solid</option>
+        <option value="taught">From our sessions</option>
+      </select>
+      <button class="btn" id="expand">Expand all</button>
+      <button class="btn" id="reset">Reset</button>
+    </div>
+  </div>
+
+  <div class="meta"><span id="count"></span><span id="hint">Tap a term to open it. Tap its status to cycle New, Shaky, Solid.</span></div>
+  <main id="list"></main>
+
+  <footer>Terms reflect common usage through mid-2026. The AI tooling area moves fastest, so expect names and best practices there to keep shifting. Statuses are stored in this browser only.</footer>
+</div>
+
+<script>
+var TERMS=[],PH=[];
+function slug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+function T(t,k,c,m,e,r,o){TERMS.push({t:t,k:k,c:c,m:m,e:e,r:r.split('|'),o:o,id:k+'-'+slug(t)})}
+function P(b,s,k){PH.push({b:b,s:s,k:k})}
+/* DATA SCIENCE & ML */
+T("p-value","ds","Statistics","Probability of seeing a result at least as extreme as yours if the null hypothesis were true. It is not the probability that your hypothesis is correct.","The p-value is 0.03, but the lift is 0.1%, so it is significant and still not worth shipping.","null hypothesis|significance level (alpha)|p-hacking|effect size|confidence interval","Effect size (how big, not just whether it is noise)");
+T("null hypothesis","ds","Statistics","The default assumption of no effect or no difference, which a statistical test tries to reject.","We could not reject the null hypothesis that the new ranking has the same click rate as the old one.","alternative hypothesis|p-value|Type I error|hypothesis test","Alternative hypothesis");
+T("statistical significance","ds","Statistics","A result unlikely to be due to chance alone at a chosen threshold (often 5%). It says nothing about whether the result matters in practice.","The change is statistically significant but practically negligible.","p-value|alpha|effect size|statistical power|practical significance","Practical (business) significance");
+T("confidence interval","ds","Statistics","A range of plausible values for a quantity estimated from a sample. A 95% interval means the method captures the true value 95% of the time across repeated samples.","Conversion rose 2.1% with a 95% CI of [0.4%, 3.8%], so the true lift could be small.","margin of error|standard error|bootstrap|credible interval|point estimate","Point estimate (a single number with no uncertainty)");
+T("effect size","ds","Statistics","The magnitude of a difference or relationship, independent of how large the sample is.","With millions of users even a trivial effect size becomes statistically significant.","Cohen's d|lift|practical significance|p-value|minimum detectable effect","p-value (tells if, not how much)");
+T("statistical power","ds","Statistics","The probability that a test detects a real effect when one exists. Low power means real effects get missed.","The test was underpowered, so 'no difference' really means 'we could not tell'.","sample size|minimum detectable effect|Type II error|power analysis|alpha","Underpowered test");
+T("Type I and Type II error","ds","Statistics","Type I is a false positive (declaring an effect that is not there). Type II is a false negative (missing a real effect).","Running 40 metric comparisons without correction inflates our Type I error rate.","false positive|false negative|alpha|power|multiple comparisons","Correct decision (true positive / true negative)");
+T("A/B test","ds","Statistics","A randomized experiment that compares two variants (control and treatment) to measure the causal effect of a change.","We A/B tested the new onboarding flow on 10% of traffic for two weeks.","randomization|control group|guardrail metric|novelty effect|sample ratio mismatch|multivariate test","Observational study (no random assignment)");
+T("confounder","ds","Statistics","A hidden variable that influences both the cause and the effect, creating a misleading link between them.","Ice cream sales and drownings correlate because of a confounder: hot weather.","correlation vs causation|spurious correlation|randomization|controlling for|instrumental variable","Randomized experiment (breaks confounding)");
+T("selection bias","ds","Statistics","Distortion that arises when the sample you analyze is not representative because of how it was chosen or who dropped out.","Only analyzing users who finished the survey introduces selection bias.","survivorship bias|sampling bias|non-response bias|representative sample|self-selection","Random sample");
+T("Simpson's paradox","ds","Statistics","A trend that appears in several subgroups but reverses or disappears when the groups are combined.","Overall acceptance looked lower for women, but within each department it was higher: classic Simpson's paradox.","confounder|aggregation|stratification|segmentation|ecological fallacy","Consistent trend across and within groups");
+T("bootstrap","ds","Statistics","Resampling your data with replacement many times to estimate the uncertainty of a statistic without strong distributional assumptions.","We bootstrapped the median to get a confidence interval.","resampling|confidence interval|standard error|permutation test|jackknife","Closed-form analytic formula");
+T("Bayesian inference","ds","Statistics","Updating a prior belief with observed data to get a posterior distribution, so uncertainty is expressed as probabilities over parameters.","With little data we used an informative prior, then the posterior tightened as events came in.","prior|posterior|likelihood|credible interval|MCMC|Bayes' theorem","Frequentist inference");
+T("outlier","ds","Statistics","A data point far from the others. It may be an error, a rare real event, or the most interesting record, so investigate before removing.","A single outlier of 10 million was a unit mix-up, not a real order.","anomaly detection|robust statistics|winsorizing|IQR|z-score|leverage","Inlier / typical observation");
+T("multicollinearity","ds","Statistics","When predictors in a model are highly correlated, making coefficients unstable and hard to interpret even if predictions stay fine.","High multicollinearity between height_cm and height_in blew up the coefficient variance.","VIF|correlation matrix|regularization|PCA|feature selection","Independent features");
+T("central limit theorem","ds","Statistics","Averages of many independent samples tend toward a normal distribution regardless of the original distribution, which is why many tests work on means.","By the central limit theorem the sample mean is roughly normal at this sample size.","law of large numbers|standard error|normal distribution|sampling distribution|sample size","Heavy-tailed data where the mean is unstable");
+T("base rate","ds","Statistics","How common an event is in the overall population. Ignoring it (the base-rate fallacy) makes rare-event predictions look better than they are.","With a 0.1% fraud base rate, even a 99% accurate detector flags mostly legitimate transactions.","prior probability|prevalence|precision|false positive rate|Bayes' theorem","Conditional (case-specific) probability");
+T("p-hacking","ds","Statistics","Trying many analyses, subgroups or metrics until something crosses the significance threshold, then reporting only that.","Slicing the data 30 ways until one segment hit p < 0.05 is p-hacking.","multiple comparisons|Bonferroni|pre-registration|garden of forking paths|replication","Pre-registered analysis plan");
+
+T("overfitting","ds","Modeling","A model learns noise and quirks of the training set, so it scores very well on training data and badly on new data.","Training loss keeps dropping while validation loss rises, which is classic overfitting.","underfitting|regularization|early stopping|generalization|validation set|variance","Underfitting");
+T("underfitting","ds","Modeling","A model is too simple to capture the real pattern, so it performs poorly on both training and new data.","A linear model on this curved relationship underfits: high bias, poor everywhere.","high bias|model capacity|feature engineering|overfitting|baseline","Overfitting");
+T("regularization","ds","Modeling","Techniques that discourage excess model complexity, usually by penalizing large weights, so the model generalizes instead of memorizing.","We added L2 regularization and early stopping to curb overfitting.","L1 (lasso)|L2 (ridge)|weight decay|dropout|early stopping|data augmentation","Unconstrained / overfit model");
+T("bias-variance tradeoff","ds","Modeling","Simpler models have high bias and low variance, flexible models the reverse. Good generalization comes from balancing the two.","Deeper trees cut bias but raised variance, so we pruned and used bagging.","overfitting|underfitting|ensemble|regularization|model complexity|irreducible error","Perfect model (does not exist: irreducible error remains)");
+T("generalization","ds","Modeling","How well a model performs on data it has not seen. It is the real goal of training, not training accuracy.","Good generalization matters more than a record-low training loss.","overfitting|validation set|holdout|distribution shift|robustness","Memorization");
+T("cross-validation","ds","Modeling","Splitting data into several folds and rotating which fold is held out for validation, giving a more stable performance estimate.","5-fold cross-validation gave an AUC of 0.81 +/- 0.02.","k-fold|stratified split|time-series split|nested CV|holdout|leakage","Single train/test split");
+T("hyperparameter","ds","Modeling","A setting chosen before training (learning rate, tree depth, regularization strength) rather than learned from the data.","We tuned hyperparameters with random search on the validation set.","parameter|grid search|random search|Bayesian optimization|learning rate|AutoML","Parameter (learned during training)");
+T("feature engineering","ds","Modeling","Creating or transforming input variables (ratios, lags, aggregates, encodings) so a model can learn the signal more easily.","Adding a 'days since last purchase' feature boosted recall more than any model change.","feature selection|encoding|scaling|interaction term|feature store|domain knowledge","Representation learning (model learns features itself)");
+T("gradient descent","ds","Modeling","An optimization method that repeatedly nudges parameters in the direction that reduces the loss, in steps scaled by the learning rate.","Stochastic gradient descent updates the weights on small mini-batches.","learning rate|loss function|SGD|Adam|local minimum|convergence","Closed-form solution");
+T("loss function","ds","Modeling","A number measuring how wrong the model's predictions are. Training tries to minimize it.","Switching from MSE to Huber loss made training robust to outliers.","cross-entropy|MSE|objective function|metric|regularization term|cost function","Evaluation metric (what humans care about, not always what is optimized)");
+T("ensemble","ds","Modeling","Combining several models so their errors average out, usually beating any single one. Common forms: bagging, boosting, stacking.","A random forest is an ensemble of decorrelated decision trees.","bagging|boosting|stacking|random forest|voting|variance reduction","Single model");
+T("gradient boosting","ds","Modeling","An ensemble that builds trees one at a time, each correcting the previous trees' errors. XGBoost and LightGBM are popular implementations.","For tabular data we still reach for gradient boosting before deep learning.","XGBoost|LightGBM|CatBoost|random forest|learning rate|shrinkage","Bagging (trees built independently in parallel)");
+T("curse of dimensionality","ds","Modeling","As the number of features grows, data becomes sparse, distances lose meaning, and models need exponentially more data.","With 5,000 features and 2,000 rows, the curse of dimensionality bites, so reduce first.","dimensionality reduction|sparsity|feature selection|PCA|distance metrics","Dense, low-dimensional data");
+T("dimensionality reduction","ds","Modeling","Compressing many features into fewer informative ones to simplify models, speed them up, or visualize data.","We used PCA to project 300 features down to 20 components.","PCA|t-SNE|UMAP|autoencoder|feature selection|manifold","Feature expansion");
+T("clustering","ds","Modeling","Grouping similar items without labels, such as customer segments. K-means, hierarchical and DBSCAN are common methods.","K-means clustering split users into four behavioral segments.","k-means|DBSCAN|silhouette score|unsupervised learning|centroid|segmentation","Classification (labels are known)");
+T("supervised vs unsupervised learning","ds","Modeling","Supervised learning learns from labeled examples to predict a target. Unsupervised learning finds structure in unlabeled data. Self-supervised creates labels from the data itself.","Fraud detection is supervised; segmenting customers is unsupervised.","labels|self-supervised|semi-supervised|regression|classification|clustering","Reinforcement learning (learns from rewards)");
+T("transfer learning","ds","Modeling","Reusing a model trained on one large task as the starting point for a related task, usually needing far less data.","We fine-tuned a pretrained vision model on 2,000 labeled factory images.","pretraining|fine-tuning|feature extraction|domain adaptation|foundation model","Training from scratch");
+T("baseline","ds","Modeling","A simple reference model or rule (predict the mean, last value, majority class) that any real model must beat to justify its complexity.","Our fancy model only beat the 'same as last week' baseline by 1%.","naive forecast|heuristic|benchmark|ablation|simple model first","State-of-the-art model");
+T("class imbalance","ds","Modeling","When one class is much rarer than another (fraud, churn, defects), so naive models ignore the rare class and accuracy is misleading.","With 1% positives, we used class weights and judged by PR-AUC, not accuracy.","resampling|SMOTE|class weights|precision-recall|stratified split|anomaly detection","Balanced dataset");
+T("interpretability","ds","Modeling","How well humans can understand why a model made a prediction. Explainability tools like SHAP approximate this for complex models.","Regulators need interpretability, so we used a scorecard with SHAP checks.","explainability|SHAP|LIME|feature importance|black box|partial dependence","Black-box model");
+T("imputation","ds","Modeling","Filling in missing values using a rule or model (mean, median, nearest neighbors, model-based), ideally fit on training data only.","We imputed missing income with the median, plus a 'was_missing' flag.","missing at random|missingness indicator|drop vs fill|KNN imputer|leakage","Deleting rows with missing values");
+T("encoding","ds","Modeling","Turning categorical values into numbers a model can use: one-hot, ordinal, target encoding, or learned embeddings.","One-hot encoding a city column with 10,000 values exploded the feature count, so we used target encoding.","one-hot|ordinal encoding|target encoding|embedding|high cardinality|hashing trick","Raw string categories");
+T("normalization vs standardization","ds","Modeling","Normalization rescales values to a fixed range (like 0 to 1). Standardization shifts to mean 0 and unit variance. Both help scale-sensitive models.","Distance-based models like k-NN need standardized features.","min-max scaling|z-score|batch norm|feature scaling|robust scaler","Unscaled features");
+T("cold start","ds","Modeling","The problem of making good predictions for a new user or item with no history, common in recommenders.","For new users we fall back to popularity-based recommendations to handle cold start.","recommender system|popularity baseline|content-based filtering|exploration|bandits","Warm start (history exists)");
+T("reinforcement learning","ds","Modeling","Training an agent through trial and error to maximize cumulative reward from an environment.","The warehouse robot policy was trained with reinforcement learning in simulation.","reward|policy|agent|exploration vs exploitation|RLHF|bandit","Supervised learning (learns from labeled answers)");
+T("data leakage","ds","Modeling","Information from outside the training data (future data, test set, or a proxy for the label) sneaks into training, so evaluation looks great and production fails.","99% accuracy is suspicious; check for leakage before celebrating.","target leakage|temporal leakage|train/test contamination|holdout set|data snooping","Clean split / leakage-free evaluation");
+T("calibration","ds","Modeling","How closely predicted probabilities match real frequencies: among cases scored 0.8, about 80% should be positive.","The model ranks well but is overconfident above 0.7, so we apply isotonic calibration.","reliability diagram|Brier score|ECE|Platt scaling|temperature scaling|overconfidence","Miscalibrated (overconfident or underconfident)");
+
+T("precision and recall","ds","Evaluation","Precision: of the items flagged positive, how many truly are. Recall: of all true positives, how many were found. They usually trade off.","For cancer screening we favor recall; for spam we favor precision.","F1|PR curve|threshold|false positive|false negative|sensitivity|specificity","Accuracy (hides imbalance)");
+T("F1 score","ds","Evaluation","The harmonic mean of precision and recall, a single number that is low if either is low.","F1 of 0.62 hides that recall is great and precision is poor.","precision|recall|F-beta|macro vs micro averaging|accuracy","Accuracy");
+T("ROC-AUC","ds","Evaluation","Area under the ROC curve: the chance the model ranks a random positive above a random negative. 0.5 is chance, 1.0 is perfect. Says nothing about calibration.","AUC is 0.91 but PR-AUC is only 0.30, because positives are rare.","ROC curve|PR-AUC|true positive rate|false positive rate|ranking quality|Gini","Accuracy at a single threshold");
+T("confusion matrix","ds","Evaluation","A table of predicted vs actual classes showing true/false positives and negatives, from which most classification metrics derive.","The confusion matrix shows most errors are class B misread as class C.","TP / FP / TN / FN|precision|recall|specificity|error analysis","Single summary number");
+T("train / validation / test split","ds","Evaluation","Train data fits the model, validation data tunes choices, and the test set is touched once at the end for an unbiased estimate.","We reused the test set while tuning, so its score is no longer trustworthy.","holdout|data leakage|stratification|time-based split|cross-validation","Evaluating on training data");
+T("ground truth","ds","Evaluation","The trusted correct answers (labels) that model outputs are compared against. Its quality caps the quality of any evaluation.","Our ground truth came from two annotators who disagreed on 15% of cases.","labels|annotation|label noise|inter-annotator agreement|gold standard|golden dataset","Weak labels / proxy labels");
+T("benchmark","ds","Evaluation","A standardized dataset and metric used to compare models fairly. Beware of overfitting to it or training on it.","The model tops the benchmark, but benchmarks may not reflect our real traffic.","leaderboard|test set|contamination|SOTA|eval harness|in-distribution","Real-world production evaluation");
+T("data drift and concept drift","ds","Evaluation","Data drift: input distributions change over time. Concept drift: the relationship between inputs and the target changes. Both degrade deployed models.","After the pricing change, concept drift made last year's churn model obsolete.","distribution shift|monitoring|PSI|retraining|covariate shift|label shift","Stationary data");
+T("offline vs online evaluation","ds","Evaluation","Offline: score a model on historical data. Online: measure it on live traffic, usually via an A/B test. Offline wins do not always translate.","It won offline by 3% AUC but lost the online A/B test on revenue.","A/B test|shadow mode|counterfactual evaluation|proxy metric|guardrail metric","Offline-only evaluation");
+T("RMSE and MAE","ds","Evaluation","Common regression errors. MAE is the average absolute error. RMSE squares errors first, so it punishes large misses more.","We report MAE for business readability and RMSE when big misses are costly.","MSE|MAPE|R-squared|residuals|outlier sensitivity","Classification metrics");
+T("decision threshold","ds","Evaluation","The cutoff that converts a predicted probability into a yes/no action. Moving it trades precision against recall.","We lowered the threshold from 0.5 to 0.3 to catch more fraud, accepting more reviews.","precision-recall tradeoff|cost matrix|calibration|operating point","Ranking without a cutoff");
+T("inter-annotator agreement","ds","Evaluation","How consistently different human labelers give the same label (often measured with Cohen's kappa). Low agreement signals unclear guidelines or an ambiguous task.","Kappa was 0.45, so we rewrote the labeling guidelines before training.","Cohen's kappa|annotation guidelines|label noise|adjudication|gold set","Single-annotator labels");
+
+T("neural network","ds","Deep learning","A model made of layers of simple units whose weights are learned, able to approximate very complex functions.","A small feed-forward neural network was enough for this tabular task.","layer|weights|activation function|deep learning|CNN|RNN|transformer","Linear model / decision tree");
+T("backpropagation","ds","Deep learning","The algorithm that computes how much each weight contributed to the error, by applying the chain rule backward through the network, so gradient descent can update them.","Backpropagation through 100 layers can suffer vanishing gradients.","gradient|chain rule|autograd|forward pass|vanishing gradient","Forward pass (inference)");
+T("epoch, batch and learning rate","ds","Deep learning","An epoch is one full pass over the training data. A batch is the chunk processed per update. The learning rate sets the step size of each update.","We trained for 10 epochs with batch size 64 and a decaying learning rate.","mini-batch|learning-rate schedule|warmup|steps|convergence|Adam","Full-batch training");
+T("activation function","ds","Deep learning","A nonlinear function applied inside a network (ReLU, GELU, sigmoid, softmax) that lets it learn more than straight lines.","ReLU is the default activation; softmax turns outputs into class probabilities.","ReLU|GELU|sigmoid|softmax|nonlinearity|dead neurons","Linear layer only");
+T("vanishing gradient","ds","Deep learning","Gradients shrink toward zero as they flow back through many layers, so early layers learn extremely slowly. Fixed with ReLU, residual connections and normalization.","Residual connections fixed the vanishing gradient in our deep model.","exploding gradient|residual connection|batch norm|LSTM|gradient clipping","Stable gradient flow");
+T("dropout","ds","Deep learning","Randomly switching off a fraction of neurons during training so the network cannot rely on any single path, a form of regularization.","We used 0.3 dropout on the dense layers.","regularization|overfitting|ensemble effect|inference mode|batch norm","Full network at training time");
+T("inductive bias","ds","Deep learning","The built-in assumptions of a model architecture that guide what it learns (convolutions assume locality, RNNs assume sequence order).","CNNs have a strong inductive bias for images, so they need less data than a plain MLP.","architecture|prior|data efficiency|CNN|transformer|generalization","Few assumptions, lots of data (scale instead of bias)");
+/* DATA ENGINEERING & ANALYTICS */
+T("join","de","SQL","Combining rows from two tables on a matching key. Inner joins keep matches only; left joins keep every row from the left table.","The left join left NULLs for customers with no orders.","inner join|left join|full outer join|cross join|join key|fan-out|anti-join","Union (stacks rows instead of matching them)");
+T("CTE (common table expression)","de","SQL","A named temporary result defined with WITH at the top of a query, making complex SQL readable by breaking it into steps.","I refactored the 200-line query into three CTEs.","WITH clause|subquery|recursive CTE|temp table|view","Deeply nested subqueries");
+T("window function","de","SQL","A calculation across related rows without collapsing them, using OVER (PARTITION BY ... ORDER BY ...): running totals, ranks, lags.","We used ROW_NUMBER() over a window to keep the latest record per user.","PARTITION BY|ROW_NUMBER|RANK|LAG / LEAD|running total|frame","GROUP BY aggregate (collapses rows)");
+T("index","de","SQL","A data structure that lets the database find rows quickly without scanning the whole table, at the cost of extra storage and slower writes.","Adding an index on user_id cut the query from 12s to 40ms.","B-tree|composite index|covering index|full table scan|selectivity|write amplification","Full table scan");
+T("query plan","de","SQL","The database's chosen strategy for running a query. EXPLAIN shows it, revealing scans, joins and where time goes.","The query plan shows a sequential scan on a 200M-row table.","EXPLAIN / EXPLAIN ANALYZE|optimizer|statistics|seq scan|index scan|cost","Guessing at why a query is slow");
+T("normalization vs denormalization","de","Modeling","Normalization splits data into related tables to avoid duplication. Denormalization deliberately duplicates data to make reads faster or simpler.","Transactional tables are normalized; the reporting layer is denormalized.","third normal form|redundancy|update anomaly|wide table|star schema","Opposite of each other: a trade-off between write integrity and read speed");
+T("primary key and foreign key","de","Modeling","A primary key uniquely identifies a row. A foreign key is a column that references another table's primary key, linking tables.","orders.customer_id is a foreign key to customers.id.","surrogate key|natural key|composite key|referential integrity|constraint","Unconstrained duplicate-prone data");
+T("star schema","de","Modeling","A warehouse design with a central fact table (events or measures) surrounded by dimension tables (who, what, when, where).","Sales is the fact table; customer, product and date are dimensions in our star schema.","fact table|dimension table|snowflake schema|grain|surrogate key|slowly changing dimension","Highly normalized transactional schema");
+T("OLTP vs OLAP","de","Architecture","OLTP systems handle many small, fast transactions (orders, logins). OLAP systems handle large analytical scans and aggregations over history.","Don't run heavy reports on the OLTP database; replicate to the OLAP warehouse.","transactional database|data warehouse|columnar|read replica|HTAP","Each is the other's opposite workload");
+T("data warehouse","de","Architecture","A central, structured store optimized for analytics, holding cleaned, modeled data from many sources (Snowflake, BigQuery, Redshift).","Finance reports come from the warehouse, not the production database.","Snowflake|BigQuery|Redshift|data mart|schema-on-write|ELT","Data lake (raw, flexible)");
+T("data lake","de","Architecture","Cheap storage holding raw data of any format (files, logs, JSON) with structure applied when read (schema-on-read).","We land raw events in the data lake and model them later.","object storage|schema-on-read|Parquet|data swamp|bronze layer","Data warehouse (curated, schema-on-write)");
+T("lakehouse","de","Architecture","An architecture that adds warehouse features (tables, transactions, governance) on top of data-lake storage using formats like Delta, Iceberg or Hudi.","The lakehouse lets analysts and ML teams share the same tables.","Delta Lake|Apache Iceberg|Hudi|ACID tables|open table format","Separate lake and warehouse copies");
+T("columnar storage","de","Architecture","Storing data by column instead of by row, so analytic queries read only the columns they need and compress well (Parquet, ORC).","Parquet's columnar layout made the aggregation 20x faster than CSV.","Parquet|ORC|compression|predicate pushdown|row-oriented","Row-oriented storage");
+T("partitioning","de","Architecture","Splitting a large table into chunks (often by date or key) so queries and jobs touch only the relevant pieces.","Partitioning by event_date means last week's query skips two years of data.","partition pruning|shard|clustering key|skew|hot partition","Single monolithic table");
+T("ETL vs ELT","de","Pipelines","ETL transforms data before loading it. ELT loads raw data first and transforms it inside the warehouse, now more common with cheap compute.","We moved from ETL to ELT so analysts can re-model raw data themselves.","dbt|extract|load|transform|staging|reverse ETL","Hand-edited spreadsheets");
+T("data pipeline","de","Pipelines","An automated sequence of steps that moves and transforms data from sources to destinations.","The nightly pipeline ingests orders, cleans them and refreshes the dashboard tables.","ingestion|transformation|DAG|scheduler|retry|idempotent load","Manual one-off data pull");
+T("orchestration and DAGs","de","Pipelines","Orchestration schedules and coordinates pipeline tasks. A DAG (directed acyclic graph) defines task order and dependencies with no loops.","The Airflow DAG waits for the upstream load before running transforms.","Airflow|Dagster|Prefect|task dependency|backfill|SLA miss","Cron jobs with hidden dependencies");
+T("batch vs streaming","de","Pipelines","Batch processes accumulated data on a schedule. Streaming processes events continuously as they arrive, with lower latency and more complexity.","Daily revenue is batch; fraud scoring must be streaming.","Kafka|Flink|Spark|micro-batch|windowing|event time","Each is the other's alternative: latency vs simplicity");
+T("change data capture (CDC)","de","Pipelines","Capturing inserts, updates and deletes from a source database's log and streaming them downstream, instead of re-copying whole tables.","Debezium streams CDC events from Postgres into the lake.","Debezium|transaction log|binlog|incremental load|replication","Full table reload");
+T("data lineage","de","Governance","A map of where data came from and how it was transformed, so you can trace a number back to its sources and see what a change will break.","Lineage showed the broken dashboard depended on a deprecated table.","data catalog|impact analysis|metadata|provenance|column-level lineage","Untraceable numbers");
+T("data contract","de","Governance","A formal agreement between data producers and consumers about schema, meaning, freshness and quality, so changes do not silently break downstream users.","The contract says order_total is never null and changes need 30 days notice.","schema registry|SLA|breaking change|ownership|validation","Implicit assumptions");
+T("schema evolution","de","Governance","Changing a table or message schema over time (adding columns, changing types) without breaking existing readers and writers.","Adding an optional column is safe schema evolution; renaming one is breaking.","backward compatibility|forward compatibility|Avro|schema registry|migration","Frozen schema");
+T("slowly changing dimension (SCD)","de","Modeling","A pattern for tracking changes in descriptive attributes over time. Type 1 overwrites; Type 2 keeps history with new rows and validity dates.","A Type 2 SCD lets us report revenue by the customer's region at the time of sale.","Type 1 / Type 2|effective dates|surrogate key|history table|snapshot","Overwriting history");
+T("upsert","de","Pipelines","Update the row if it exists, insert it if not. A key tool for making loads idempotent.","The loader upserts on order_id, so retries never create duplicates.","MERGE|ON CONFLICT|idempotent|deduplication|primary key","Blind insert (creates duplicates on retry)");
+T("deduplication","de","Pipelines","Removing repeated records, typically keeping one per key using a rule such as latest timestamp.","At-least-once delivery means we deduplicate on event_id downstream.","ROW_NUMBER|distinct|at-least-once|idempotency key|primary key","Accepting duplicates");
+T("late-arriving data and watermarks","de","Pipelines","Events that show up after their time window has passed. A watermark tells a stream processor how long to wait before closing a window.","We set a 10-minute watermark to absorb late mobile events.","event time vs processing time|windowing|out-of-order|backfill|allowed lateness","Perfectly ordered events");
+T("data catalog","de","Governance","A searchable inventory of datasets with descriptions, owners, schemas and quality info so people can find and trust data.","Check the data catalog before building a new table.","metadata|glossary|data steward|discoverability|lineage","Tribal knowledge");
+T("cardinality","de","SQL","The number of distinct values in a column, or the relationship between tables (one-to-one, one-to-many, many-to-many).","High-cardinality columns like user_id make poor partition keys.","distinct count|selectivity|one-to-many|many-to-many|fan-out","Low-cardinality / few distinct values");
+T("materialized view","de","SQL","A query result stored physically and refreshed periodically, trading freshness for fast reads.","Dashboards read from a materialized view refreshed hourly.","view|cache|refresh schedule|incremental refresh|precomputation","Plain view (recomputed on every query)");
+T("cohort analysis","de","Analytics","Grouping users by a shared start (signup month) and tracking their behavior over time, such as retention by cohort.","Cohort analysis shows March signups retain better than February's.","retention curve|churn|LTV|segmentation|survivorship bias","Aggregate average across all users");
+T("funnel analysis","de","Analytics","Measuring how many users complete each step of a multi-step flow (visit, signup, purchase) and where they drop off.","The funnel shows 60% of users abandon at the payment step.","conversion rate|drop-off|attribution|event tracking|sessionization","Looking at total traffic only");
+T("metric definition and single source of truth","de","Analytics","Agreeing on one precise, shared definition of a metric (what counts as an 'active user') in one governed place so teams stop reporting different numbers.","Marketing and finance had two definitions of 'revenue', so we built a semantic layer.","semantic layer|KPI|metrics store|data dictionary|north-star metric|vanity metric","Competing spreadsheet definitions");
+T("data quality","de","Governance","How fit data is for use: completeness, accuracy, consistency, timeliness, uniqueness. Usually enforced with automated checks.","A freshness check alerts us if the table has not updated in 3 hours.","null checks|freshness|uniqueness test|anomaly detection|dbt tests|Great Expectations","Garbage in, garbage out");
+T("data observability","de","Governance","Monitoring the health of data itself (freshness, volume, schema, distribution) to detect broken pipelines before users notice.","Observability caught a 40% drop in row count overnight.","freshness|volume anomaly|lineage|alert fatigue|data downtime","Finding out from an angry stakeholder");
+T("medallion architecture","de","Architecture","A layered lakehouse pattern: bronze (raw), silver (cleaned, conformed), gold (business-ready aggregates).","Raw events land in bronze, are cleaned into silver, and feed gold reporting tables.","bronze / silver / gold|lakehouse|Delta Lake|incremental processing|data product","Single flat raw dump");
+T("feature store","de","ML data","A shared system that stores, versions and serves ML features consistently for both training and real-time inference.","The feature store guarantees training and serving compute 'avg_order_value' the same way.","training-serving skew|point-in-time join|online / offline store|feature reuse","Ad hoc notebooks recomputing features");
+T("point-in-time correctness","de","ML data","Joining data as it existed at each event's moment, not as it is today, so training data never sees the future.","Without a point-in-time join our features leaked next month's balances.","as-of join|temporal leakage|feature store|snapshot|time travel","Joining on the latest value (leaks the future)");
+/* SOFTWARE ENGINEERING */
+T("abstraction","sw","Design","Hiding complexity behind a simple interface so callers use what something does without knowing how it works.","The storage layer is an abstraction, so we can swap S3 for local disk in tests.","interface|encapsulation|leaky abstraction|layering|API|information hiding","Leaky abstraction / exposed internals");
+T("coupling and cohesion","sw","Design","Coupling is how much modules depend on each other. Cohesion is how closely a module's parts belong together. Aim for low coupling, high cohesion.","This class does billing, emailing and logging: low cohesion, high coupling.","separation of concerns|single responsibility|modularity|dependency|god object","Tightly coupled spaghetti / grab-bag module");
+T("separation of concerns","sw","Design","Organizing code so each part handles one distinct responsibility (data access, business logic, presentation).","Keep SQL out of the view layer: separation of concerns.","layering|MVC|single responsibility|modularity|clean architecture","Mixed-up logic in one file");
+T("DRY, YAGNI and KISS","sw","Design","Three rules of thumb: Don't Repeat Yourself, You Aren't Gonna Need It (don't build for imagined futures), Keep It Simple.","This config option is YAGNI; nobody asked for it.","premature optimization|over-engineering|abstraction|rule of three|duplication","Over-engineering / speculative generality");
+T("design pattern","sw","Design","A named, reusable solution to a common design problem (factory, observer, strategy), which gives teams shared shorthand.","We used the strategy pattern to swap pricing rules at runtime.","factory|observer|singleton|strategy|adapter|anti-pattern","Anti-pattern");
+T("dependency injection","sw","Design","Passing a component's dependencies in from outside instead of creating them inside, making code easier to test and swap.","Inject the database client so tests can pass a fake.","inversion of control|mock|constructor injection|service locator|testability","Hard-coded dependencies");
+T("API contract","sw","Design","The agreed behavior of an interface: inputs, outputs, errors and guarantees. Changing it can break every consumer.","Adding a required field breaks the API contract; make it optional.","OpenAPI|schema|versioning|breaking change|backward compatibility|consumer-driven contract","Undocumented behavior");
+T("refactoring","sw","Quality","Restructuring existing code to improve clarity or design without changing what it does, ideally covered by tests.","I refactored the parser into three functions before adding the feature.","code smell|technical debt|tests first|rename / extract method|rewrite","Rewrite (discard and rebuild)");
+T("technical debt","sw","Quality","The future cost of a quick or messy solution chosen now. It accrues interest: later changes get slower and riskier until it is paid down.","We took on debt to hit launch; paydown is scheduled for next sprint.","refactoring|code smell|legacy code|workaround|velocity drag|TODO/FIXME","Clean, maintainable code");
+T("code smell","sw","Quality","A surface symptom in code (giant function, duplicated blocks, long parameter list) that hints at a deeper design problem.","A 600-line function with nine parameters is a code smell.","refactoring|god class|duplication|magic number|dead code|linting","Clean code");
+T("legacy code","sw","Quality","Older code that is hard to change safely, often undocumented and untested. Michael Feathers defines it as code without tests.","We wrap the legacy code in characterization tests before touching it.","characterization tests|strangler fig|technical debt|rewrite|bus factor","Greenfield project");
+T("monolith vs microservices","sw","Architecture","A monolith is deployed as one unit. Microservices split a system into independently deployable services, trading simplicity for flexibility and operational cost.","We kept the modular monolith; microservices would add network failures we do not need.","service boundary|modular monolith|distributed system|API gateway|Conway's law","Each is a trade-off, not a winner");
+T("immutability","sw","Design","Data that cannot be changed after creation. Updates produce new values, which removes whole classes of bugs, especially with concurrency.","Immutable config objects mean no thread can change them mid-request.","mutable state|pure function|thread safety|copy-on-write|persistent data structure","Mutable shared state");
+T("side effect","sw","Design","Anything a function does besides returning a value: writing a file, changing a global, sending a request.","get_user() should not have the side effect of updating last_seen.","pure function|idempotent|mutation|referential transparency|command-query separation","Pure function");
+T("pure function","sw","Design","A function whose output depends only on its inputs and which has no side effects, so it is easy to test and reason about.","Keep the pricing calculation a pure function; do the I/O at the edges.","side effect|determinism|memoization|functional programming|referential transparency","Impure function with hidden state");
+T("idempotent","sw","Reliability","An operation that leaves the system in the same state whether it runs once or many times, so retries are safe.","We made the payment call idempotent with an idempotency key.","retry|idempotency key|upsert|at-least-once|exactly-once|deduplication","Non-idempotent (side effects accumulate)");
+T("race condition","sw","Concurrency","The outcome depends on the timing or order of concurrent operations, so identical code can give different results run to run.","Two workers read the same counter and both write value+1: a race condition.","mutex / lock|atomic operation|deadlock|critical section|heisenbug|thread-safe","Deterministic, serialized execution");
+T("concurrency vs parallelism","sw","Concurrency","Concurrency is structuring a program to handle many tasks overlapping in time. Parallelism is literally running tasks at the same instant on multiple cores.","An async web server is concurrent on one core; a data job split across 8 cores is parallel.","threads|processes|async / await|event loop|GIL|multiprocessing","Sequential execution");
+T("deadlock","sw","Concurrency","Two or more tasks each hold a resource the other needs and wait forever, so nothing progresses.","Thread A locks the user row then the order row; thread B does the reverse: deadlock.","lock ordering|timeout|livelock|starvation|race condition","Race condition (wrong result vs stuck forever)");
+T("asynchronous programming","sw","Concurrency","Starting an operation and continuing other work while waiting for it to finish (async/await, callbacks, promises), instead of blocking.","The handler awaits the database call without blocking the event loop.","async / await|event loop|callback|promise|non-blocking I/O|blocking","Synchronous (blocking) execution");
+T("memory leak","sw","Runtime","Memory that is allocated and never released, so usage grows until the process slows or crashes.","The service's RSS climbs 50MB per hour: a memory leak in the cache.","garbage collection|heap profile|reference cycle|unbounded cache|OOM","Bounded, stable memory");
+T("garbage collection","sw","Runtime","Automatic reclaiming of memory that a program no longer uses, as in Java, Go, Python and JavaScript.","Long GC pauses spiked our p99 latency.","heap|reference counting|stop-the-world|memory leak|allocation rate","Manual memory management");
+T("Big-O notation","sw","Algorithms","A way to describe how an algorithm's time or memory grows as input size grows, ignoring constants: O(1), O(log n), O(n), O(n log n), O(n^2).","The nested loop is O(n^2), which hurts at a million rows.","time complexity|space complexity|amortized|hash map|sorting|scaling","Constant-time O(1)");
+T("caching","sw","Performance","Storing the result of expensive work so repeated requests are served faster. The hard parts are invalidation and staleness.","We cache the exchange rate for 60 seconds.","TTL|cache invalidation|cache hit ratio|write-through|stale data|Redis","Recomputing on every request");
+T("edge case","sw","Quality","An input or situation at the extremes or outside normal use (empty list, zero, Unicode, leap day) where bugs hide.","Add a test for the edge case where the cart is empty.","boundary condition|corner case|fuzzing|property-based testing|null handling","Happy path");
+T("regression","sw","Quality","A bug where something that used to work breaks after a change.","The refactor caused a regression in date parsing.","regression test|bisect|release notes|rollback|test suite","Progression / new feature");
+T("backward compatibility","sw","Versioning","New versions keep working with existing clients, data and integrations without requiring changes from them.","We kept the old field for backward compatibility for two releases.","breaking change|deprecation|semantic versioning|migration|API versioning","Breaking change");
+T("semantic versioning (SemVer)","sw","Versioning","A MAJOR.MINOR.PATCH scheme: major for breaking changes, minor for backward-compatible features, patch for compatible fixes.","Bumping to 3.0.0 signals a breaking change.","breaking change|changelog|pre-release tag|pinning|lockfile","Unversioned or calendar-only releases");
+T("deprecation","sw","Versioning","Officially marking a feature as discouraged and scheduled for removal, with notice and a migration path.","The v1 endpoint is deprecated and will be removed in March.","sunset date|migration guide|warning|breaking change|backward compatibility","Removal / end of life");
+T("feature flag","sw","Delivery","A runtime switch that turns a feature on or off without redeploying, enabling gradual rollouts, tests and instant kill-switches.","We shipped the code dark behind a feature flag and ramped to 5% of users.","progressive rollout|kill switch|canary|trunk-based development|flag debt","Long-lived feature branch");
+T("code review","sw","Delivery","Having teammates inspect a change (usually a pull request) before it merges, to catch bugs, share knowledge and keep standards.","Please leave nits as comments, and flag blocking issues clearly in code review.","pull request|LGTM|nit|approval|reviewer|pair programming","Merging unreviewed changes");
+T("merge conflict","sw","Delivery","Git cannot automatically combine two changes to the same lines, so a human must choose the result.","Rebase onto main and resolve the merge conflict in config.yaml.","rebase|merge|branch|conflict markers|trunk-based development","Clean fast-forward merge");
+T("trunk-based development","sw","Delivery","Everyone commits small changes to one main branch frequently, using feature flags instead of long-lived branches.","Trunk-based development kept our merges small and painless.","feature flag|continuous integration|short-lived branch|Gitflow|release train","Long-lived feature branches");
+T("CI/CD","sw","Delivery","Continuous integration automatically builds and tests every change. Continuous delivery/deployment automatically ships passing changes toward or into production.","The CI pipeline runs tests; CD deploys to staging on merge.","pipeline|build|artifact|GitHub Actions|deployment|gating","Manual builds and releases");
+T("unit, integration and end-to-end tests","sw","Testing","Unit tests check small pieces in isolation, integration tests check components working together, end-to-end tests drive the whole system like a user.","Many fast unit tests, fewer integration tests, a handful of end-to-end tests: the test pyramid.","test pyramid|mock|fixture|contract test|smoke test|flaky test","Manual testing only");
+T("mock and stub","sw","Testing","Stand-in objects for real dependencies in tests. A stub returns canned answers; a mock also verifies how it was called.","We stub the payment gateway so tests do not charge cards.","fake|spy|test double|dependency injection|isolation","The real dependency");
+T("test coverage","sw","Testing","The share of code executed by tests. High coverage does not prove good tests, but low coverage shows blind spots.","90% coverage with no assertions is meaningless.","line vs branch coverage|mutation testing|assertion|dead code","Untested code");
+T("flaky test","sw","Testing","A test that sometimes passes and sometimes fails with no code change, often caused by timing, shared state or race conditions.","Quarantine the flaky test and open a ticket for the race condition.","race condition|retry|quarantine|non-determinism|test isolation|timeout","Deterministic, reliable test");
+T("TDD (test-driven development)","sw","Testing","Writing a failing test first, then the minimal code to pass it, then refactoring: red, green, refactor.","With TDD the spec is the test.","red-green-refactor|unit test|BDD|refactoring|regression test","Writing tests after the fact");
+T("linting and static analysis","sw","Quality","Automated tools that inspect code without running it for style issues, bugs and risky patterns.","The linter fails the build on unused imports.","ESLint|ruff / flake8|type checker|SAST|formatter|pre-commit hook","Manual style policing");
+T("type system and type safety","sw","Design","Rules that classify values (int, string, user) and catch misuse early. Static typing checks before running; dynamic typing at runtime.","Adding type hints caught a None-handling bug before production.","static vs dynamic typing|type hints|generics|null safety|mypy / TypeScript","Untyped / stringly-typed code");
+T("exception handling","sw","Reliability","Detecting and responding to errors during execution, instead of letting the program crash or silently continue.","Catch the specific timeout, retry once, and surface everything else.","try / catch|error propagation|fail fast|retry|logging|swallowed exception","Silently ignoring errors");
+T("REST API","sw","Interfaces","A web API style using HTTP methods (GET, POST, PUT, DELETE) on resource URLs, usually exchanging JSON, with standard status codes.","GET /orders/42 returns the order; a 404 means it does not exist.","HTTP verbs|status codes|JSON|OpenAPI|GraphQL|gRPC|pagination","RPC / GraphQL (other styles)");
+T("authentication vs authorization","sw","Security","Authentication proves who you are. Authorization decides what you are allowed to do.","Login is authentication; checking the admin role is authorization.","OAuth|JWT|RBAC|SSO|session|MFA|least privilege","Anonymous / unrestricted access");
+T("serialization","sw","Interfaces","Converting in-memory data to a format for storage or transmission (JSON, Protobuf, Avro) and back (deserialization).","Switching from JSON to Protobuf shrank payloads by 60%.","JSON|Protobuf|Avro|schema|encoding|marshalling","In-memory object only");
+T("library vs framework","sw","Design","A library is code you call. A framework calls your code and imposes structure (inversion of control).","Requests is a library; Django is a framework.","inversion of control|SDK|dependency|boilerplate|opinionated","Writing from scratch");
+T("transitive dependency","sw","Delivery","A package your code depends on indirectly, through another dependency. A common source of version conflicts and security issues.","The vulnerable version came in as a transitive dependency of the logging library.","lockfile|dependency hell|SBOM|pinning|supply chain","Direct dependency");
+T("script block","sw","Languages","A delimited chunk of executable code treated as one unit: an HTML script tag, a PowerShell {...} value, or the script section of a CI job.","The deploy job fails on the third line of its script block.","code block|lambda|callback|heredoc|CI job|snippet","Declarative configuration");
+T("boilerplate","sw","Quality","Repetitive, standard code that must be written in many places with little variation.","The generator removes the boilerplate for new endpoints.","scaffolding|template|code generation|macro|DRY","Concise, purpose-built code");
+
+T("bus factor","sw","Team & culture","How many people could be lost (hit by a bus) before a project stalls because critical knowledge leaves with them. A bus factor of 1 is a risk.","Only Maria understands the billing job: our bus factor is one.","knowledge silo|documentation|pairing|ownership|key-person risk","Shared ownership");
+T("bikeshedding","sw","Team & culture","Spending disproportionate time on trivial, easy-to-opine issues (naming, colors) while important decisions get little attention.","We spent 40 minutes on the button color and 5 on the data model: classic bikeshedding.","Parkinson's law of triviality|timebox|decision owner|yak shaving","Focusing on the high-impact decision");
+T("yak shaving","sw","Team & culture","Getting dragged through a chain of small prerequisite tasks that have little to do with your original goal.","To fix the bug I had to upgrade the library, which needed a new compiler: pure yak shaving.","rabbit hole|scope creep|dependency chain|time sink","Direct path to the goal");
+T("footgun","sw","Team & culture","A feature or design that makes it easy to accidentally hurt yourself, such as an API where the dangerous option is the default.","The delete-all endpoint with no confirmation is a footgun.","sharp edge|safe defaults|guardrail|pit of success|API design","Pit of success (safe by default)");
+T("nit","sw","Team & culture","A minor, non-blocking comment in code review about style or small polish. Prefixed with 'nit:' so the author can ignore it.","nit: rename tmp to retry_count.","LGTM|blocking comment|style guide|review etiquette","Blocking issue");
+T("rubber duck debugging","sw","Team & culture","Explaining your problem line by line, to a colleague or a literal rubber duck, so the act of explaining reveals the bug.","I was about to ask, then explained it to the duck and saw the off-by-one.","explaining aloud|minimal repro|hypothesis|pair debugging","Debugging silently in circles");
+T("spike","sw","Team & culture","A short, time-boxed investigation to learn something or test feasibility before committing to build, not to ship.","Let's do a two-day spike on whether the vendor API supports bulk export.","timebox|proof of concept|prototype|risk reduction|estimate","Committed delivery work");
+/* SYSTEMS & INFRASTRUCTURE */
+T("latency vs throughput","sys","Performance","Latency is how long one request takes. Throughput is how many requests (or how much data) the system handles per unit of time. Improving one can hurt the other.","Batching raises throughput but adds latency.","p99 latency|bandwidth|concurrency|queueing|response time|RPS","Each is the other axis of the trade-off");
+T("scalability","sys","Reliability","Ability to handle growing load by adding resources. Vertical scaling makes one machine bigger; horizontal scaling adds more machines.","We scale out horizontally behind a load balancer; the database is still vertically scaled.","horizontal vs vertical scaling|stateless service|sharding|autoscaling|bottleneck","Fixed-capacity / single-node system");
+T("availability","sys","Reliability","The share of time a system is up and serving requests, often quoted in nines (99.9% allows about 8.8 hours of downtime a year).","Moving to two zones took us from three nines to four nines of availability.","uptime|nines|redundancy|failover|SLA|MTTR","Downtime / outage");
+T("reliability","sys","Reliability","The probability that a system does its job correctly over time, including surviving faults. It is broader than uptime alone.","Reliable means correct under failure, not just reachable.","fault tolerance|MTBF|SRE|error rate|durability","Fragile / brittle system");
+T("SLI, SLO and SLA","sys","Reliability","SLI is a measured indicator (request success rate). SLO is the internal target for it (99.9%). SLA is the contractual promise to customers, with penalties.","Our SLO is 99.9% of requests under 300ms; the SLA is looser.","error budget|burn rate|uptime|latency target|customer credit","Unmeasured 'it feels fast'");
+T("error budget","sys","Reliability","The amount of unreliability an SLO allows (0.1% for a 99.9% target). Spend it on shipping; when it runs out, prioritize stability.","We burned the error budget early, so we froze risky launches.","SLO|burn rate|release freeze|SRE|risk tolerance","Perfect reliability target (100%)");
+T("fault tolerance","sys","Reliability","A system's ability to keep working correctly when parts of it fail.","The cluster is fault tolerant: losing one node causes no downtime.","redundancy|failover|replication|graceful degradation|chaos engineering","Single point of failure");
+T("redundancy and failover","sys","Reliability","Redundancy keeps spare copies of components. Failover automatically switches to a spare when the primary fails.","The primary database failed over to the replica in 20 seconds.","active-passive|active-active|health check|replica|RTO / RPO","No spare capacity");
+T("load balancer","sys","Networking","A component that spreads incoming requests across multiple servers, checking their health and routing around failures.","The load balancer drains the unhealthy instance before we redeploy it.","round robin|health check|sticky session|reverse proxy|Layer 4 / 7|autoscaling","Single server taking all traffic");
+T("CDN","sys","Networking","A content delivery network caches content on servers close to users to cut latency and offload your origin.","Static assets are served from the CDN edge, so origin traffic dropped 80%.","edge cache|origin|TTL|cache invalidation|PoP","Serving everything from one origin");
+T("rate limiting","sys","Reliability","Capping how many requests a client can make in a period to protect the service and ensure fairness.","The API returns 429 after 100 requests per minute per key.","token bucket|429|throttling|quota|abuse prevention|backpressure","Unlimited access");
+T("backpressure","sys","Reliability","A slow consumer pushes back on a fast producer so the system slows, buffers within limits or drops work instead of crashing.","With no backpressure, the unbounded queue ate all our memory.","bounded queue|load shedding|rate limiting|consumer lag|flow control|429 / 503","Unbounded buffering / no flow control");
+T("circuit breaker","sys","Reliability","Stops calling a failing dependency for a while so failures do not cascade, then tests it again before resuming.","The circuit breaker opened after five timeouts and returned a cached response.","closed / open / half-open|cascading failure|timeout|fallback|bulkhead","Hammering a failing service");
+T("retry with exponential backoff","sys","Reliability","Retrying failed calls with growing waits (1s, 2s, 4s...) and random jitter so retries do not pile on a struggling service.","Retries use exponential backoff with jitter, capped at five attempts.","jitter|idempotent|thundering herd|timeout|retry budget","Immediate tight retry loop");
+T("timeout","sys","Reliability","A maximum wait for an operation. Without timeouts one slow dependency can tie up every thread and take the system down.","Set explicit timeouts on every outbound call.","deadline|connect vs read timeout|cascading failure|circuit breaker|hung request","Waiting forever");
+T("eventual vs strong consistency","sys","Distributed systems","Strong consistency: every read sees the latest write. Eventual consistency: replicas converge over time, so reads may briefly be stale, in exchange for availability and speed.","Likes are eventually consistent; the account balance must be strongly consistent.","CAP theorem|replication lag|read-your-writes|linearizability|quorum","Each is the other end of a spectrum");
+T("CAP theorem","sys","Distributed systems","During a network partition a distributed system must choose between consistency and availability; it cannot guarantee both.","On a partition our store favors availability, so reads can be stale (AP).","partition tolerance|consistency|availability|PACELC|CP vs AP","A single-node system (no partition to survive)");
+T("replication","sys","Distributed systems","Keeping copies of data on several nodes for durability, availability and read scaling. Leader-follower and multi-leader are common designs.","Reads go to replicas, so we tolerate a little replication lag.","leader / follower|replication lag|quorum|failover|read replica","Single copy of data");
+T("sharding","sys","Distributed systems","Splitting data across multiple machines by a key so no single node holds everything, enabling scale at the cost of complexity.","We shard orders by customer_id; cross-shard joins are painful.","partitioning|shard key|hot shard|rebalancing|consistent hashing","Single database instance");
+T("message queue and pub/sub","sys","Messaging","A queue holds messages for consumers to process asynchronously. Pub/sub broadcasts events to every subscriber. Decouples producers and consumers.","Orders publish to Kafka; billing and email each subscribe.","Kafka|RabbitMQ|SQS|topic|consumer group|decoupling","Synchronous direct call");
+T("event-driven architecture","sys","Messaging","Components communicate by emitting and reacting to events, so they are loosely coupled and can scale independently.","The service emits an OrderPlaced event; inventory and email react.","event sourcing|CQRS|pub/sub|choreography|eventual consistency|saga","Request/response orchestration");
+T("delivery guarantees","sys","Messaging","At-most-once may lose messages. At-least-once never loses but may duplicate. Exactly-once is expensive; in practice you get it with at-least-once plus idempotent processing.","Kafka gives at-least-once; our consumer is idempotent so duplicates are harmless.","idempotent|deduplication|ack|offset commit|transactional outbox","Fire-and-forget");
+T("dead-letter queue (DLQ)","sys","Messaging","A holding queue for messages that repeatedly fail processing, so they do not block the main flow and can be inspected later.","Poison messages land in the DLQ after three attempts.","poison message|retry|alerting|replay|redrive","Dropping or endlessly retrying failures");
+T("container","sys","Infrastructure","A lightweight, portable package that bundles an app with its dependencies and runs isolated on a shared OS kernel (Docker).","It works on my machine; ship it in a container so it works everywhere.","Docker|image|registry|namespace|VM|sidecar","Virtual machine (full OS per instance)");
+T("Kubernetes","sys","Infrastructure","An orchestrator that schedules containers across machines, restarts them on failure, scales them and manages networking and rollouts.","The pod crash-loops; check the liveness probe and events.","pod|deployment|node|ingress|helm|HPA|namespace","Manually managed servers");
+T("infrastructure as code (IaC)","sys","Infrastructure","Defining servers, networks and permissions in versioned code (Terraform, CloudFormation) so environments are reproducible and reviewable.","The VPC is Terraform, so rebuilding staging is one command.","Terraform|drift|state file|declarative|idempotent apply|GitOps","Click-ops (manual console changes)");
+T("observability","sys","Operations","The ability to understand a system's internal state from its outputs: logs, metrics and traces, so you can ask new questions without new code.","We lacked traces, so we could not tell which hop was slow.","logs|metrics|traces|OpenTelemetry|dashboards|cardinality|monitoring","Black box / flying blind");
+T("distributed tracing","sys","Operations","Following one request across many services with a shared trace ID to see where time and errors occur.","The trace shows 700ms spent waiting on the inventory service.","span|trace ID|OpenTelemetry|Jaeger|latency breakdown|correlation ID","Per-service logs with no link");
+T("alerting and on-call","sys","Operations","Alerts notify responders when something needs action. On-call is the rotation of engineers who respond. Good alerts are actionable and rare.","We cut noisy alerts so on-call is not paged for every blip.","paging|alert fatigue|runbook|escalation|SLO-based alerts|incident","Finding out from customers");
+T("postmortem","sys","Operations","A written review after an incident covering timeline, root causes and follow-ups. Blameless postmortems focus on systems and process, not individuals.","The blameless postmortem led to three action items.","blameless|root cause|5 whys|timeline|action items|incident review","Blame and silence");
+T("runbook","sys","Operations","A step-by-step guide for handling a known operational task or alert, so any on-call engineer can act quickly.","The alert links straight to the runbook for restarting the consumer.","playbook|on-call|automation|SOP|incident response","Tribal knowledge");
+T("canary and blue-green deployment","sys","Delivery","Canary releases a change to a small slice of traffic first. Blue-green runs two full environments and switches traffic between them, allowing instant rollback.","We canaried at 1% and watched error rates before ramping up.","progressive rollout|rollback|feature flag|traffic shifting|health check","Big-bang deployment");
+T("rollback","sys","Delivery","Reverting to the previous known-good version after a bad release. Easiest when changes are small and database migrations are backward compatible.","Error rate spiked after the deploy, so we rolled back first and investigated second.","roll forward|hotfix|backward-compatible migration|blue-green|versioned artifact","Roll forward (fix and push ahead)");
+T("serverless","sys","Infrastructure","A model where the cloud runs your code on demand and handles servers and scaling for you, billing by use (functions, managed databases).","Cheap for spiky workloads, but cold starts affect latency.","Lambda / Cloud Functions|cold start|pay-per-use|event trigger|FaaS","Always-on dedicated servers");
+T("multi-tenancy","sys","Architecture","One deployment serving many customers (tenants) with their data and behavior isolated from each other.","In a multi-tenant system a noisy neighbor can slow everyone.","tenant isolation|noisy neighbor|row-level security|single-tenant|quota","Single-tenant (dedicated per customer)");
+T("least privilege","sys","Security","Giving every user, service and process only the access it needs and nothing more, limiting damage if it is compromised.","The job's role can read one bucket, not the whole account.","IAM|RBAC|blast radius|service account|zero trust|secrets management","Admin access for everything");
+T("secrets management","sys","Security","Storing and distributing credentials (API keys, passwords, certificates) securely with rotation and audit, never in code or repos.","Rotate the key and move it into the secrets manager, not an env file in git.","vault|rotation|KMS|environment variable|leaked credential|OIDC","Hard-coded secrets");
+T("tail latency (p99)","sys","Performance","Latency percentiles show the slowest requests. p50 is typical, p99 is what 1 in 100 users feels. Averages hide tail latency.","Average is 80ms but p99 is 2.4s; users in the tail are suffering.","percentile|p50 / p95 / p99|histogram|SLO|queueing|outlier","Median / average latency");
+T("capacity planning","sys","Operations","Forecasting the resources (compute, storage, network) needed to meet future demand with headroom, before limits are hit.","We load tested and sized for 3x peak with 30% headroom.","headroom|load test|autoscaling|forecast|bottleneck|quota","Scaling reactively during an outage");
+T("autoscaling","sys","Infrastructure","Automatically adding or removing capacity based on load or schedule.","The service autoscales on CPU and queue depth.","HPA|scale-out / scale-in|warm-up time|cooldown|min / max replicas","Fixed manual capacity");
+T("single point of failure (SPOF)","sys","Reliability","Any component whose failure takes down the whole system because there is no backup.","The lone cron host is a SPOF.","redundancy|failover|high availability|dependency mapping|blast radius","Redundant, highly available design");
+T("thundering herd","sys","Reliability","A surge of simultaneous requests (for example when a cache expires or a service restarts) that overwhelms the backend.","All caches expired at midnight, causing a thundering herd on the database.","cache stampede|jitter|request coalescing|staggered TTL|backoff","Smoothed, staggered load");
+T("graceful degradation","sys","Reliability","When parts fail, keep core functionality working in a reduced form instead of failing completely.","If recommendations are down, show popular items instead of an error page.","fallback|feature shedding|circuit breaker|fail-safe|resilience","Hard failure / total outage");
+T("cold start","sys","Performance","The extra delay on the first request after a service or function has been idle, while it initializes.","Serverless cold starts add 1 to 2 seconds to the first call.","warm pool|provisioned concurrency|initialization|lazy loading|serverless","Warm instance");
+T("blast radius","sys","Reliability","How much of the system or how many users are affected when something goes wrong. Good design keeps it small.","Rolling out to one region first limits the blast radius.","isolation|bulkhead|canary|least privilege|cell-based architecture|SPOF","Global, all-at-once impact");
+T("toil","sys","Operations","Repetitive, manual, automatable operational work that scales with the service and brings no lasting value.","Rotating certificates by hand every month is toil; automate it.","automation|SRE|runbook|on-call load|operational overhead","Engineering work that reduces future work");
+T("chaos engineering","sys","Reliability","Deliberately injecting failures (killing instances, adding latency) in a controlled way to find weaknesses before real incidents do.","We run a monthly game day that kills a random replica.","game day|fault injection|resilience|steady state|blast radius","Hoping nothing breaks");
+/* LLM & AI ENGINEERING */
+T("LLM (large language model)","ai","Foundations","A neural network trained on huge amounts of text to predict the next token, which gives it broad abilities in writing, reasoning and code.","We call the LLM through an API and treat its output as untrusted text.","foundation model|transformer|token|parameters|pretraining|inference","Small task-specific model / rule-based system");
+T("token and tokenization","ai","Foundations","Models read text as tokens, chunks of characters or word pieces. Context limits, speed and cost are all measured in tokens.","A page is roughly 500 tokens; we budget tokens, not words.","BPE|context window|token budget|cost per token|vocabulary","Characters or words (tokens are in between)");
+T("prompt","ai","Prompting","The input given to a model: instructions, context, examples and the user's question.","The prompt includes the policy text and three worked examples.","system prompt|user prompt|template|prompt engineering|few-shot","Model output / completion");
+T("system prompt","ai","Prompting","Standing instructions that set a model's role, rules and style for a whole conversation, usually written by the developer, not the user.","The system prompt tells the assistant to cite sources and refuse legal advice.","instructions|persona|guardrails|prompt injection|context","User message");
+T("prompt engineering","ai","Prompting","Designing and iterating prompts (instructions, examples, structure) to get reliable outputs, ideally measured against evals, not by feel.","We improved accuracy by moving the rules before the examples and re-running the eval.","few-shot|chain of thought|prompt template|eval|prompt versioning|context engineering","Changing the model's weights (fine-tuning)");
+T("zero-shot and few-shot","ai","Prompting","Zero-shot gives only instructions. Few-shot adds a handful of worked examples in the prompt to show the desired format or behavior.","Three few-shot examples fixed the JSON formatting.","in-context learning|examples|prompt|exemplar selection|one-shot","Fine-tuning on thousands of examples");
+T("chain of thought","ai","Prompting","Having a model reason step by step before answering, which often improves accuracy on multi-step problems. Many modern models do this internally.","Asking for step-by-step reasoning improved math accuracy.","reasoning model|scratchpad|test-time compute|self-consistency|tree of thought","Direct answer with no reasoning");
+T("sampling parameters (temperature, top-p)","ai","Inference","Settings that control randomness in generation. Low temperature is more deterministic; higher is more varied. Top-p restricts choices to the most probable tokens.","Use temperature 0 for extraction and a higher value for brainstorming.","temperature|top-p|top-k|greedy decoding|determinism|seed","Greedy (always pick the most likely token)");
+T("hallucination","ai","Reliability","A model producing fluent but false or unsupported content with confidence, such as invented citations or facts.","The assistant hallucinated a function that does not exist in our SDK.","grounding|RAG|citations|confabulation|factuality|verification","Grounded, source-backed answer");
+T("grounding","ai","Reliability","Tying a model's output to trusted sources (retrieved documents, tool results, databases) so claims can be checked.","Grounding every answer in retrieved passages with citations cut hallucinations.","RAG|citations|retrieval|attribution|tool use|verification","Ungrounded generation from memory");
+T("RAG (retrieval-augmented generation)","ai","Retrieval","Retrieving relevant documents at question time and adding them to the prompt so the answer is grounded in them instead of only the model's memory.","The support bot uses RAG over the help center, with citations.","embeddings|vector database|chunking|reranking|hybrid search|grounding|context window","Closed-book answering / fine-tuning only");
+T("embeddings","ai","Retrieval","Numeric vectors representing the meaning of text, images or other data, so similar items sit close together and can be found by distance.","We embed each chunk and the query, then take the nearest neighbors.","vector|cosine similarity|vector database|semantic search|embedding model|dimensionality","Keyword / exact-match representation");
+T("vector database","ai","Retrieval","A database built to store embeddings and quickly find the nearest ones (approximate nearest-neighbor search).","We store 2M chunk vectors in a vector database with metadata filters.","ANN|HNSW|index|cosine similarity|metadata filtering|pgvector|Pinecone","Relational / keyword index");
+T("semantic search","ai","Retrieval","Searching by meaning rather than exact words, usually via embeddings, so 'car' can match 'automobile'.","Semantic search found the refund policy even though the user never said 'refund'.","embeddings|keyword search|BM25|hybrid search|query rewriting","Keyword search");
+T("chunking","ai","Retrieval","Splitting documents into smaller pieces for indexing and retrieval. Chunk size and overlap strongly affect retrieval quality.","Chunking by section headings beat fixed 500-token chunks.","overlap|chunk size|semantic chunking|metadata|context window|parent-child retrieval","Embedding whole documents");
+T("reranking","ai","Retrieval","A second pass that reorders retrieved candidates with a more accurate (and slower) model before they reach the LLM.","Retrieve 50, rerank, and keep the top 5 for the prompt.","cross-encoder|top-k|recall vs precision|hybrid search|relevance score","Using first-pass retrieval order as is");
+T("hybrid search","ai","Retrieval","Combining keyword search (like BM25) with semantic vector search, merging both result lists for better coverage.","Hybrid search handles exact part numbers and fuzzy questions.","BM25|semantic search|reciprocal rank fusion|reranking|lexical","Keyword-only or vector-only search");
+T("context window","ai","Foundations","The maximum amount of text (in tokens) a model can consider at once: instructions, history, retrieved documents and its own output.","The 300-page document does not fit, so we chunk and retrieve.","token|truncation|chunking|prompt caching|lost in the middle|compaction|stateless","External memory / retrieval");
+T("context engineering","ai","Prompting","Deliberately curating everything placed in the model's context (instructions, tools, retrieved data, memory, history) so it has what it needs and nothing distracting.","Most of our quality gains came from better context engineering, not a bigger model.","prompt engineering|retrieval|compaction|agent memory|tool results|token budget","Stuffing everything into the prompt");
+T("fine-tuning","ai","Training","Continuing a pretrained model's training on your own examples to change its behavior, style or skills.","We fine-tuned a small model on 5,000 labeled tickets for consistent tone.","LoRA / PEFT|instruction tuning|pretraining|catastrophic forgetting|SFT|distillation","Prompting or RAG (no weight changes)");
+T("LoRA and PEFT","ai","Training","Parameter-efficient fine-tuning updates a small set of added weights (like LoRA adapters) instead of the whole model, cutting cost and memory.","LoRA adapters let us fine-tune on one GPU and swap them per customer.","adapter|QLoRA|full fine-tuning|rank|weights|merge","Full fine-tuning of all parameters");
+T("RLHF and preference tuning","ai","Training","Training a model with human (or AI) preference judgments so outputs become more helpful and safe. Variants include DPO and RLAIF.","Preference tuning made the model follow instructions more reliably.","reward model|DPO|RLAIF|alignment|PPO|human feedback","Pure next-token pretraining");
+T("pretraining","ai","Training","The initial, expensive phase where a model learns general knowledge from a massive corpus, before any task-specific tuning.","Pretraining gives breadth; post-training shapes behavior.","foundation model|corpus|compute|post-training|scaling laws|fine-tuning","Task-specific fine-tuning");
+T("distillation","ai","Training","Training a smaller 'student' model to imitate a larger 'teacher' model, keeping much of the quality at lower cost and latency.","We distilled the big model's outputs into an 8B model for production.","teacher-student|synthetic data|compression|quantization|pruning","Training from raw labels only");
+T("quantization","ai","Inference","Storing and computing model numbers at lower precision (16-bit to 8 or 4-bit) to cut memory and speed up inference, with a small quality loss.","The 4-bit quantized model fits on one GPU.","FP16 / INT8 / INT4|GGUF|GPTQ|AWQ|VRAM|latency|distillation","Full-precision model");
+T("inference","ai","Inference","Running a trained model to produce outputs, as opposed to training it. Most production cost and latency work happens here.","Inference costs dominate our bill, not training.","latency|throughput|batching|KV cache|serving|GPU","Training");
+T("time to first token and tokens per second","ai","Inference","Time to first token (TTFT) is the wait before output starts. Tokens per second is the streaming speed after that. Both shape perceived latency.","Streaming made the app feel fast even though total latency was 6s.","streaming|latency|throughput|prefill vs decode|batching","Waiting for the complete response");
+T("KV cache","ai","Inference","Stored attention keys and values for tokens already processed, so the model does not recompute them for each new token. Uses lots of memory for long contexts.","Long contexts are memory-bound because of the KV cache.","attention|memory bandwidth|prompt caching|prefill|paged attention","Recomputing every token each step");
+T("prompt caching","ai","Inference","Reusing the processed form of a repeated prompt prefix (long instructions, documents) across requests to cut latency and cost.","With prompt caching, the 20k-token system prompt costs a fraction after the first call.","prefix|KV cache|TTL|cache hit|token cost|static content first","Re-processing the full prompt every call");
+T("tool use (function calling)","ai","Agents","The model outputs a structured request to call an external function (search, database, calculator), the app runs it, and the result goes back to the model.","The model calls get_order_status and answers from the returned JSON.","function calling|JSON schema|tool result|MCP|API|agent","Pure text generation with no external actions");
+T("agent","ai","Agents","A system where an LLM decides which actions to take (tool calls, steps) in a loop toward a goal, observing results and adapting.","The coding agent edits files, runs tests, reads failures and tries again.","agent loop|tools|planning|memory|agentic workflow|harness|sandbox","Fixed pipeline / single prompt");
+T("agentic workflow","ai","Agents","A multi-step process where an LLM plans, uses tools and iterates, ranging from fixed steps with LLM calls to fully autonomous loops.","We started with a deterministic workflow and added autonomy only where it paid off.","workflow vs agent|orchestration|routing|human-in-the-loop|evaluator-optimizer","One-shot prompt");
+T("multi-agent system","ai","Agents","Several LLM agents with different roles or contexts that coordinate on a task, for example a planner, workers and a reviewer.","A research lead spawns sub-agents that search in parallel and report back.","orchestrator|subagent|handoff|parallelism|shared state|coordination overhead","Single agent");
+T("MCP (Model Context Protocol)","ai","Agents","An open standard for connecting AI applications to tools and data sources through a common interface, so integrations are built once and reused.","We exposed our ticketing system as an MCP server so any compatible assistant can use it.","MCP server|MCP client|tools|resources|connector|integration standard","One-off custom integrations per app");
+T("structured output","ai","Reliability","Constraining a model to return output in a defined format such as JSON matching a schema, so downstream code can parse it reliably.","We request JSON that conforms to a schema and validate it before use.","JSON schema|constrained decoding|parsing|validation|function calling|Pydantic","Free-form text");
+T("guardrails","ai","Safety","Checks and constraints around a model (input filters, output validation, policy rules, permission limits) that keep behavior within bounds.","Guardrails block PII in outputs and cap refunds the agent can issue.","moderation|validation|allowlist|permissions|policy|human approval","Unrestricted model access");
+T("prompt injection","ai","Safety","An attack where malicious text in the input or retrieved content tries to override the model's instructions, such as a web page telling the agent to leak data.","Treat retrieved web content as untrusted data, never as instructions: prompt injection defense.","indirect injection|jailbreak|least privilege|sandboxing|input isolation|data exfiltration","Trusted, sanitized input");
+T("jailbreak","ai","Safety","A user prompt crafted to push a model past its safety rules into behavior it would normally refuse.","Red-teaming found a role-play jailbreak that bypassed the filter.","prompt injection|red teaming|refusal|safety training|adversarial prompt","Normal, policy-compliant use");
+T("red teaming","ai","Safety","Deliberately attacking your own AI system (adversarial prompts, abuse scenarios) to find failures and vulnerabilities before real users do.","Before launch we red-teamed the agent for data leaks and unsafe actions.","adversarial testing|jailbreak|safety evals|threat model|penetration test","Only testing happy-path usage");
+T("alignment","ai","Safety","Making AI systems behave according to human intentions and values: helpful, honest and harmless, including in unanticipated situations.","Alignment work shapes how the model handles ambiguous or risky requests.","RLHF|constitution / policy|safety|reward hacking|sycophancy|oversight","Misaligned or reward-hacking behavior");
+T("evals","ai","Evaluation","Repeatable tests that measure an AI system's quality on tasks that matter to you, run on every change to catch regressions and guide decisions.","We gate every prompt change on the eval suite: 200 cases, pass rate and cost.","golden dataset|metrics|regression|LLM-as-judge|human grading|eval-driven development","Vibes-based spot checking");
+T("LLM-as-judge","ai","Evaluation","Using a (usually strong) model to grade another model's outputs against a rubric. Fast and scalable, but needs calibration against human judgments.","We validated the LLM judge against 100 human-labeled examples before trusting it.","rubric|pairwise comparison|position bias|verbosity bias|human agreement|calibration","Human expert grading");
+T("benchmark contamination","ai","Evaluation","When test questions from a benchmark appear in a model's training data, inflating scores. It is data leakage at LLM scale.","The leaderboard score may be contaminated; check our private eval.","data leakage|held-out set|private eval|memorization|decontamination","Fresh, held-out evaluation");
+T("golden dataset","ai","Evaluation","A curated set of inputs with trusted expected outputs or grading criteria, used as the standard test for a system.","The golden dataset has 300 real tickets labeled by senior support staff.","ground truth|eval set|annotation|edge cases|versioning|coverage","Ad hoc examples");
+T("human-in-the-loop","ai","Safety","Designing a system so a person reviews, approves or corrects AI actions at key points, especially risky or irreversible ones.","The agent drafts the refund; a human approves anything over $100.","approval gate|escalation|oversight|review queue|autonomy level","Fully autonomous operation");
+T("multimodal","ai","Foundations","Models that handle more than one kind of data (text, images, audio, video) in input or output.","A multimodal model can read the chart in the screenshot and explain it.","vision|speech|OCR|image generation|cross-modal","Text-only model");
+T("foundation model","ai","Foundations","A large model pretrained on broad data that can be adapted to many downstream tasks via prompting or fine-tuning.","We build on a foundation model instead of training from scratch.","pretraining|LLM|transfer learning|adaptation|open-weight","Narrow, task-specific model");
+T("open-weight vs closed model","ai","Foundations","Open-weight models publish their trained weights so you can run and tune them yourself. Closed models are accessed only through a provider's API.","Open-weight lets us self-host for data residency; closed APIs give top quality with no ops.","self-hosting|license|API|fine-tuning|data residency|open source","Each is the other: control vs convenience");
+T("transformer and self-attention","ai","Foundations","The neural architecture behind modern LLMs. Self-attention lets each token weigh every other token in the context to decide what is relevant.","Attention cost grows with context length, which is why long contexts are expensive.","attention|multi-head|positional encoding|encoder / decoder|context window|KV cache","RNN (processes sequentially)");
+T("mixture of experts (MoE)","ai","Foundations","An architecture with many specialist sub-networks where a router activates only a few per token, giving large capacity at lower compute per token.","The MoE model has 400B total parameters but uses far fewer per token.","router|active parameters|sparse model|capacity|dense model","Dense model (all parameters used every token)");
+T("scaling laws","ai","Foundations","Empirical relationships showing how model quality improves predictably with more parameters, data and compute.","Scaling laws guided how the lab split compute between model size and data.","parameters|compute|data|diminishing returns|emergent abilities|Chinchilla","Small-model-only progress");
+T("reasoning model and test-time compute","ai","Foundations","Models trained to spend extra computation thinking (long internal reasoning) before answering, trading latency and cost for accuracy on hard problems.","For hard planning tasks we pay for a reasoning model; for classification a small one is enough.","chain of thought|thinking budget|latency|cost|verifier|self-consistency","Fast, single-pass answer");
+T("batching","ai","Inference","Processing several requests together to use hardware efficiently, raising throughput at some cost to individual latency.","Continuous batching keeps the GPU busy across users.","throughput|latency|continuous batching|GPU utilization|queueing","One request at a time");
+T("model routing","ai","Inference","Sending each request to the cheapest model that can handle it well (small model for easy tasks, large for hard ones) to balance cost, speed and quality.","A router sends 80% of tickets to the small model and escalates the rest.","cascade|classifier|fallback|cost optimization|latency budget","One big model for everything");
+T("semantic caching","ai","Inference","Reusing a stored response when a new query is similar in meaning (by embedding) to a past one, saving a model call.","Semantic caching answered 25% of FAQ questions with no LLM call.","embeddings|similarity threshold|cache invalidation|staleness|exact-match cache","Calling the model every time");
+T("agent memory","ai","Agents","Mechanisms that let an agent retain information across steps or sessions: short-term context, summaries, or long-term stores it can write to and retrieve from.","The agent saves user preferences to a memory store and retrieves them next session.","long-term memory|summarization|vector store|scratchpad|compaction|stateless","Stateless model that forgets between calls");
+T("synthetic data","ai","Training","Artificially generated data (often by a model) used to train, test or augment systems when real data is scarce, sensitive or costly.","We generated synthetic support tickets to cover rare edge cases.","data augmentation|distillation|privacy|model collapse|quality filtering","Real, human-collected data");
+T("data flywheel","ai","Training","A feedback loop where usage produces data (ratings, corrections, outcomes) that improves the product, attracting more usage.","User corrections feed our eval set and fine-tuning data: a data flywheel.","feedback loop|telemetry|labeling|continual learning|privacy","One-off static dataset");
+T("sycophancy","ai","Safety","A model's tendency to agree with or flatter the user instead of being accurate, even when the user is wrong.","The model caved when the user pushed back: sycophancy.","alignment|preference bias|honesty|calibration|pushback tests","Calibrated, honest disagreement");
+T("LLM observability","ai","Operations","Tracing and monitoring LLM apps (prompts, retrieved context, tool calls, tokens, latency, cost, user feedback) so you can debug and improve them.","The trace shows retrieval returned the wrong chunk, so the answer was off.","tracing|spans|token usage|cost tracking|feedback|prompt versioning","Opaque model calls");
+T("LLMOps and MLOps","ai","Operations","Practices and tooling to build, deploy, monitor and maintain ML or LLM systems reliably: versioning, CI/CD, evaluation, monitoring, rollback.","LLMOps means prompts, models and evals are versioned and released like code.","model registry|CI/CD|monitoring|drift|prompt versioning|reproducibility","Notebook-to-production by hand");
+T("vibe coding","ai","Practice","Building software by describing what you want to an AI and accepting its code with little line-by-line review. Fast for prototypes, risky for production without tests and review.","I vibe coded the prototype in an hour, then we reviewed and tested it before shipping.","AI coding assistant|prototype|code review|tests|technical debt|spec","Careful, reviewed, test-backed engineering");
+T("sandbox","ai","Safety","An isolated environment where an agent or untrusted code can run with limited permissions, so mistakes or attacks cannot harm real systems.","The agent runs code in a sandbox with no network and a temporary filesystem.","isolation|least privilege|container|permissions|blast radius|allowlist","Running with full production access");
+T("harness","ai","Agents","The surrounding software that runs a model in a loop: building prompts, exposing tools, handling results, managing context and enforcing permissions.","The same model performs very differently depending on the harness around it.","agent loop|tools|context management|permissions|orchestrator|SDK","Calling the model once and stopping");
+/* PHRASEBOOK: beginner -> senior */
+P("The model is 99% accurate!","99% is suspicious. I'd check for leakage and class imbalance before trusting it.","ds");
+P("It works on my machine.","It's environment drift. Let's pin dependencies and reproduce it in a container.","sw");
+P("The server crashed because too many people used it.","We had no backpressure or rate limiting, so load exceeded capacity and the queue grew unbounded.","sys");
+P("The AI made stuff up.","The model hallucinated because the answer wasn't grounded in retrieved sources.","ai");
+P("It's slow.","Median is fine, but p99 latency is 2s. Let's find the tail contributor with a trace.","sys");
+P("The test fails sometimes.","The test is flaky, probably a race condition on shared state. Quarantine it and open a ticket.","sw");
+P("We'll fix it later.","We're taking on technical debt here. Let's log it with an owner and a paydown date.","sw");
+P("Can we just try a bigger model?","Let's establish a baseline and an eval first, so we know whether size is actually the bottleneck.","ai");
+P("The data looks weird.","I see a distribution shift in the last week. Let me check upstream schema changes and freshness.","de");
+P("The new version is better.","It's better on the offline eval, but we should confirm with an A/B test and watch guardrail metrics.","ds");
+P("Running it twice breaks things.","The job isn't idempotent. Let's upsert on a key so retries are safe.","sw");
+P("The chatbot forgot what I said.","That earlier turn fell out of the context window. We should summarize or retrieve it.","ai");
+P("The prediction says 90% sure, so it's right 90% of the time.","That depends on calibration. Let's check a reliability diagram before treating scores as probabilities.","ds");
+P("We should rewrite the whole thing.","A rewrite is high risk. Let's strangle it incrementally and refactor behind tests.","sw");
+P("Let's use microservices because they scale.","What's the actual bottleneck? A modular monolith might avoid the distributed-systems tax for now.","sw");
+P("Add more servers.","Scaling horizontally won't help if the database is the single point of contention. Let's measure first.","sys");
+P("The numbers don't match between dashboards.","We have two metric definitions. Let's agree on one governed definition in the semantic layer.","de");
+P("The agent did something unexpected.","We need tighter guardrails: least-privilege tools, a sandbox, and human approval for risky actions.","ai");
+P("It's accurate on the benchmark.","The benchmark may be contaminated or unrepresentative. What does our private golden set say?","ai");
+P("Users are complaining and nobody knew.","We lack observability and SLO-based alerting. Let's add traces and an error-budget burn alert.","sys");
+P("Can we ship it Friday?","What's the rollback plan? I'd canary it behind a feature flag and ramp up while watching the error budget.","sys");
+P("The correlation is strong, so this causes that.","Correlation isn't causation. Is there a confounder, or can we run an experiment?","ds");
+(function(){
+var TRACKS=[
+ {k:'ds',n:'Data science & ML'},
+ {k:'de',n:'Data & analytics eng.'},
+ {k:'sw',n:'Software eng.'},
+ {k:'sys',n:'Systems & infra'},
+ {k:'ai',n:'LLM & AI eng.'}
+];
+var TN={};TRACKS.forEach(function(t){TN[t.k]=t.n});
+var TAUGHT={};
+['idempotent','data leakage','race condition','context window','script block','technical debt','regularization','rag (retrieval-augmented generation)','backpressure','calibration','quantization'].forEach(function(n){TAUGHT[n]=1});
+TERMS.forEach(function(x){x.taught=!!TAUGHT[x.t.toLowerCase()]});
+
+var ALIAS={};
+TERMS.forEach(function(x){
+  var names=[x.t.toLowerCase(),x.t.replace(/\s*\([^)]*\)/,'').trim().toLowerCase()];
+  var m=x.t.match(/\(([^)]+)\)/);if(m)names.push(m[1].toLowerCase());
+  names.forEach(function(n){if(!ALIAS[n])ALIAS[n]=x.id});
+});
+var BYID={};TERMS.forEach(function(x){BYID[x.id]=x});
+
+var KEY='tvi-status-v1';
+var ST={};
+try{var raw=localStorage.getItem(KEY);if(raw)ST=JSON.parse(raw)||{}}catch(e){ST={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}}
+function gs(id){return ST[id]||0}
+
+var S={view:'terms',track:'all',cat:'all',status:'all',q:''};
+var OPEN={};var allOpen=false;
+var $=function(i){return document.getElementById(i)};
+var LBL=['New','Shaky','Solid'];
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function trackCounts(){
+  var c={all:0};TRACKS.forEach(function(t){c[t.k]=0});
+  TERMS.forEach(function(x){c.all++;c[x.k]++});return c;
+}
+function buildTracks(){
+  var c=trackCounts();
+  var items=[{k:'all',n:'All',c:c.all}].concat(TRACKS.map(function(t){return{k:t.k,n:t.n,c:c[t.k]}}));
+  $('tracks').innerHTML=items.map(function(i){
+    return '<button class="chip" data-track="'+i.k+'" aria-pressed="'+(S.track===i.k)+'">'+esc(i.n)+'<small>'+i.c+'</small></button>';
+  }).join('');
+}
+function buildCats(){
+  var set={};
+  TERMS.forEach(function(x){if(S.track==='all'||x.k===S.track)set[x.c]=1});
+  var cats=Object.keys(set).sort();
+  if(cats.indexOf(S.cat)<0)S.cat='all';
+  $('cat').innerHTML='<option value="all">All categories</option>'+cats.map(function(c){return '<option value="'+esc(c)+'"'+(S.cat===c?' selected':'')+'>'+esc(c)+'</option>'}).join('');
+}
+function progress(){
+  var n=TERMS.length,solid=0,shaky=0;
+  TERMS.forEach(function(x){var s=gs(x.id);if(s===2)solid++;else if(s===1)shaky++});
+  var nw=n-solid-shaky;
+  $('bSolid').style.width=(solid/n*100)+'%';
+  $('bShaky').style.width=(shaky/n*100)+'%';
+  $('legend').innerHTML='<span><i class="dot" style="background:var(--st-solid)"></i><b>'+solid+'</b> solid</span><span><i class="dot" style="background:var(--st-shaky)"></i><b>'+shaky+'</b> shaky</span><span><i class="dot" style="background:var(--st-new)"></i><b>'+nw+'</b> new</span>';
+}
+
+function matches(x){
+  if(S.track!=='all'&&x.k!==S.track)return false;
+  if(S.cat!=='all'&&x.c!==S.cat)return false;
+  if(S.status==='taught'){if(!x.taught)return false}
+  else if(S.status!=='all'&&String(gs(x.id))!==S.status)return false;
+  if(S.q){
+    var h=(x.t+' '+x.c+' '+x.m+' '+x.e+' '+x.r.join(' ')+' '+x.o).toLowerCase();
+    var toks=S.q.toLowerCase().split(/\s+/).filter(Boolean);
+    for(var i=0;i<toks.length;i++){if(h.indexOf(toks[i])<0)return false}
+  }
+  return true;
+}
+
+function termHTML(x){
+  var s=gs(x.id);
+  var open=(allOpen||OPEN[x.id])?' open':'';
+  var rels=x.r.map(function(r){
+    var id=ALIAS[r.toLowerCase().trim()];
+    if(id&&id!==x.id)return '<button class="rel link" data-go="'+id+'">'+esc(r)+'</button>';
+    return '<span class="rel">'+esc(r)+'</span>';
+  }).join('');
+  return '<article class="term t-'+x.k+open+'" id="'+x.id+'">'+
+   '<div class="head">'+
+    '<button class="hit" data-toggle="'+x.id+'" aria-expanded="'+(!!open)+'">'+
+      '<span class="name"><span class="tt">'+esc(x.t)+'</span><span class="tag">'+esc(TN[x.k])+'</span><span class="tag cat">'+esc(x.c)+'</span>'+(x.taught?'<span class="tag taught">From our sessions</span>':'')+'</span>'+
+      '<span class="mean">'+esc(x.m)+'</span>'+
+    '</button>'+
+    '<button class="st st-'+s+'" data-st="'+x.id+'" aria-label="Status of '+esc(x.t)+': '+LBL[s]+'. Tap to change.">'+LBL[s]+'</button>'+
+   '</div>'+
+   '<div class="more">'+
+     '<div class="fld"><span class="lab">Example of usage</span><p class="ex">'+esc(x.e)+'</p></div>'+
+     '<div class="fld"><span class="lab">Related terms</span><div class="rels">'+rels+'</div></div>'+
+     '<div class="fld"><span class="lab">Opposite or contrast</span><p class="opp">'+esc(x.o)+'</p></div>'+
+   '</div>'+
+  '</article>';
+}
+
+function renderTerms(){
+  var list=TERMS.filter(matches);
+  var q=S.q.toLowerCase().trim();
+  list.sort(function(a,b){
+    if(q){var sa=a.t.toLowerCase().indexOf(q)>=0?0:1,sb=b.t.toLowerCase().indexOf(q)>=0?0:1;if(sa!==sb)return sa-sb}
+    return a.t.toLowerCase().localeCompare(b.t.toLowerCase());
+  });
+  $('count').textContent='Showing '+list.length+' of '+TERMS.length+' terms';
+  if(!list.length){$('list').innerHTML='<div class="empty">No terms match. Try fewer words or reset the filters.</div>';return}
+  var html='',last='';
+  list.forEach(function(x){
+    if(!q){
+      var L=x.t.charAt(0).toUpperCase();if(!/[A-Z]/.test(L))L='#';
+      if(L!==last){html+='<h2 class="letter">'+L+'</h2>';last=L}
+    }
+    html+=termHTML(x);
+  });
+  $('list').innerHTML=html;
+}
+
+function renderPhrase(){
+  var q=S.q.toLowerCase().trim();
+  var list=PH.filter(function(p){
+    if(S.track!=='all'&&p.k!==S.track)return false;
+    if(q&&(p.b+' '+p.s).toLowerCase().indexOf(q)<0)return false;
+    return true;
+  });
+  $('count').textContent='Showing '+list.length+' of '+PH.length+' phrase swaps';
+  if(!list.length){$('list').innerHTML='<div class="empty">No phrases match. Try fewer words or reset the filters.</div>';return}
+  $('list').innerHTML=list.map(function(p){
+    return '<div class="pb t-'+p.k+'"><div class="before"><span class="lab">Beginner</span><p>'+esc(p.b)+'</p></div><div class="after"><span class="lab">Senior <span class="tag" style="margin-left:6px">'+esc(TN[p.k])+'</span></span><p>'+esc(p.s)+'</p></div></div>';
+  }).join('');
+}
+
+function render(){
+  var isT=S.view==='terms';
+  $('tabTerms').setAttribute('aria-pressed',isT);
+  $('tabPhrase').setAttribute('aria-pressed',!isT);
+  $('cat').hidden=!isT;$('status').hidden=!isT;$('expand').hidden=!isT;
+  $('hint').textContent=isT?'Tap a term to open it. Tap its status to cycle New, Shaky, Solid.':'Same situation, said two ways. Borrow the senior phrasing.';
+  document.querySelectorAll('#tracks .chip').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-track')===S.track)});
+  if(isT)renderTerms();else renderPhrase();
+}
+
+function reset(){S.track='all';S.cat='all';S.status='all';S.q='';$('q').value='';$('status').value='all';buildCats();render()}
+
+function goTo(id){
+  var x=BYID[id];if(!x)return;
+  S.track='all';S.cat='all';S.status='all';S.q='';$('q').value='';$('status').value='all';
+  S.view='terms';OPEN[id]=true;buildCats();render();
+  var el=document.getElementById(id);
+  if(el){
+    var off=document.querySelector('.controls').offsetHeight+8;
+    window.scrollTo({top:el.getBoundingClientRect().top+window.pageYOffset-off,behavior:'smooth'});
+    el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');
+  }
+}
+
+$('list').addEventListener('click',function(e){
+  var st=e.target.closest('[data-st]');
+  if(st){
+    var id=st.getAttribute('data-st');ST[id]=(gs(id)+1)%3;save();progress();
+    if(S.status!=='all'&&S.status!=='taught'){renderTerms()}
+    else{var s=gs(id);st.className='st st-'+s;st.textContent=LBL[s];st.setAttribute('aria-label','Status of '+BYID[id].t+': '+LBL[s]+'. Tap to change.')}
+    return;
+  }
+  var go=e.target.closest('[data-go]');
+  if(go){goTo(go.getAttribute('data-go'));return}
+  var tg=e.target.closest('[data-toggle]');
+  if(tg){
+    var tid=tg.getAttribute('data-toggle');var art=document.getElementById(tid);
+    var isOpen=art.classList.toggle('open');
+    if(isOpen)OPEN[tid]=true;else{delete OPEN[tid];}
+    tg.setAttribute('aria-expanded',isOpen);
+  }
+});
+$('tracks').addEventListener('click',function(e){
+  var b=e.target.closest('[data-track]');if(!b)return;
+  S.track=b.getAttribute('data-track');S.cat='all';buildCats();render();
+});
+$('cat').addEventListener('change',function(){S.cat=this.value;render()});
+$('status').addEventListener('change',function(){S.status=this.value;render()});
+$('q').addEventListener('input',function(){S.q=this.value;render()});
+$('reset').addEventListener('click',reset);
+$('expand').addEventListener('click',function(){
+  allOpen=!allOpen;if(!allOpen)OPEN={};
+  this.textContent=allOpen?'Collapse all':'Expand all';render();
+});
+$('tabTerms').addEventListener('click',function(){S.view='terms';render()});
+$('tabPhrase').addEventListener('click',function(){S.view='phrase';render()});
+
+var sc=0;TERMS.forEach(function(x){sc++});
+$('sub').textContent=TERMS.length+' terms across five tracks, each with a meaning, an example of usage, related terms and an opposite or contrast, plus '+PH.length+' beginner-to-senior phrase swaps. Terms marked "From our sessions" are ones we have already covered together.';
+buildTracks();buildCats();progress();render();
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,496 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Scenario Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout concept: a quiet practice room. One dashboard, then one task at a time: a single card or question, big type, clear next action. */
+:root{
+  --bg:#EDF1F5; --surface:#FFFFFF; --ink:#14212C; --muted:#586979; --line:#D3DCE5; --accent:#0A6A8A; --accent-ink:#FFFFFF; --focus:#0A6A8A;
+  --good:#17803D; --bad:#B3261E; --warn:#B26A00;
+  --c-ds:#2A5DB0; --c-ml:#5B49B8; --c-de:#0B7566; --c-dt:#7A6300; --c-sw:#A8501B; --c-ar:#A33A3A; --c-sys:#1B7A99; --c-se:#7B5A2E; --c-ai:#A12E63; --c-cm:#4F7A1E;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F171F; --surface:#16212B; --ink:#E5ECF2; --muted:#9AAAB8; --line:#2A3947; --accent:#52B6D6; --accent-ink:#071218; --focus:#52B6D6;
+    --good:#52C27B; --bad:#F2877F; --warn:#E6A93A;
+    --c-ds:#7DA6EC; --c-ml:#A99CF0; --c-de:#4CC2AE; --c-dt:#D9BB52; --c-sw:#E59A66; --c-ar:#EE8A8A; --c-sys:#6FC3E0; --c-se:#CFA878; --c-ai:#EE86B3; --c-cm:#A8CF72;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F171F; --surface:#16212B; --ink:#E5ECF2; --muted:#9AAAB8; --line:#2A3947; --accent:#52B6D6; --accent-ink:#071218; --focus:#52B6D6;
+  --good:#52C27B; --bad:#F2877F; --warn:#E6A93A;
+  --c-ds:#7DA6EC; --c-ml:#A99CF0; --c-de:#4CC2AE; --c-dt:#D9BB52; --c-sw:#E59A66; --c-ar:#EE8A8A; --c-sys:#6FC3E0; --c-se:#CFA878; --c-ai:#EE86B3; --c-cm:#A8CF72;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:0 56px;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin-inline:auto}
+header.top{padding-block:28px 12px;display:flex;flex-direction:column;gap:8px}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.1;font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.sub{margin:0;color:var(--muted);max-width:60ch}
+h2{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+button{font:inherit;color:inherit}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--line);margin-block:10px 22px}
+.stat{padding:14px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.stat + .stat{border-left:1px solid var(--line)}
+.stat b{font-family:var(--font-mono);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{font-size:12px;color:var(--muted)}
+.stat.due b{color:var(--accent)}
+.start{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:16px 18px;cursor:pointer;font-size:17px;font-weight:600;text-align:left}
+.start small{font-weight:400;font-size:13px;opacity:.9;display:block}
+.start:hover{filter:brightness(1.07)}
+.section{margin-top:26px}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.mode{all:unset;box-sizing:border-box;cursor:pointer;padding:14px 16px;display:flex;flex-direction:column;gap:3px;border-bottom:1px solid var(--line)}
+.mode:nth-child(odd){border-right:1px solid var(--line)}
+.mode:nth-last-child(-n+2){border-bottom:0}
+.mode:hover{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.mode:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.mode b{font-weight:600}
+.mode span{font-size:13px;color:var(--muted)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.chip{flex:0 0 auto;font-size:13px;background:transparent;border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.settings{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:12px;align-items:center;font-size:14px}
+.settings label{display:flex;align-items:center;gap:8px;color:var(--muted)}
+select{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent)}
+.note{margin:12px 0 0;color:var(--warn);font-size:14px}
+
+.tracks{display:flex;flex-direction:column}
+.trow{display:grid;grid-template-columns:minmax(0,170px) 1fr 64px;gap:12px;align-items:center;padding-block:7px;border-bottom:1px solid var(--line);font-size:14px}
+.trow .nm{overflow-wrap:anywhere}
+.tbar{display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--line)}
+.tbar i{display:block;height:100%}
+.tbar .m{background:var(--good)}.tbar .l{background:var(--warn)}
+.trow .ct{font-family:var(--font-mono);font-size:12px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:8px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+
+.sbar{display:flex;align-items:center;gap:12px;margin-block:18px 14px}
+.prog{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .2s}
+.sbar .n{font-family:var(--font-mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.linkbtn{background:none;border:0;color:var(--muted);cursor:pointer;font-size:14px;padding:6px 4px;text-decoration:underline}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:clamp(18px,4vw,30px);min-height:280px;display:flex;flex-direction:column;gap:16px}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:4px;color:var(--tc);background:color-mix(in srgb,var(--tc) 13%,transparent);white-space:nowrap}
+.tag.cat{color:var(--muted);background:transparent;border:1px solid var(--line)}
+.t-ds{--tc:var(--c-ds)}.t-ml{--tc:var(--c-ml)}.t-de{--tc:var(--c-de)}.t-dt{--tc:var(--c-dt)}.t-sw{--tc:var(--c-sw)}.t-ar{--tc:var(--c-ar)}.t-sys{--tc:var(--c-sys)}.t-se{--tc:var(--c-se)}.t-ai{--tc:var(--c-ai)}.t-cm{--tc:var(--c-cm)}
+.big{font-family:var(--font-mono);font-size:clamp(22px,5vw,30px);font-weight:600;line-height:1.2;margin:0;overflow-wrap:anywhere;text-wrap:balance}
+.q{font-size:clamp(17px,3.2vw,20px);line-height:1.45;margin:0;overflow-wrap:anywhere}
+.qlab{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.center{flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.hint{color:var(--muted);font-size:14px;margin:0}
+.fld{display:flex;flex-direction:column;gap:3px}
+.lab{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ex{margin:0;font-style:italic;overflow-wrap:anywhere}
+.rels{display:flex;flex-wrap:wrap;gap:5px}
+.rel{font-size:13px;padding:2px 9px;border-radius:4px;background:color-mix(in srgb,var(--muted) 14%,transparent)}
+.opp{margin:0;overflow-wrap:anywhere}
+.det{display:flex;flex-direction:column;gap:12px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.btn{font-size:15px;font-weight:500;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:11px 18px;cursor:pointer;flex:1 1 120px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.again{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}
+.btn.easy{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,var(--line))}
+.btn kbd{font-family:var(--font-mono);font-size:11px;opacity:.65;margin-left:6px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;cursor:pointer;overflow-wrap:anywhere}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt .k{font-family:var(--font-mono);font-size:12px;color:var(--muted);flex:0 0 auto;padding-top:2px}
+.opt.right{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.opt[disabled]{cursor:default}
+.verdict{font-weight:600}
+.verdict.ok{color:var(--good)}.verdict.no{color:var(--bad)}
+.fb{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line);padding-top:14px}
+.big2{font-family:var(--font-mono);font-size:44px;font-weight:600;line-height:1;margin:0;font-variant-numeric:tabular-nums}
+.miss{display:flex;flex-direction:column}
+.miss .mi{padding-block:10px;border-bottom:1px solid var(--line)}
+.miss .mi b{font-family:var(--font-mono);font-size:14px}
+.miss .mi p{margin:2px 0 0;color:var(--muted);font-size:14px}
+details.bk{margin-top:30px;color:var(--muted);font-size:14px}
+details.bk summary{cursor:pointer}
+details.bk textarea{width:100%;min-height:90px;margin-top:10px;font-family:var(--font-mono);font-size:12px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.small{font-size:13px;padding:7px 12px;flex:0 0 auto}
+footer{margin-top:26px;color:var(--muted);font-size:13px;max-width:62ch}
+@media (max-width:560px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(3){border-left:0}
+  .stat:nth-child(n+3){border-top:1px solid var(--line)}
+  .modes{grid-template-columns:1fr}
+  .mode:nth-child(odd){border-right:0}
+  .mode:nth-last-child(-n+2){border-bottom:1px solid var(--line)}
+  .mode:last-child{border-bottom:0}
+  .trow{grid-template-columns:minmax(0,1fr) 56px}
+  .trow .tbar{grid-column:1 / -1;order:3}
+}
+.sc{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:8px;background:var(--surface);overflow:hidden}
+.sci{all:unset;box-sizing:border-box;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;border-bottom:1px solid var(--line)}
+.sci:last-child{border-bottom:0}
+.sci:hover{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.sci:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.sci b{font-weight:600}
+.sci .meta{font-size:13px;color:var(--muted);grid-column:1}
+.sci .bs{grid-row:1 / span 2;grid-column:2;align-self:center;font-family:var(--font-mono);font-size:13px;color:var(--muted)}
+.sci .bs.hi{color:var(--good)}
+.msg{border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 7%,transparent);padding:12px 14px;border-radius:0 8px 8px 0;display:flex;flex-direction:column;gap:4px}
+.msg .from{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.msg p{margin:0;overflow-wrap:anywhere}
+.lbl{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:4px;display:inline-block}
+.lbl.g2{color:var(--good);background:color-mix(in srgb,var(--good) 14%,transparent)}
+.lbl.g1{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}
+.lbl.g0{color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.opt.g1{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 10%,var(--surface))}
+.opt.g0{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.opt.g2{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.opt.dim{opacity:.6}
+.rc{padding-block:10px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:4px;font-size:14px}
+.rc p{margin:0;overflow-wrap:anywhere}
+.reuse{font-style:italic}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){.prog i{transition:none}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Scenario Simulator</h1>
+    <p class="sub" id="sub">Short workplace situations. Choose how you would respond, then see why a phrasing sounds senior or not.</p>
+  </header>
+  <main id="app"></main>
+  <footer>Best scores are saved in this browser only. Options are shuffled each time, so retry a scenario to practise the phrasing rather than the position.</footer>
+</div>
+<script>
+var SCEN=[];
+function S(title,k,role,setup,terms,steps){SCEN.push({id:'s'+SCEN.length,title:title,k:k,role:role,setup:setup,terms:terms,steps:steps})}
+
+S("Checkout is failing","sys","On-call engineer, e-commerce company",
+ "It is 09:42 on a Tuesday. You are on call when the alerts start. Practice incident communication: clear impact, honest uncertainty, no blame.",
+ ["SLO","p99 latency","rollback","canary release","idempotent","consumer lag","dead-letter queue","thundering herd","postmortem","blameless"],
+ [
+  ["Alert: checkout-api","Error rate 18% (SLO: 0.5%). p99 latency 6.2 s. Started at 09:38, three minutes after the 09:35 deploy.","What do you post first in #incidents?",
+   [["Declaring an incident: checkout error rate is 18% since 09:38, starting right after the 09:35 deploy. Impact: roughly one in five checkouts failing. I'm incident lead. Rolling back the deploy now; next update at 10:00.",2,"States impact, timeline, a likely cause as a hypothesis, an owner, the action and the next update time. Rolling back first is the standard move when a deploy lines up with the start."],
+    ["Checkout looks broken, investigating.",1,"Fast and honest, but missing impact, owner and next update, so others cannot decide whether to act or escalate."],
+    ["The deploy broke everything. Whoever pushed it needs to fix it.",0,"Blames a person, overstates certainty with the word everything, and offers no plan. Blameless language and a rollback come first."]]],
+  ["VP of Support","Customers are complaining on social media. Can you tell me when this will be fixed?","How do you respond?",
+   [["I can't give a full-recovery time yet. The rollback finishes in about 10 minutes; I'll confirm whether error rates recover and post an update at 10:05. Meanwhile support can tell customers we're aware and working on it.",2,"Separates what you know (rollback ETA) from what you don't (full recovery), gives a checkpoint time, and hands support something usable. It is an estimate, not a commitment."],
+    ["It should be fixed in 10 minutes.",1,"Reassuring, but turns a rollback ETA into a promise. If recovery takes longer, you lose credibility."],
+    ["No idea. I'm busy.",0,"Understandable under stress, but it leaves stakeholders guessing and escalating. Even 'unknown, next update at 10:05' is better."]]],
+  ["Metrics","After the rollback the error rate is back to 0.4%. But the payments queue shows 3,000 stuck messages, and consumer lag is still climbing.","What is the most precise next step?",
+   [["Errors have recovered. I'm checking the payment consumer: the lag suggests a backlog. Before reprocessing the stuck messages I'll confirm the handler is idempotent so retries can't double charge, and I'll replay at a controlled rate to avoid a thundering herd.",2,"Names the backlog, checks idempotency before replaying because of the double-charge risk, and replays at a controlled rate to avoid overloading the consumer."],
+    ["Replay all the stuck messages now to clear the backlog.",1,"Fast, but replaying without checking idempotency can double charge customers, and a full replay can overload the consumer again."],
+    ["Delete the stuck messages. Customers will just retry.",0,"Deleting loses orders silently. Move failures to a dead-letter queue and inspect them instead."]]],
+  ["Engineering Director","Please write the one-paragraph summary for the incident report.","Which summary is best?",
+   [["Between 09:38 and 09:49 about 18% of checkouts failed. Cause: the 09:35 deploy included a config change that exhausted the payment connection pool. Detection: the error-rate alert fired within 3 minutes. Resolution: rollback at 09:49. Follow-ups: add a canary stage, add a pool-saturation alert, and test the config in staging, with owners and dates in the doc.",2,"Covers impact, timeline, cause, detection, resolution and owned follow-ups, in blameless wording."],
+    ["A deploy caused an outage. We rolled it back. We should test more.",1,"Points the right way but is vague: no numbers, no cause detail, no owned actions."],
+    ["A developer pushed an untested change and broke checkout. Lesson: be more careful.",0,"Blames a person, and 'be more careful' is not an action. Postmortems fix systems, not people."]]]
+ ]);
+
+S("The model is too good","ds","Data scientist on a churn project",
+ "Your teammate has trained a churn model and is excited. Practice skepticism, diagnosis, and explaining results to non-specialists.",
+ ["data leakage","target leakage","AUC","baseline","calibration","A/B test","point-in-time correctness","test set"],
+ [
+  ["Teammate","New churn model: AUC 0.99 on validation! Can we ship it?","What is your best reply?",
+   [["That is suspiciously high for churn. Before shipping I'd rule out data leakage. Can we check feature importance for anything only known after a customer churns, and confirm the split is time-based?",2,"Treats a too-good result as a warning, names the specific risk, and proposes concrete checks."],
+    ["Great, let's ship it and monitor closely.",1,"Monitoring is good, but shipping first skips the most likely explanation for a result this high."],
+    ["Nice! Let's tell the PM it's 99% accurate.",0,"Confuses AUC with accuracy and celebrates before validating. Overstating results damages trust later."]]],
+  ["You, an hour later","Feature importance shows cancellation_reason is the top feature. It is only populated after a customer cancels.","How do you explain this to the PM?",
+   [["The model had access to a field that is only filled in after a customer cancels, so it was effectively seeing the answer. That is target leakage and it inflated performance. I removed it and re-ran with a time-based split. The honest AUC is 0.78, which is still useful.",2,"Plain-language cause, the correct term, the impact, the fix, and the honest new number."],
+    ["The model had a bug and I fixed it.",1,"True but vague, and it hides what went wrong, so the team cannot learn from it."],
+    ["The model overfit. We'll add regularization.",0,"Wrong diagnosis. Overfitting is a train-validation gap; this was leakage from how the data was set up."]]],
+  ["Product Manager","0.78 is a big drop from 0.99. Is it good enough to use?","What is a good reply?",
+   [["It depends on the decision. AUC measures ranking, not business value. Let's compare against the current heuristic baseline on precision in the top 5% of customers, and check calibration so we can trust the probabilities for targeting. If it beats the baseline there, it's worth an A/B test.",2,"Ties the metric to the decision, introduces a baseline and calibration, and proposes the right next experiment."],
+    ["0.78 is decent, so yes.",1,"Plausible, but gives no reasoning and no comparison point."],
+    ["Anything under 0.9 is bad, so no.",0,"A universal threshold ignores context. Good enough depends on the baseline and the cost of errors."]]],
+  ["Team lead","How do we stop this happening again?","What process change do you propose?",
+   [["Add a leakage checklist: time-based splits, a feature-availability review (is it known at prediction time?), point-in-time joins in the feature store, and a final test set nobody tunes against.",2,"Specific, repeatable controls that map directly to the failure."],
+    ["We should be more careful with features.",1,"Right sentiment, but not an actionable process change."],
+    ["Use a bigger model next time.",0,"Unrelated to the cause. A bigger model would exploit the leak even more."]]]
+ ]);
+
+S("Microservices proposal","ar","Senior engineer in a design discussion",
+ "A colleague wants to split your monolith. Practice asking for the problem before the solution, naming trade-offs, and recording the decision.",
+ ["monolith vs microservices","blast radius","strangler fig pattern","trade-off","canary release","feature flag","ADR","design doc"],
+ [
+  ["Colleague","We should split the monolith into microservices. It will scale better.","What is the best response?",
+   [["What problem are we trying to solve? If it's deploy contention or one hot component, a modular monolith or extracting a single service might give most of the benefit at lower operational cost. Can we write the bottleneck and options in a design doc?",2,"Asks for the problem first, offers proportionate options, and moves the discussion into writing."],
+    ["Microservices are overkill. No.",1,"May be right, but dismissive, and it does not help the colleague find the real issue."],
+    ["Sure, microservices scale better. Let's start.",0,"Agrees without analysis. Microservices add network failures, tracing and data-ownership complexity."]]],
+  ["Colleague","The real issue is checkout is deployed with everything. One bug there takes the whole site down.","How do you frame the options?",
+   [["That is a blast radius and deploy-coupling problem. Option 1: keep the monolith and add module boundaries plus feature flags. Option 2: extract checkout as a service with a strangler fig approach. The trade-off: option 2 gives isolation but adds network failures, tracing and data-ownership questions.",2,"Names the real problem, gives two concrete options and states the trade-off honestly."],
+    ["We could split checkout out.",1,"Directionally fine, but no alternatives and no costs, so nobody can evaluate it."],
+    ["Let's rewrite the whole thing cleanly.",0,"A full rewrite is the highest-risk option and does not target the stated problem."]]],
+  ["Manager","I need a decision by Friday. What do you recommend?","What do you say?",
+   [["I recommend extracting checkout using the strangler fig pattern, behind a feature flag, with a canary rollout. Risks are distributed transactions and added latency. I'll record the decision in an ADR and set a review at two months with success criteria: fewer incidents touching checkout and deploys under 15 minutes.",2,"A clear recommendation with risks, rollout safety, a written record and measurable success criteria."],
+    ["I think extraction is better. Probably.",1,"A view, but hedged and without risks or a plan."],
+    ["Whatever the team prefers.",0,"Avoids owning a recommendation when you were asked for one."]]],
+  ["Teammate","How should we capture this decision?","Which answer is best?",
+   [["Write a short ADR: context, options considered, the decision, consequences and a review date, linked from the design doc.",2,"Preserves the why for future engineers and is cheap to maintain."],
+    ["Post it in Slack so everyone knows.",1,"Visible now, but chat is hard to find later and loses the reasoning."],
+    ["No need. Everyone was in the meeting.",0,"People leave and memories fade. Unrecorded decisions get relitigated."]]]
+ ]);
+
+S("The flaky test","sw","Backend engineer reviewing CI",
+ "A test fails now and then in CI. Practice triage, explaining a race condition simply, and writing useful review comments.",
+ ["flaky test","race condition","quarantine","shared state","regression test","nit"],
+ [
+  ["CI","tests/test_export.py::test_writes_file failed in 1 of the last 20 runs. It passes on rerun.","What is your first move?",
+   [["Treat it as a flaky test, likely a race condition or shared state. Quarantine it so it doesn't block merges, open a ticket with the failure logs, and try to reproduce it by running the test in a loop with parallelism on.",2,"Names the likely class of cause, protects the team's flow, records it, and plans a reproduction."],
+    ["Just rerun CI until it's green.",1,"Unblocks you, but hides the problem and trains the team to ignore failures."],
+    ["Delete the test.",0,"Removes the signal instead of fixing the problem."]]],
+  ["You, after digging","Two tests both write to /tmp/export.csv, and CI runs tests in parallel.","How do you explain the cause to the team?",
+   [["Two tests write the same file path and CI runs them in parallel, so one can overwrite or read the other's file. That's a race condition on shared state. The fix is a unique temp directory per test and removing shared mutable state.",2,"Describes the mechanism, uses the correct term, and states the fix."],
+    ["Tests interfere with each other sometimes.",1,"Accurate but vague. It does not say how, so the fix is unclear."],
+    ["CI is just unreliable.",0,"Blames the tool and leaves the real cause in place."]]],
+  ["Manager","Can we make sure this never happens again?","What do you say?",
+   [["We can't guarantee never, but we can shrink the class of problem: a shared fixture that gives each test a unique temp directory, running the suite in random order and in parallel on every pull request to expose hidden dependencies, and tracking flaky rate with a quarantine policy.",2,"Honest about limits and offers concrete controls and a measurable policy."],
+    ["Yes, I'll be more careful.",1,"Well meant, but relies on individual vigilance instead of a system."],
+    ["No.",0,"Accurate but unhelpful. A good answer offers what can be done."]]],
+  ["Pull request","You are reviewing the fix. Which review comment is best?","Pick the best comment.",
+   [["nit: rename tmp to export_dir for clarity. Blocking: please add a regression test that runs this test twice in parallel so the race can't return.",2,"Separates a minor nit from a blocking request and explains why the blocker matters."],
+    ["Looks fine.",1,"Quick, but gives no signal about what was checked."],
+    ["This is wrong, fix it.",0,"Not actionable and not respectful. Say what is wrong and what you would like instead."]]]
+ ]);
+
+S("The assistant gave the wrong answer","ai","AI engineer owning a support assistant",
+ "A customer was told the wrong refund window. Practice separating retrieval problems from generation problems, and explaining the fix.",
+ ["hallucination","grounding","reranking","metadata filtering","golden dataset","evals","RAG vs fine-tuning"],
+ [
+  ["Product Manager","The support bot told a customer our refund window is 60 days. It's 30. The AI hallucinated, right?","How do you respond?",
+   [["Possibly, but I want to separate retrieval from generation. I'll check the trace. If the 30-day policy wasn't retrieved, it's a retrieval miss; if it was retrieved and ignored, it's a grounding failure; if an old document said 60 days, it's a stale-source problem.",2,"Breaks one vague complaint into testable causes and uses the trace as evidence."],
+    ["Yes, models hallucinate. We'll tweak the prompt.",1,"May be true, but guessing at a fix before diagnosing wastes time."],
+    ["We should use a better model.",0,"Jumps to a costly change without knowing the cause."]]],
+  ["You, after reading the trace","Retrieval returned an old policy PDF that says 60 days, ranked above the current one.","Explain the cause and propose a fix.",
+   [["Retrieval pulled a superseded policy ranked above the current one, and the model answered faithfully from the wrong source. Fix: remove or version stale documents, add effective-date metadata with a filter, and rerank to prefer current policies.",2,"Correct diagnosis (retrieval, not generation) with concrete fixes at the data and ranking layers."],
+    ["The AI read the wrong file.",1,"Right gist, but no mechanism and no fix."],
+    ["Add 'do not hallucinate' to the system prompt.",0,"Instructions can't fix a faulty source. The model was following what it retrieved."]]],
+  ["Team lead","How will we know it's fixed, and stays fixed?","What is your plan?",
+   [["Add this case and similar policy questions to our golden dataset with expected answers and sources, and gate prompt and retrieval changes on the eval pass rate. Track groundedness and citation correctness, not just answer similarity.",2,"Turns a one-off bug into a regression test and measures what actually matters."],
+    ["I'll test it manually a few times.",1,"Better than nothing, but not repeatable and won't catch regressions."],
+    ["It won't happen again.",0,"A promise with no mechanism behind it."]]],
+  ["Executive","Should we fine-tune a model on our policies so it just knows them?","What do you say?",
+   [["Not for facts that change. Fine-tuning shapes behavior and format; policies change, so we'd retrain on every update and still risk stale answers. RAG with versioned sources and citations fits better. We could fine-tune later for tone or format.",2,"Gives the right rule of thumb with reasons, and leaves the door open appropriately."],
+    ["Maybe. Let's try both.",1,"Experimentation is fine, but it skips the reasoning an executive needs."],
+    ["Yes, fine-tuning always works better.",0,"Overgeneralizes, and it is the wrong tool for frequently changing facts."]]]
+ ]);
+
+S("Two numbers for revenue","de","Data engineer asked to reconcile dashboards",
+ "Finance and marketing report different revenue. Practice diagnosing a definitions problem and proposing a durable fix.",
+ ["single source of truth","semantic layer","data lineage","data contract","data catalog","metric definition"],
+ [
+  ["CFO","Marketing's dashboard says $4.2M and finance's says $3.9M. Which one is right?","How do you respond?",
+   [["Probably both are correct under different definitions. I'll compare how each defines revenue (gross vs net of refunds, booking vs recognition date, timezone cutoffs) and trace each to its source tables using lineage. I'll send a reconciliation by Wednesday.",2,"Reframes the question, lists likely causes, names the method and gives a date."],
+    ["I'll check which one is wrong.",1,"Assumes one is wrong, which closes off the most likely explanation."],
+    ["Finance is always right.",0,"Authority is not evidence. The definitions need to be compared."]]],
+  ["You, after tracing","Marketing counts gross bookings by order date. Finance counts net revenue recognized after refunds.","How do you explain the $300K gap?",
+   [["The gap is refunds plus timing. Marketing counts gross bookings by order date; finance counts net revenue as recognized. Neither is wrong, but both are labeled revenue. That's a metric definition problem.",2,"Explains the mechanism, avoids blame, and names the real issue."],
+    ["They use different numbers.",1,"True but unhelpful. It doesn't say why or what to do."],
+    ["Marketing's dashboard is broken.",0,"Incorrect and unfair. It is computing a valid but different metric."]]],
+  ["Head of Data","How do we fix this for good?","What do you propose?",
+   [["Define each metric once in a semantic layer (gross bookings, net revenue), owned by finance, with documented definitions, and point both dashboards at it. Rename the labels so they can't be confused, and add data contract tests on the underlying tables.",2,"One owned definition, clear naming and automated protection."],
+    ["Make everyone use finance's number.",1,"Settles this case, but gross bookings are legitimately useful to marketing."],
+    ["Add a footnote to the dashboard.",0,"Footnotes get ignored and leave two competing numbers in circulation."]]],
+  ["New analyst","Where do I find the revenue number?","What do you tell them?",
+   [["Use gross_bookings or net_revenue from the semantic layer. Definitions and owners are in the data catalog. Please avoid computing revenue from raw order tables.",2,"Points to the single source of truth and explains the guardrail."],
+    ["Ask finance.",1,"Workable once, but doesn't scale and builds no shared knowledge."],
+    ["Just query the orders table.",0,"Recreates the original problem with a third definition."]]]
+ ]);
+
+S("Estimate or commitment?","cm","Engineer scoping a new feature",
+ "A manager asks how long a feature takes. Practice giving ranges, pushing back on dates, handling scope changes and reporting blockers.",
+ ["estimate","commitment","spike","scope creep","change request","blocker","escalation","trade-off"],
+ [
+  ["Manager","How long will the new reporting feature take?","What do you answer?",
+   [["I need two days of investigation on the data source before I can give a reliable range. My early guess is 4 to 8 weeks, low confidence. I'll narrow it after the spike.",2,"Offers a range with a confidence level, names the unknown, and proposes a time-boxed spike."],
+    ["About 6 weeks.",1,"A single number will be heard as a commitment, with no confidence level."],
+    ["It'll be done by the end of next month.",0,"Commits to a date before understanding the work."]]],
+  ["Manager","After your spike you estimate 5 to 7 weeks. Sales has already told a customer March 15.","How do you respond?",
+   [["Thanks for telling me. My estimate is 5 to 7 weeks, so March 15 is at risk. Options: cut scope to the three core reports for March 15, add an engineer (helps only partly because of onboarding), or move the date to April 5. I'd recommend cutting scope. Which do you prefer?",2,"States the risk, gives options with trade-offs, recommends one and asks for a decision."],
+    ["That's too tight. We can't do it.",1,"Honest, but offers no options, so the manager has nothing to act on."],
+    ["OK, we'll make it work.",0,"Silently accepts a date the evidence doesn't support."]]],
+  ["Customer, via manager","Can you also add an export to a second file format?","How do you handle the extra request?",
+   [["That's a scope change. We can include it if we trade something out or move the date. I'll size it (about 3 days) and we can decide in Thursday's sync. I'll note it in the change log so scope stays visible.",2,"Treats it as a decision with a trade-off and keeps the scope history visible."],
+    ["Sure, it's a small addition.",1,"Small additions accumulate into scope creep."],
+    ["No. It's not in scope.",0,"Technically true but closes the conversation instead of offering a path."]]],
+  ["Stand-up","You are waiting on access to the billing replica.","Which stand-up update is best?",
+   [["Blocked: waiting on read access to the billing replica, requested Monday, ticket linked. Impact: two days of slip if not resolved by Thursday. Need: Priya to approve. I'm escalating to Dan today with the impact.",2,"A clear blocker, impact, owner of the next action and an escalation path."],
+    ["Still waiting on access.",1,"Honest but gives no impact, no owner and no ask."],
+    ["Nothing to report.",0,"Hides a real risk to the schedule."]]]
+ ]);
+
+S("A leaked key","se","Engineer on the security rota",
+ "A secret scanner finds a cloud key in a public repository. Practice acting first, scoping honestly, and communicating without over- or under-claiming.",
+ ["secrets management","key rotation","least privilege","audit log","incident response","blast radius","PII"],
+ [
+  ["Secret scanner","An AWS access key was found in a public repo commit pushed 11 minutes ago.","What is your first action?",
+   [["Treat the key as compromised: revoke or rotate it immediately, then remove it from the repo. Deleting the commit alone isn't enough because it's already public. I'll check cloud audit logs for any use of that key since the push.",2,"Contains the risk first, understands that public means exposed, and starts scoping through logs."],
+    ["Delete the commit and force push.",1,"Doesn't invalidate the key, which may already have been copied."],
+    ["Ignore it. It's probably a test key.",0,"Unverified assumption. Treat every exposed credential as live until proven otherwise."]]],
+  ["Audit log","An unfamiliar IP used the key at 14:07 to list S3 buckets. No object reads yet.","What do you tell the security lead?",
+   [["Incident: the leaked key was used from an unknown IP at 14:07 to list S3 buckets, with no object reads seen so far. Key revoked at 14:11. I'm scoping what else this role could reach and checking logs for data access. I need your approval to notify legal because those buckets may hold PII.",2,"Facts with timestamps, what is and isn't known, actions taken, and a specific ask."],
+    ["Someone used our key.",1,"Correct but lacks the detail needed to prioritize."],
+    ["It's fine. Nothing was downloaded.",0,"Claims certainty you don't have yet. Say 'no evidence so far'."]]],
+  ["Security lead","What is the root cause, and what changes?","What do you propose?",
+   [["Root cause: a .env file was committed. Fixes: pre-commit and CI secret scanning, move secrets to a secrets manager with short-lived credentials, give the app a least-privilege role, and rotate keys on a schedule.",2,"Names the cause and layers several controls so one slip is not fatal."],
+    ["Tell developers not to commit secrets.",1,"Reasonable but relies on human perfection."],
+    ["Find out who committed it and discipline them.",0,"Blame discourages reporting. Fix the system."]]],
+  ["Executive","Were we breached?","How do you answer?",
+   [["A credential was exposed and an unauthorized party used it to list bucket names. We have no evidence yet that data was accessed. We're verifying through audit logs and will confirm by Thursday. Access is revoked and we're following our incident response plan, including legal review.",2,"Precise and calibrated: what happened, what's unknown, what's being done and when you'll know more."],
+    ["We're fine.",1,"Reassuring but not supported by the evidence yet."],
+    ["Yes, we were hacked and data is gone.",0,"Overstates what you know. Don't claim data loss without evidence."]]]
+ ]);
+
+S("Duplicates in the pipeline","de","Data engineer on call for a pipeline",
+ "Tuesday's order count suddenly doubled. Practice diagnosing duplicates, explaining idempotency, and setting expectations about late data.",
+ ["idempotent","upsert","at-least-once delivery","deduplication","watermark","late-arriving data"],
+ [
+  ["Analyst","Order counts doubled for Tuesday!","What is your best first response?",
+   [["That smells like duplicates from a retry or reprocessing. I'll check for repeated order_ids, whether the Tuesday job ran twice, and whether the upstream delivered at-least-once.",2,"Offers a specific hypothesis and concrete checks."],
+    ["Maybe we had a record day.",1,"Possible, but a doubling should be checked before it is celebrated."],
+    ["Divide Tuesday by two.",0,"Hides the problem and corrupts the data."]]],
+  ["You, after checking","The loader timed out and retried. It uses plain INSERT.","Explain the cause.",
+   [["The loader timed out and retried, and because it uses plain inserts, the retry wrote the same batch again. The job isn't idempotent.",2,"States the mechanism and uses the right term."],
+    ["The job ran twice.",1,"True, but doesn't explain why duplicates resulted."],
+    ["The database duplicated the data.",0,"Incorrect. The database did what it was told."]]],
+  ["Team lead","What is the fix?","What do you propose?",
+   [["Make the load idempotent: upsert (MERGE) on order_id so reruns converge to the same state. Add a uniqueness test, and a deduplication step downstream as a safety net.",2,"Fixes the root cause and adds layered protection."],
+    ["Add a check so the job never runs twice.",1,"Reduces risk, but doesn't make retries safe."],
+    ["Turn off retries.",0,"Trades duplicates for dropped data when failures happen."]]],
+  ["Analyst","Yesterday's number changed this morning.","How do you explain it?",
+   [["Late-arriving events: some orders reached us after midnight but belong to yesterday by event time. We use a watermark and re-aggregate affected days. I'll document that numbers settle within six hours and mark provisional figures.",2,"Names the cause, explains the mechanism and sets a clear expectation."],
+    ["Data changes sometimes.",1,"True but does not build trust or explain what to expect."],
+    ["Ignore it. It's a small difference.",0,"Unexplained changes erode confidence in the numbers."]]]
+ ]);
+
+S("Reading an A/B test","ds","Data scientist advising a product team",
+ "A product manager wants a quick answer from an experiment. Practice explaining peeking, effect size, sample ratio mismatch and multiple comparisons without jargon overload.",
+ ["peeking","sequential testing","statistical vs practical significance","confidence interval","guardrail metric","sample ratio mismatch","multiple comparisons"],
+ [
+  ["Product Manager","After 3 days of a planned 14-day test, p = 0.03 for the new onboarding. Can we call it?","How do you answer?",
+   [["Not yet. Checking daily and stopping when it turns significant inflates false positives, which is called peeking. We planned 14 days and a sample size. Let's wait, or use a sequential method that is designed for early stopping.",2,"Explains the risk plainly, references the plan and offers a valid alternative."],
+    ["Sure, p < 0.05 is significant.",1,"Technically below the threshold, but the stopping rule invalidates the p-value."],
+    ["p-values are meaningless.",0,"Overcorrects. P-values are useful when used correctly."]]],
+  ["Product Manager","Day 14: relative lift 0.4%, 95% CI from 0.1% to 0.7%, p = 0.01. So it's a win?","How do you respond?",
+   [["It's statistically significant but small. The interval says the lift is probably between 0.1% and 0.7%. Whether it's worth shipping depends on practical significance: the revenue at our volume against maintenance cost. I'd also check guardrail metrics like support tickets.",2,"Separates statistical from practical significance and uses the interval and guardrails."],
+    ["Yes, it's significant, ship it.",1,"Skips the question of whether the size matters."],
+    ["No. It's too small.",0,"May be right, but dismissing it without weighing cost and volume is not reasoned."]]],
+  ["Analyst","The traffic split was 52/48 instead of 50/50 on 400,000 users.","What do you say?",
+   [["That's a sample ratio mismatch. At this size, a 52/48 split is very unlikely by chance, which suggests a bug in assignment or logging. I don't trust these results until we find the cause, since the groups may not be comparable.",2,"Names the problem, explains why it matters and refuses to trust biased data."],
+    ["Close enough.",1,"At 400K users, that gap is a strong warning sign, not noise."],
+    ["Remove some users from the bigger group.",0,"Manually trimming data to hit a ratio introduces new bias."]]],
+  ["Product Manager","Mobile users show a huge lift. Can we say it works on mobile?","How do you reply?",
+   [["That's a post-hoc segment, one of many slices we looked at, so a significant result may be chance (multiple comparisons). I'd treat it as a hypothesis and run a follow-up test on mobile with a pre-registered plan.",2,"Explains the risk of slicing and proposes the right next step."],
+    ["Great, mobile is the winner.",1,"Enthusiastic but ignores that many slices were checked."],
+    ["Segments are never valid.",0,"Segments can be valid when planned. The issue is looking after the fact."]]]
+ ]);
+
+S("The AI bill tripled","ai","AI engineer asked to cut costs",
+ "Finance noticed AI spend tripled. Practice diagnosing token costs, using caching and routing sensibly, and balancing cost with latency.",
+ ["token","prompt caching","RAG","compaction","model routing","evals","latency budget","time to first token"],
+ [
+  ["Finance","Our AI costs tripled this month. What happened?","How do you start?",
+   [["I'll break the spend down by feature, model and token type (input vs output) and compare it with request volume, using our traces. Cost scales with tokens, so I'm looking for longer prompts, retries or a feature that got more traffic. I'll report by Thursday.",2,"Structured investigation and a clear deadline."],
+    ["We use more AI now.",1,"Probably true, but does not identify anything actionable."],
+    ["Switch to the cheapest model.",0,"A blunt change that may hurt quality without addressing the cause."]]],
+  ["You, after the analysis","The support assistant sends 18,000-token prompts: the full policy documents and the full chat history on every turn.","What do you propose?",
+   [["Every request includes the full policy text and conversation, so input tokens dominate. Options: retrieve only the relevant chunks (RAG), use prompt caching for the static system prompt, and compact long histories into a summary.",2,"Identifies the driver and offers the standard levers."],
+    ["Prompts are long, so we'll shorten them.",1,"Right direction, but no method for shortening safely."],
+    ["Remove the policy text.",0,"Removes the knowledge the assistant needs to answer correctly."]]],
+  ["Product Manager","Can a smaller model handle the easy questions?","How do you answer?",
+   [["Likely, for FAQ and classification-style queries. I'd add a router that sends simple intents to the small model and escalates hard ones, verified with evals so quality doesn't drop, and I'd measure cost per resolved ticket, not just cost per call.",2,"Proposes routing with a quality guard and a better metric."],
+    ["Use the small model for everything.",1,"Cheapest, but risks quality on hard questions."],
+    ["No. Quality always drops.",0,"Untested absolute claim. Evals can show where a small model suffices."]]],
+  ["Support lead","Users say answers got slower after you added retrieval.","What do you do?",
+   [["Retrieval adds a hop, so I'll set a latency budget: stream tokens so time to first token stays low, cache embeddings and frequent queries, run retrieval in parallel with other work, and watch p95 latency.",2,"Acknowledges the trade-off and uses concrete latency tools."],
+    ["Slower is the price of savings.",1,"A trade-off, but users still experience a worse product."],
+    ["Remove retrieval.",0,"Undoes the savings and the grounding."]]]
+ ]);
+var NAMES={ds:'Data science',ml:'ML',de:'Data eng.',dt:'Data tools',sw:'Software',ar:'Architecture',sys:'Systems',se:'Security',ai:'LLM / AI',cm:'Communication'};
+var KEY='sim-v1',st={best:{},tries:{}},app=document.getElementById('app'),filter='all',cur=null;
+try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&o.best)st=o}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function tag(k){return '<span class="tag t-'+k+'">'+esc(NAMES[k]||k)+'</span>'}
+function home(){
+  cur=null;
+  var keys=[];SCEN.forEach(function(s){if(keys.indexOf(s.k)<0)keys.push(s.k)});
+  var done=Object.keys(st.best).length,tot=0,n=0;for(var id in st.best){tot+=st.best[id];n++}
+  var h='<div class="stats" style="grid-template-columns:repeat(3,1fr)"><div class="stat"><b>'+SCEN.length+'</b><span>scenarios</span></div><div class="stat"><b>'+done+'</b><span>attempted</span></div><div class="stat"><b>'+(n?(tot/n).toFixed(1):'–')+'</b><span>avg best / 8</span></div></div>';
+  h+='<div class="section" style="margin-top:0"><div class="chips" role="group" aria-label="Filter by track"><button class="chip" aria-pressed="'+(filter==='all')+'" data-f="all">All</button>';
+  keys.forEach(function(k){h+='<button class="chip" aria-pressed="'+(filter===k)+'" data-f="'+k+'">'+esc(NAMES[k]||k)+'</button>'});
+  h+='</div></div><div class="section"><h2>Pick a situation</h2><div class="sc">';
+  SCEN.forEach(function(s){
+    if(filter!=='all'&&s.k!==filter)return;
+    var b=st.best[s.id];
+    h+='<button class="sci" data-id="'+s.id+'"><b>'+esc(s.title)+'</b><span class="meta">'+tag(s.k)+' &nbsp;'+esc(s.role)+' · '+s.steps.length+' decisions</span><span class="bs'+(b>=7?' hi':'')+'">'+(b===undefined?'new':'best '+b+'/8')+'</span></button>';
+  });
+  h+='</div></div>';
+  app.innerHTML=h;
+  app.querySelectorAll('[data-f]').forEach(function(b){b.onclick=function(){filter=b.dataset.f;home()}});
+  app.querySelectorAll('.sci').forEach(function(b){b.onclick=function(){intro(b.dataset.id)}});
+  window.scrollTo(0,0);
+}
+function find(id){return SCEN.filter(function(s){return s.id===id})[0]}
+function intro(id){
+  var s=find(id);cur={s:s,i:0,score:0,log:[]};
+  var h='<div class="card"><div class="tags">'+tag(s.k)+'</div><h2 style="margin:0;font-size:22px;text-transform:none;letter-spacing:0;color:var(--ink)">'+esc(s.title)+'</h2>'
+   +'<div class="fld"><span class="lab">Your role</span><span>'+esc(s.role)+'</span></div>'
+   +'<p class="q" style="font-size:16px">'+esc(s.setup)+'</p>'
+   +'<div class="fld"><span class="lab">Terms in play</span><div class="rels">'+s.terms.map(function(t){return '<span class="rel">'+esc(t)+'</span>'}).join('')+'</div></div></div>'
+   +'<div class="actions"><button class="btn" id="bk">Back</button><button class="btn primary" id="go">Start</button></div>';
+  app.innerHTML=h;document.getElementById('bk').onclick=home;document.getElementById('go').onclick=step;window.scrollTo(0,0);
+}
+function step(){
+  var s=cur.s,d=s.steps[cur.i],opts=shuffle(d[3]);cur.opts=opts;cur.d=d;cur.answered=false;
+  var h='<div class="sbar"><div class="prog"><i style="width:'+(cur.i/s.steps.length*100)+'%"></i></div><span class="n">'+(cur.i+1)+'/'+s.steps.length+'</span><button class="linkbtn" id="qt">Quit</button></div>'
+   +'<div class="card"><div class="msg"><span class="from">'+esc(d[0])+'</span><p>'+esc(d[1])+'</p></div><p class="qlab">'+esc(d[2])+'</p><div class="opts">'
+   +opts.map(function(o,i){return '<button class="opt" data-i="'+i+'"><span class="k">'+(i+1)+'</span><span>'+esc(o[0])+'</span></button>'}).join('')
+   +'</div><div id="fb"></div></div>';
+  app.innerHTML=h;document.getElementById('qt').onclick=home;
+  app.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){pick(+b.dataset.i)}});
+  window.scrollTo(0,0);
+}
+var LAB=['Weak','Acceptable','Strong'];
+function pick(i){
+  if(!cur||cur.answered)return;cur.answered=true;
+  var o=cur.opts[i],best=cur.d[3].filter(function(x){return x[1]===2})[0];
+  cur.score+=o[1];cur.log.push({d:cur.d,pick:o,best:best});
+  app.querySelectorAll('.opt').forEach(function(b,j){b.disabled=true;var g=cur.opts[j][1];if(j===i)b.classList.add('g'+g);else if(g===2)b.classList.add('g2');else b.classList.add('dim')});
+  var last=cur.i===cur.s.steps.length-1;
+  var h='<div class="fb"><div><span class="lbl g'+o[1]+'">'+LAB[o[1]]+'</span></div><p style="margin:0">'+esc(o[2])+'</p>';
+  if(o[1]!==2)h+='<div class="fld"><span class="lab">Stronger version</span><span class="reuse">'+esc(best[0])+'</span></div><p class="hint">'+esc(best[2])+'</p>';
+  h+='<div class="actions"><button class="btn primary" id="nx">'+(last?'See result':'Next')+' <kbd>Enter</kbd></button></div></div>';
+  var fb=document.getElementById('fb');fb.innerHTML=h;
+  var nx=document.getElementById('nx');nx.onclick=function(){cur.i++;last?end():step()};nx.focus();
+}
+function end(){
+  var s=cur.s,max=s.steps.length*2,sc=cur.score;
+  var prev=st.best[s.id];if(prev===undefined||sc>prev)st.best[s.id]=sc;st.tries[s.id]=(st.tries[s.id]||0)+1;save();
+  var v=sc>=7?'Senior-sounding':sc>=5?'Solid':'Developing';
+  var h='<div class="card"><div class="tags">'+tag(s.k)+'</div><p class="big2">'+sc+'/'+max+'</p><p class="q"><b>'+v+'.</b> '+(sc>=7?'Your responses were clear, owned and specific.':sc>=5?'Good instincts. Tighten the weaker steps below.':'Review the stronger versions below, then retry.')+'</p>'
+   +'<div><h2>Your decisions</h2>';
+  cur.log.forEach(function(l,n){h+='<div class="rc"><span><span class="lbl g'+l.pick[1]+'">'+LAB[l.pick[1]]+'</span> &nbsp;<b>'+(n+1)+'. '+esc(l.d[0])+'</b></span><p>'+esc(l.pick[0])+'</p>'+(l.pick[1]!==2?'<p class="reuse">Better: '+esc(l.best[0])+'</p>':'')+'</div>'});
+  h+='</div><div><h2>Phrases to reuse</h2>';
+  cur.log.forEach(function(l){h+='<div class="rc"><p class="reuse">'+esc(l.best[0])+'</p></div>'});
+  h+='</div><div class="fld"><span class="lab">Terms in play</span><div class="rels">'+s.terms.map(function(t){return '<span class="rel">'+esc(t)+'</span>'}).join('')+'</div></div></div>'
+   +'<div class="actions"><button class="btn" id="hm">All scenarios</button><button class="btn primary" id="rt">Retry</button></div>';
+  app.innerHTML=h;document.getElementById('hm').onclick=home;document.getElementById('rt').onclick=function(){intro(s.id)};window.scrollTo(0,0);
+}
+document.addEventListener('keydown',function(e){
+  if(!cur||!cur.d)return;
+  if(!cur.answered&&e.key>='1'&&e.key<='3'){pick(+e.key-1)}
+});
+home();
+</script>
+
+</body></html>

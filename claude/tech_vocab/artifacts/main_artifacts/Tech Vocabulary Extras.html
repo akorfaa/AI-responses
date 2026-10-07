@@ -1,0 +1,714 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Tech Vocabulary Extras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout concept: a flat, scannable reference index. Hairline-separated rows, sticky search and filters, track colors as small tags only. */
+:root{
+  --bg:#EDF1F5; --surface:#FFFFFF; --ink:#14212C; --muted:#586979; --line:#D3DCE5; --accent:#0A6A8A; --accent-ink:#FFFFFF; --focus:#0A6A8A;
+  --c-sta:#2A5DB0; --c-web:#A8501B; --c-db:#0B7566; --c-ops:#1B7A99; --c-pm:#4F7A1E; --c-biz:#7A6300; --c-eth:#A12E63; --c-wk:#6A4FA3; --c-cs:#5B49B8; --c-hw:#A33A3A;
+  --st-new:#6C7C8A; --st-shaky:#B26A00; --st-solid:#17803D;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F171F; --surface:#16212B; --ink:#E5ECF2; --muted:#9AAAB8; --line:#2A3947; --accent:#52B6D6; --accent-ink:#071218; --focus:#52B6D6;
+  --c-sta:#7DA6EC; --c-web:#E59A66; --c-db:#4CC2AE; --c-ops:#6FC3E0; --c-pm:#A8CF72; --c-biz:#D9BB52; --c-eth:#EE86B3; --c-wk:#B4A1E6; --c-cs:#A99CF0; --c-hw:#EE8A8A;
+    --st-new:#8696A5; --st-shaky:#E6A93A; --st-solid:#52C27B;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F171F; --surface:#16212B; --ink:#E5ECF2; --muted:#9AAAB8; --line:#2A3947; --accent:#52B6D6; --accent-ink:#071218; --focus:#52B6D6;
+  --c-sta:#7DA6EC; --c-web:#E59A66; --c-db:#4CC2AE; --c-ops:#6FC3E0; --c-pm:#A8CF72; --c-biz:#D9BB52; --c-eth:#EE86B3; --c-wk:#B4A1E6; --c-cs:#A99CF0; --c-hw:#EE8A8A;
+  --st-new:#8696A5; --st-shaky:#E6A93A; --st-solid:#52C27B;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:0 48px;-webkit-text-size-adjust:100%}
+.wrap{max-width:920px;margin-inline:auto}
+header.top{padding-block:28px 14px;display:flex;flex-direction:column;gap:12px}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.1;font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.sub{margin:0;color:var(--muted);max-width:66ch}
+.progress{display:flex;flex-direction:column;gap:6px}
+.bar{display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--line)}
+.bar span{display:block;height:100%;transition:width .25s}
+.bar .b-solid{background:var(--st-solid)}
+.bar .b-shaky{background:var(--st-shaky)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.legend b{color:var(--ink);font-weight:600}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:baseline}
+
+.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding-block:10px;margin-inline:-16px;padding-inline:16px;display:flex;flex-direction:column;gap:10px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.search{flex:1 1 220px;min-width:0;display:flex}
+.search input{width:100%;min-width:0;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:9px 12px}
+select{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 10px;max-width:100%}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 12px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.tabs{display:flex;gap:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.tabs button{font:inherit;font-size:14px;border:0;background:transparent;color:var(--muted);padding:8px 14px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:500}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
+.chip{flex:0 0 auto;font:inherit;font-size:13px;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer;white-space:nowrap;font-variant-numeric:tabular-nums}
+.chip small{color:var(--muted);margin-left:4px;font-size:12px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip[aria-pressed="true"] small{color:inherit;opacity:.75}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+
+.meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:12px 4px;color:var(--muted);font-size:13px}
+.letter{font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--accent);padding-block:18px 6px;border-bottom:1px solid var(--line);margin:0}
+.term{border-bottom:1px solid var(--line)}
+.head{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:start;padding-block:12px}
+.hit{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;cursor:pointer;min-width:0}
+.hit:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:4px}
+.name{font-family:var(--font-mono);font-weight:600;font-size:15px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.name .tt{overflow-wrap:anywhere}
+.tag{font-family:var(--font-body);font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:4px;color:var(--tc);background:color-mix(in srgb,var(--tc) 13%,transparent);white-space:nowrap}
+.tag.cat{color:var(--muted);background:transparent;border:1px solid var(--line)}
+.tag.taught{color:var(--accent);background:color-mix(in srgb,var(--accent) 13%,transparent)}
+.t-sta{--tc:var(--c-sta)}.t-web{--tc:var(--c-web)}.t-db{--tc:var(--c-db)}.t-ops{--tc:var(--c-ops)}.t-pm{--tc:var(--c-pm)}.t-biz{--tc:var(--c-biz)}.t-eth{--tc:var(--c-eth)}.t-wk{--tc:var(--c-wk)}.t-cs{--tc:var(--c-cs)}.t-hw{--tc:var(--c-hw)}
+.mean{color:var(--ink);margin:0;max-width:72ch;overflow-wrap:anywhere}
+.st{font:inherit;font-size:12px;font-weight:500;border-radius:999px;padding:4px 11px;cursor:pointer;border:1px solid currentColor;background:transparent;min-width:62px}
+.st-0{color:var(--st-new)}
+.st-1{color:var(--st-shaky);background:color-mix(in srgb,var(--st-shaky) 14%,transparent)}
+.st-2{color:var(--st-solid);background:color-mix(in srgb,var(--st-solid) 14%,transparent)}
+.more{display:none;padding:0 0 16px;gap:10px;flex-direction:column;max-width:72ch}
+.term.open .more{display:flex}
+.fld{display:flex;flex-direction:column;gap:3px}
+.lab{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ex{margin:0;font-style:italic;color:var(--ink);overflow-wrap:anywhere}
+.rels{display:flex;flex-wrap:wrap;gap:5px}
+.rel{font-size:13px;padding:2px 9px;border-radius:4px;background:color-mix(in srgb,var(--muted) 14%,transparent);color:var(--ink);border:0;font-family:inherit}
+button.rel.link{cursor:pointer;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+button.rel.link:hover{text-decoration:underline}
+.opp{margin:0;overflow-wrap:anywhere}
+.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%{background:color-mix(in srgb,var(--accent) 22%,transparent)}100%{background:transparent}}
+@media (prefers-reduced-motion:reduce){.flash{animation:none}.bar span{transition:none}}
+
+.pb{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid var(--line);padding-block:14px;gap:14px}
+.pb > div{min-width:0}
+.pb .lab{display:block;margin-bottom:4px}
+.pb .before p{color:var(--muted);margin:0;text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--muted) 50%,transparent)}
+.pb .after p{margin:0;font-weight:500}
+.empty{padding:36px 0;color:var(--muted);text-align:center}
+footer{margin-top:28px;color:var(--muted);font-size:13px;max-width:70ch}
+@media (max-width:560px){
+  .head{grid-template-columns:1fr}
+  .st{justify-self:start}
+  .pb{grid-template-columns:1fr}
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Tech Vocabulary Extras</h1>
+    <p class="sub" id="sub"></p>
+    <div class="progress" aria-live="polite">
+      <div class="bar" id="bar"><span class="b-solid" id="bSolid"></span><span class="b-shaky" id="bShaky"></span></div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="row">
+      <div class="tabs" role="group" aria-label="View">
+        <button id="tabTerms" aria-pressed="true">Glossary</button>
+        <button id="tabPhrase" aria-pressed="false">Say it like a senior</button>
+      </div>
+      <div class="search"><input id="q" type="search" placeholder="Search terms, meanings, related words" autocomplete="off" aria-label="Search"></div>
+    </div>
+    <div class="chips" id="tracks" role="group" aria-label="Track"></div>
+    <div class="row" id="filters">
+      <select id="cat" aria-label="Category"></select>
+      <select id="status" aria-label="Status">
+        <option value="all">All status</option>
+        <option value="0">New</option>
+        <option value="1">Shaky</option>
+        <option value="2">Solid</option>
+      </select>
+      <button class="btn" id="expand">Expand all</button>
+      <button class="btn" id="reset">Reset</button>
+    </div>
+  </div>
+
+  <div class="meta"><span id="count"></span><span id="hint">Tap a term to open it. Tap its status to cycle New, Shaky, Solid.</span></div>
+  <main id="list"></main>
+
+  <footer>The final volume: terms the first inventory and the Companion did not cover. Usage reflects common practice through mid-2026, and the AI tooling area keeps shifting. Statuses are stored in this browser only.</footer>
+</div>
+
+<script>
+var TERMS=[],PH=[];
+function slug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+function T(t,k,c,m,e,r,o){TERMS.push({t:t,k:k,c:c,m:m,e:e,r:r.split('|'),o:o,id:k+'-'+slug(t)})}
+function P(b,s,k){PH.push({b:b,s:s,k:k})}
+/* STATISTICS & EXPERIMENTATION */
+T("sampling bias","sta","Inference","When the sample is collected in a way that systematically over- or under-represents part of the population, so conclusions don't generalise.","Surveying only app users gave us sampling bias: people who churned never saw the survey.","selection bias|representative sample|random sampling|stratified sampling|coverage error","Representative (random) sample");
+T("survivorship bias","sta","Inference","Drawing conclusions from the cases that survived a filter while ignoring those that didn't, so the picture looks better than reality.","Studying only successful startups is survivorship bias; the failures hold the lessons.","selection bias|sampling bias|censoring|missing data","Including the failed cases");
+T("causal inference","sta","Inference","Methods for estimating the effect of a cause rather than just observing association, using experiments or careful adjustment.","We used causal inference on observational data because a randomised test wasn't possible.","counterfactual|confounder|difference-in-differences|instrumental variable|propensity score","Pure correlation analysis");
+T("propensity score","sta","Inference","The estimated probability that a unit receives the treatment given its features; used to match or weight comparable treated and untreated units.","Propensity score matching balanced the two groups on age and tenure.","matching|confounder|causal inference|overlap|inverse weighting","Randomised assignment");
+T("minimum detectable effect","sta","Experiments","The smallest true effect a test is designed to reliably detect given sample size, variance and power.","The minimum detectable effect is 3%, so smaller improvements will look like noise.","statistical power|sample size|variance|practical significance","Observed effect");
+T("type I error","sta","Experiments","A false positive: concluding there is an effect when there isn't one. Its rate is controlled by alpha.","A 5% alpha means we accept a 5% type I error rate per test.","false positive|alpha|p-value|multiple comparisons|significance level","Type II error");
+T("type II error","sta","Experiments","A false negative: failing to detect a real effect. Its rate is beta; power is one minus beta.","The test was underpowered, so we risked a type II error and shelved a good idea.","false negative|power|beta|sample size|MDE","Type I error");
+T("multiple comparisons","sta","Experiments","Running many tests or looking at many metrics inflates the chance that something looks significant by luck.","We checked 20 metrics, so multiple comparisons mean one will look significant by chance.","Bonferroni|false discovery rate|p-hacking|family-wise error|pre-registration","A single pre-specified test");
+T("false discovery rate","sta","Experiments","The expected share of flagged results that are false positives; controlled with procedures like Benjamini-Hochberg when testing many hypotheses.","Controlling the false discovery rate let us scan 500 features without drowning in false leads.","multiple comparisons|Bonferroni|Benjamini-Hochberg|q-value","Family-wise error control");
+T("pre-registration","sta","Experiments","Writing down the hypothesis, metrics and analysis plan before seeing the data, so results can't be bent after the fact.","We pre-registered the primary metric in the experiment doc before launch.","p-hacking|hypothesis|primary metric|guardrail metric|analysis plan","Post-hoc analysis");
+T("sequential testing","sta","Experiments","Statistical methods that allow checking results repeatedly during a test without inflating false positives.","Sequential testing lets us stop early for a clear win without the peeking problem.","peeking|alpha spending|always-valid p-value|early stopping|group sequential","Fixed-horizon test");
+T("variance reduction","sta","Experiments","Techniques that shrink noise in a metric so tests need fewer users, such as CUPED or stratification.","CUPED variance reduction cut our required sample size by 30%.","CUPED|stratification|covariate adjustment|statistical power|blocking","Raw, unadjusted metric");
+T("network effects in experiments","sta","Experiments","When users influence each other, so treated and control users interact and the test result is biased (interference).","Because of interference between friends, we randomised by cluster rather than by user.","SUTVA|cluster randomisation|spillover|switchback test|marketplace test","Independent units");
+T("switchback test","sta","Experiments","An experiment that alternates the treatment on and off over time periods in the same market, used when users can't be split cleanly.","Delivery pricing used a switchback test, flipping the algorithm every hour.","interference|time-based randomisation|carryover|cluster randomisation","User-level A/B test");
+T("permutation test","sta","Inference","Shuffles labels many times to see how often a difference as large as the observed one appears by chance.","A permutation test gave a p-value without assuming normality.","null distribution|bootstrap|p-value|exact test|resampling","Parametric test");
+T("law of large numbers","sta","Inference","As the sample grows, the sample average converges to the true expected value.","The law of large numbers means conversion rate stabilises as traffic accumulates.","central limit theorem|expected value|sample size|convergence|variance","Small-sample noise");
+T("heteroscedasticity","sta","Modelling","When the variability of errors changes across the range of a predictor, violating a regression assumption.","The residual plot fans out: heteroscedasticity, so the standard errors are unreliable.","residuals|robust standard errors|homoscedasticity|variance|weighted least squares","Homoscedasticity");
+T("prior","sta","Modelling","What you believe about a parameter before seeing the data, expressed as a probability distribution.","A weak prior centred on zero keeps the estimate sensible with little data.","posterior|bayesian inference|likelihood|regularization|informative prior","Posterior");
+T("posterior","sta","Modelling","The updated belief about a parameter after combining the prior with the data.","The posterior says there's a 92% chance the lift is positive.","prior|likelihood|credible interval|bayes theorem|MCMC","Prior");
+T("credible interval","sta","Modelling","A range containing the parameter with a stated probability, given the data and prior; the Bayesian counterpart to a confidence interval.","The 95% credible interval for the lift is 0.5% to 3.1%.","posterior|confidence interval|bayesian inference|highest density interval","Confidence interval");
+T("time series decomposition","sta","Modelling","Splitting a series into trend, seasonality and residual so each can be understood and forecast.","Decomposition showed a weekly cycle on top of a slow upward trend.","trend|seasonality|residual|stationarity|forecasting","Treating the raw series as one signal");
+/* WEB, FRONTEND & APIs */
+T("DOM","web","Frontend","Document Object Model: the browser's tree representation of a page that scripts can read and change.","Updating the DOM on every keystroke made the page janky.","virtual DOM|rendering|event listener|reflow|selector","Server-rendered static HTML");
+T("virtual DOM","web","Frontend","A lightweight in-memory copy of the UI that a framework diffs to apply minimal real DOM updates.","React uses a virtual DOM to batch updates.","DOM|reconciliation|diffing|rendering|component","Direct DOM manipulation");
+T("hydration","web","Frontend","Attaching JavaScript behaviour to HTML that was already rendered on the server so the page becomes interactive.","The page looks ready, but hydration hasn't finished, so buttons don't respond yet.","server-side rendering|time to interactive|SSR|bundle size|islands","Client-only rendering");
+T("server-side rendering","web","Frontend","Generating the HTML on the server for each request so users and crawlers see content immediately.","We moved to server-side rendering to improve first paint and SEO.","SSR|hydration|CSR|static site generation|first contentful paint","Client-side rendering");
+T("client-side rendering","web","Frontend","Sending a mostly empty page plus JavaScript that builds the UI in the browser.","Pure client-side rendering made the first load slow on cheap phones.","CSR|SPA|bundle|hydration|time to interactive","Server-side rendering");
+T("static site generation","web","Frontend","Building pages to HTML files ahead of time, then serving them from a CDN.","Docs are static site generation: built once, served everywhere.","SSG|CDN|build time|incremental regeneration|JAMstack","Per-request rendering");
+T("single-page application","web","Frontend","A web app that loads once and updates the view in the browser without full page reloads.","The single-page application feels fast but needs care for SEO and back-button behaviour.","SPA|client-side routing|CSR|state management|bundle","Multi-page application");
+T("state management","web","Frontend","How an app stores, updates and shares data that changes over time across components.","Moving shared filters into a central store fixed our state management mess.","props|store|reducer|context|derived state","Local, component-only state");
+T("prop drilling","web","Frontend","Passing data through many layers of components that don't need it just to reach one deep child.","Prop drilling through six components pushed us to use context.","context|state management|component tree|composition|global store","Direct access via context or store");
+T("bundle size","web","Frontend","The amount of JavaScript and assets shipped to the browser; bigger bundles load and parse more slowly.","A 2 MB bundle size explains the slow first load on mobile.","tree shaking|code splitting|lazy loading|minification|webpack","Lean, code-split app");
+T("code splitting","web","Frontend","Breaking the bundle into chunks loaded on demand so users download only what a page needs.","Code splitting by route cut the initial download by 60%.","lazy loading|bundle size|dynamic import|chunk|tree shaking","Single monolithic bundle");
+T("tree shaking","web","Frontend","Removing unused exports from the final bundle during the build.","Tree shaking only works if the library uses ES modules.","dead code elimination|bundle size|ES modules|minification|sideEffects","Shipping unused code");
+T("core web vitals","web","Frontend","Google's user-centred performance metrics: loading (LCP), responsiveness (INP) and visual stability (CLS).","Core web vitals regressed after the new hero image shipped.","LCP|INP|CLS|lighthouse|real user monitoring","Server-only metrics");
+T("layout shift","web","Frontend","Elements moving around as the page loads, causing misclicks; measured as CLS.","Reserve space for images to prevent layout shift.","CLS|core web vitals|reflow|aspect ratio|font swap","Stable layout");
+T("responsive design","web","Frontend","Layouts that adapt to different screen sizes using flexible grids and breakpoints.","Responsive design means the same page works on a phone and a monitor.","breakpoint|media query|mobile-first|flexbox|viewport","Fixed-width layout");
+T("accessibility","web","Frontend","Building products people with disabilities can use, including screen reader and keyboard support.","Accessibility isn't a nice-to-have: every control needs a label and focus state.","WCAG|ARIA|screen reader|contrast ratio|keyboard navigation","Mouse-only, visual-only design");
+T("polling","web","APIs","Repeatedly asking a service whether something has changed.","Short polling every second hammered the API; we switched to a webhook.","long polling|webhook|WebSocket|server-sent events|rate limiting","Push notification");
+T("over-fetching","web","APIs","Receiving more data than the client needs, wasting bandwidth and time.","The list endpoint returns full records: classic over-fetching.","under-fetching|GraphQL|pagination|payload size|projection","Under-fetching");
+T("pagination","web","APIs","Returning large result sets in pages instead of all at once.","Use cursor-based pagination so results stay stable while data changes.","cursor|offset|limit|page token|infinite scroll","Returning everything");
+T("cursor-based pagination","web","APIs","Paging using an opaque marker for the last item seen, which stays consistent when rows are added or removed.","Offset pagination skipped rows; cursor-based pagination fixed it.","pagination|offset|keyset|stable ordering|page token","Offset pagination");
+T("API versioning","web","APIs","Maintaining multiple versions of an API so changes don't break existing clients.","We'll introduce API versioning before the breaking change.","breaking change|deprecation|backward compatibility|semver|sunset","Unversioned, silently changing API");
+T("OpenAPI","web","APIs","A standard format to describe REST APIs, from which docs, clients and tests can be generated.","The OpenAPI spec is the source of truth for the contract.","Swagger|schema|API contract|code generation|documentation","Undocumented endpoint");
+T("HTTP status codes","web","APIs","Three-digit response codes: 2xx success, 3xx redirect, 4xx client error, 5xx server error.","A 4xx means fix the request; a 5xx means the service has a problem.","200|401|403|404|429|500|503","Silent failure");
+T("idempotency key","web","APIs","A unique client-supplied token that lets a server recognise and ignore repeated attempts of the same request.","Send an idempotency key so a retry doesn't charge the customer twice.","idempotent|retry|deduplication|payments|at-least-once","Unkeyed retry");
+T("session vs token authentication","web","APIs","Sessions store login state on the server; tokens carry signed state with the client.","Token authentication suits mobile clients; sessions suit server-rendered sites.","cookie|JWT|stateless|refresh token|session store","Anonymous access");
+T("cookie","web","Frontend","A small piece of data a site stores in the browser and sends back with requests, often for sessions.","Mark the session cookie HttpOnly and Secure.","HttpOnly|SameSite|session|CSRF|third-party cookie","Header-based token");
+T("progressive enhancement","web","Frontend","Build a working baseline for every browser, then add richer features where supported.","Progressive enhancement means the form still submits without JavaScript.","graceful degradation|feature detection|polyfill|accessibility|baseline","Graceful degradation");
+T("polyfill","web","Frontend","Code that adds a modern feature to older browsers that lack it.","We load a polyfill for the missing API on older Safari.","shim|transpile|browser support|feature detection|compatibility","Native support");
+T("transpile","web","Frontend","Converting code from one language or version to another, such as modern JavaScript or TypeScript to older JavaScript.","TypeScript is transpiled to JavaScript at build time.","Babel|build step|compile|minify|source map","Interpret directly");
+T("source map","web","Frontend","A file mapping minified production code back to the original source for debugging.","Upload the source maps so stack traces are readable.","minification|stack trace|debugging|bundle|error tracking","Minified, unreadable trace");
+T("lighthouse","web","Frontend","An automated tool that audits a page for performance, accessibility, SEO and best practices.","Lighthouse scored 48 on mobile performance.","core web vitals|audit|synthetic monitoring|performance budget|RUM","Real-user measurement");
+T("real user monitoring","web","Frontend","Collecting performance data from actual users' browsers, not lab tests.","Real user monitoring shows the slow experience is on Android in one region.","RUM|synthetic monitoring|core web vitals|percentiles|field data","Synthetic (lab) testing");
+/* DATABASES & DATA MODELLING */
+T("normalisation","db","Modelling","Organising tables to reduce duplication and update anomalies by splitting data into related tables.","Normalisation keeps the customer address in one place.","third normal form|foreign key|redundancy|joins|update anomaly","Denormalisation");
+T("denormalisation","db","Modelling","Deliberately duplicating data to make reads faster or simpler, at the cost of extra writes and risk of inconsistency.","We denormalised the order total onto the order row to avoid a join on every list.","normalisation|materialised view|read-optimised|redundancy|trade-off","Normalisation");
+T("primary key","db","Modelling","A column (or set) that uniquely identifies each row in a table.","The primary key is the order ID.","foreign key|unique constraint|surrogate key|natural key|index","Duplicate-allowing column");
+T("foreign key","db","Modelling","A column that references the primary key of another table, enforcing the relationship.","The foreign key guarantees every order points to a real customer.","primary key|referential integrity|join|cascade|constraint","Unlinked, orphan-prone data");
+T("surrogate key","db","Modelling","An artificial identifier with no business meaning, such as an auto-incrementing number or UUID.","We use a surrogate key because customer emails change.","natural key|primary key|UUID|sequence|dimension table","Natural key");
+T("natural key","db","Modelling","A key derived from real-world data, such as an email or national ID.","Email as a natural key broke when users changed addresses.","surrogate key|uniqueness|business key|primary key","Surrogate key");
+T("referential integrity","db","Modelling","The guarantee that relationships between tables stay valid, so no row points to a missing parent.","Dropping foreign keys removed referential integrity and orphans appeared.","foreign key|constraint|cascade|orphan record|data quality","Orphaned rows");
+T("fact table","db","Modelling","A table of measurable events, such as orders or clicks, at a defined grain.","The fact table stores one row per order line.","dimension table|grain|measure|star schema|additive","Dimension table");
+T("dimension table","db","Modelling","A table describing the context of facts: who, what, where, when.","The customer dimension holds name, region and segment.","fact table|surrogate key|SCD|attribute|star schema","Fact table");
+T("grain","db","Modelling","The level of detail one row represents, such as one row per order line per day.","Be explicit about grain before joining, or you'll double count.","fact table|aggregation|fan-out|cardinality|granularity","Aggregated summary");
+T("fan-out","db","Modelling","A join that multiplies rows because one side has many matches, inflating sums.","The join caused fan-out, so revenue was counted three times.","grain|cardinality|double counting|join|distinct","One-to-one join");
+T("composite index","db","Performance","An index on multiple columns, useful when queries filter or sort on them together in order.","A composite index on (user_id, created_at) serves the feed query.","index|column order|covering index|leftmost prefix|selectivity","Single-column index");
+T("covering index","db","Performance","An index containing every column a query needs, so the database never touches the table.","With a covering index, the query is index-only.","index|index-only scan|composite index|query plan","Index requiring table lookups");
+T("full table scan","db","Performance","Reading every row because no index can be used.","A full table scan on 200M rows is why the report times out.","index|query plan|selectivity|partition pruning|seq scan","Index seek");
+T("N+1 query","db","Performance","One query to fetch a list plus one more per item, causing hundreds of round trips.","The page triggered an N+1 query; we fixed it with an eager join.","ORM|eager loading|batching|join|round trip","Single batched query");
+T("transaction isolation","db","Consistency","How much concurrent transactions can see each other's changes; levels include read committed, repeatable read and serializable.","Under read committed, a second read in the same transaction can differ.","dirty read|phantom read|serializable|snapshot isolation|locking","Fully serial execution");
+T("dirty read","db","Consistency","Reading data another transaction has changed but not yet committed.","A dirty read showed a balance that was later rolled back.","isolation level|read committed|non-repeatable read|phantom read","Read committed or higher");
+T("optimistic locking","db","Consistency","Allow concurrent edits but check a version number at write time; fail if someone else changed the row.","Optimistic locking prevents lost updates without holding locks.","version column|pessimistic locking|lost update|retry|compare-and-swap","Pessimistic locking");
+T("pessimistic locking","db","Consistency","Lock the data when reading it for update so no one else can change it until you finish.","We used pessimistic locking on the inventory row during checkout.","optimistic locking|row lock|SELECT FOR UPDATE|contention|deadlock","Optimistic locking");
+T("replication lag","db","Scaling","The delay between a write on the primary and its appearance on replicas.","Replication lag caused users to not see their own edit.","read replica|eventual consistency|read-your-writes|primary|failover","Synchronous replication");
+T("read-your-writes consistency","db","Consistency","A guarantee that after you write something, your own subsequent reads see it.","We route a user to the primary briefly to guarantee read-your-writes consistency.","replication lag|session consistency|eventual consistency|sticky routing","Stale read after write");
+T("materialised view","db","Performance","A stored result of a query that is refreshed periodically, trading freshness for speed.","The dashboard reads from a materialised view refreshed hourly.","view|refresh|cache|denormalisation|incremental refresh","Plain view computed at read time");
+T("write-ahead log","db","Internals","An append-only log written before changes reach data files, enabling crash recovery and replication.","Replicas replay the write-ahead log to stay in sync.","WAL|durability|crash recovery|checkpoint|replication","In-place unlogged writes");
+T("B-tree","db","Internals","A balanced tree structure used by most database indexes for fast lookups, ranges and ordering.","A B-tree index supports range queries on date.","index|LSM tree|balanced tree|page|range scan","Hash index");
+T("LSM tree","db","Internals","Log-structured merge tree: writes go to memory and sequential files that are merged later, giving high write throughput.","Cassandra uses an LSM tree, so writes are fast but reads may check several files.","compaction|memtable|SSTable|write amplification|B-tree","B-tree");
+T("tombstone","db","Internals","A marker that a record was deleted, kept until compaction so deletes propagate in distributed stores.","Too many tombstones slowed reads on that partition.","compaction|soft delete|TTL|Cassandra|garbage collection","Physical deletion");
+T("soft delete","db","Modelling","Marking a row as deleted with a flag or timestamp instead of removing it.","Soft delete lets us restore accounts, but every query must filter it.","hard delete|deleted_at|retention|audit|GDPR erasure","Hard delete");
+T("expand and contract","db","Operations","Making a breaking schema change safely: add the new structure, move traffic, then remove the old.","Rename the column with expand and contract so old and new code both work.","schema migration|backward compatibility|dual write|backfill|zero downtime","Big-bang change");
+T("connection pooling","db","Performance","Reusing a set of open database connections instead of opening a new one per request.","Connection pooling stopped us exhausting the database's connection limit.","pool size|PgBouncer|connection limit|latency|timeouts","Connection per request");
+/* DEVOPS, CLOUD & NETWORKING */
+T("blue-green deployment","ops","Deployment","Run two identical environments; deploy to the idle one, then switch traffic over, keeping the old one for instant rollback.","Blue-green deployment let us flip back in seconds when errors appeared.","canary release|rollback|zero downtime|load balancer|traffic switch","In-place upgrade");
+T("rolling update","ops","Deployment","Replacing instances gradually, a few at a time, so the service stays up.","The rolling update replaces one pod at a time.","blue-green deployment|canary release|health check|surge|readiness probe","All-at-once deploy");
+T("kill switch","ops","Deployment","A flag or control that instantly disables a risky feature or integration.","The kill switch turned off the recommender when it misbehaved.","feature flag|circuit breaker|incident|mitigation|rollback","Fix-forward deploy");
+T("configuration drift","ops","Infrastructure","When live systems gradually diverge from their declared configuration through manual changes.","Someone hotfixed prod by hand, and now we have configuration drift.","IaC|immutable infrastructure|state file|reconcile|GitOps","Declared, reconciled state");
+T("Terraform state","ops","Infrastructure","The file where Terraform records which real resources it manages, used to plan changes.","Corrupted Terraform state made the plan want to recreate the database.","IaC|plan|apply|remote backend|state locking","Untracked resources");
+T("container image","ops","Containers","A packaged, immutable snapshot of an application and its dependencies, from which containers are started.","Build the container image once and promote it across environments.","Dockerfile|registry|layer|tag|container","Running container");
+T("Kubernetes pod","ops","Containers","The smallest deployable unit in Kubernetes: one or more containers sharing network and storage.","The pod keeps restarting because it fails its liveness probe.","deployment|replica set|node|container|liveness probe","Bare process on a VM");
+T("liveness vs readiness probe","ops","Containers","Liveness checks whether to restart a container; readiness checks whether it should receive traffic.","A failing readiness probe removes the pod from the load balancer without restarting it.","health check|startup probe|pod|rollout|service","No health check");
+T("horizontal pod autoscaler","ops","Containers","A Kubernetes controller that adds or removes pod replicas based on metrics like CPU or custom signals.","The horizontal pod autoscaler scaled out ahead of the traffic spike.","autoscaling|replicas|CPU target|scale out|metrics server","Fixed replica count");
+T("horizontal vs vertical scaling","ops","Scaling","Horizontal adds more machines; vertical makes one machine bigger.","Vertical scaling bought us time, but horizontal scaling is the long-term answer.","scale out|scale up|load balancer|statelessness|capacity","Static capacity");
+T("multi-region","ops","Cloud","Running a service in several geographic regions for resilience and lower latency.","Multi-region failover protects us if one region goes down.","availability zone|failover|replication|latency|data residency","Single region");
+T("availability zone","ops","Cloud","An isolated data-centre location within a cloud region; spreading across zones survives a zone failure.","Deploy across three availability zones.","region|fault domain|HA|failover|redundancy","Single data centre");
+T("shared responsibility model","ops","Cloud","The split of security duties: the provider secures the cloud itself; you secure what you put in it.","Under the shared responsibility model, misconfigured buckets are on us.","IAM|encryption|compliance|misconfiguration|cloud security","Provider handles everything");
+T("FinOps","ops","Cloud","Practices for managing and optimising cloud spend through shared accountability between engineering and finance.","FinOps flagged an idle GPU cluster costing $9k a month.","unit economics|tagging|reserved instances|rightsizing|showback","Unmonitored cloud spend");
+T("reserved instances","ops","Cloud","Committing to use capacity for a year or more in return for a discount over on-demand pricing.","Steady baseline load goes on reserved instances; spikes stay on-demand.","on-demand|savings plan|spot instances|commitment|FinOps","On-demand pricing");
+T("spot instances","ops","Cloud","Spare cloud capacity sold at a steep discount that can be reclaimed with short notice.","Training jobs run on spot instances with checkpointing.","preemption|checkpointing|on-demand|interruptible|cost optimisation","On-demand or reserved capacity");
+T("egress cost","ops","Cloud","Fees for moving data out of a cloud provider or across regions.","Egress cost made the cross-region copy more expensive than the compute.","data transfer|bandwidth|region|CDN|data gravity","Free ingress / in-region transfer");
+T("structured logging","ops","Operations","Logging in a machine-readable format such as JSON with consistent fields instead of free text.","Structured logging lets us filter by user ID and request ID.","JSON logs|log level|correlation ID|log aggregation|searchability","Free-text log lines");
+T("cardinality explosion","ops","Operations","A metric with too many unique label combinations, overwhelming the monitoring system.","Adding user ID as a metric label caused a cardinality explosion.","time series|labels|Prometheus|cost|aggregation","Bounded label set");
+T("latency vs bandwidth","ops","Networking","Latency is the delay for one message; bandwidth is how much data can flow per second.","High bandwidth doesn't fix high latency: the round trip is still slow.","round-trip time|throughput|jitter|congestion|packet loss","Throughput");
+T("NAT","ops","Networking","Network Address Translation: lets many private addresses share one public IP.","Private subnets reach the internet through a NAT gateway.","public IP|private subnet|gateway|IPv4|egress","Public address per host");
+T("CIDR","ops","Networking","Classless Inter-Domain Routing: notation such as 10.0.0.0/16 describing a block of IP addresses.","Pick a larger CIDR block so we don't run out of addresses.","subnet|IP address|netmask|VPC|routing","Fixed address classes");
+/* PRODUCT, AGILE & DELIVERY */
+T("user story","pm","Agile","A short description of a need from the user's viewpoint: as a [user], I want [goal] so that [benefit].","The user story is: as an analyst, I want to export results so that I can share them.","acceptance criteria|epic|backlog|persona|INVEST","Technical task with no user value");
+T("backlog grooming","pm","Agile","Regularly reviewing and refining upcoming work: clarifying, splitting and estimating items. Also called refinement.","In backlog grooming we split the epic into stories.","refinement|prioritisation|estimation|epic|story","Unrefined wish list");
+T("sprint","pm","Agile","A fixed, short work cycle, usually one to two weeks, with a planned goal.","This sprint's goal is to ship the new onboarding flow.","sprint planning|retro|velocity|scrum|iteration","Open-ended project phase");
+T("velocity","pm","Agile","How much work a team completes per sprint, used for forecasting, not for comparing teams.","Velocity has been steady at about 30 points.","story points|capacity|forecast|burn-down|throughput","Output per individual");
+T("story points","pm","Agile","A relative measure of effort and uncertainty for a story, not a count of hours.","We sized it at five story points because the API is unknown.","estimation|velocity|planning poker|complexity|t-shirt sizing","Hours");
+T("standup","pm","Agile","A brief daily sync on progress, plans and blockers.","Standup: finished the schema, starting the API, blocked on credentials.","blocker|sprint|sync|async update|scrum","Long status meeting");
+T("kanban","pm","Agile","A flow-based method visualising work on a board with limits on work in progress.","Support uses Kanban: cards flow left to right with a WIP limit of four.","WIP limit|flow|cycle time|board|lean","Time-boxed sprints");
+T("cycle time","pm","Agile","How long an item takes from starting work to being done.","Median cycle time dropped from nine days to four.","lead time|throughput|flow|bottleneck|WIP","Lead time");
+T("lead time","pm","Agile","How long from request to delivery, including time waiting in the queue.","Lead time is long because tickets sit in the backlog for weeks.","cycle time|queue|throughput|DORA|flow","Cycle time");
+T("DORA metrics","pm","Delivery","Four delivery performance measures: deployment frequency, lead time for changes, change failure rate and time to restore.","DORA metrics show we deploy weekly but fail one in four.","deployment frequency|change failure rate|MTTR|lead time|software delivery","Vanity metrics");
+T("technical spike","pm","Delivery","A short time-boxed investigation to answer a question or reduce uncertainty before committing to a plan.","We scheduled a two-day spike to test the vendor API.","time-box|proof of concept|uncertainty|research|estimate","Full implementation");
+T("tracer bullet","pm","Delivery","A thin end-to-end slice of the real system built early to validate the architecture.","The tracer bullet pushes one record from source to dashboard.","vertical slice|MVP|walking skeleton|integration|risk","Layer-by-layer build");
+T("vertical slice","pm","Delivery","A feature built across all layers, from UI to database, so it delivers real value on its own.","We shipped a vertical slice: sign up, one report, one export.","horizontal layer|MVP|increment|end-to-end|iteration","Horizontal layer");
+T("scope creep","pm","Delivery","Uncontrolled growth in what a project includes after it has started.","Three late requests were scope creep, so we parked them for phase two.","change request|scope|prioritisation|trade-off|guardrail","Fixed scope");
+T("dependency","pm","Delivery","Something your work relies on from another team or system, which can delay you.","The main dependency is the identity team's API.","blocker|critical path|handoff|risk|coordination","Independent work");
+T("critical path","pm","Delivery","The longest chain of dependent tasks, which determines the minimum project duration.","Any slip on the critical path moves the launch date.","dependency|float|schedule|milestone|bottleneck","Parallel, non-blocking work");
+T("milestone","pm","Delivery","A significant checkpoint marking progress toward the goal.","Milestone two: data migrated and validated.","deliverable|deadline|roadmap|phase|checkpoint","Ongoing activity");
+T("prioritisation framework","pm","Product","A structured way to rank work, such as RICE, MoSCoW or value versus effort.","We scored ideas with RICE to rank them objectively.","RICE|MoSCoW|impact|effort|trade-off","Loudest-voice-wins");
+T("RICE","pm","Product","A scoring model: Reach times Impact times Confidence divided by Effort.","The export feature scored highest on RICE.","prioritisation framework|reach|impact|confidence|effort","Gut feel");
+T("MoSCoW","pm","Product","Sorting requirements into Must, Should, Could and Won't (this time).","In MoSCoW terms, SSO is a Must and dark mode is a Could.","prioritisation framework|scope|must-have|nice-to-have|trade-off","Everything is priority one");
+T("product-market fit","pm","Product","When a product satisfies a strong market demand, shown by retention and pull from users.","Retention curves flattening is an early sign of product-market fit.","retention|churn|demand|pivot|traction","Solution looking for a problem");
+T("north star metric","pm","Product","The single metric best capturing the value customers get, which guides the whole team.","Our north star metric is weekly active analysts.","KPI|input metric|guardrail|OKR|outcome","Collection of vanity metrics");
+T("leading vs lagging indicator","pm","Product","Leading indicators predict future results; lagging indicators confirm what already happened.","Activation is a leading indicator; revenue is lagging.","KPI|forecast|input metric|outcome|retention","Single outcome metric");
+T("retention","pm","Product","The share of users who keep coming back over time.","Day-30 retention is 22%, so we need better onboarding.","churn|cohort|activation|engagement|LTV","Churn");
+T("churn","pm","Product","The rate at which customers or users stop using or paying for a product.","Monthly churn rose to 4% after the price change.","retention|cohort analysis|attrition|LTV|win-back","Retention");
+T("activation","pm","Product","The moment a new user first experiences the product's core value.","Activation means creating a first dashboard within 24 hours.","onboarding|aha moment|funnel|conversion|time to value","Sign-up only");
+T("funnel","pm","Product","The sequence of steps users go through toward a goal, with drop-off at each stage.","The funnel shows 60% of users abandon at payment.","conversion rate|drop-off|step|activation|bottleneck","Single-step conversion");
+T("time to value","pm","Product","How long it takes a new user or customer to get meaningful benefit.","Time to value fell from two weeks to two days after templates.","onboarding|activation|adoption|implementation|aha moment","Long implementation");
+T("sunset","pm","Product","Retiring a product, feature or API on a planned timeline.","We'll sunset v1 of the API in six months with a migration guide.","deprecation|end of life|migration|communication|backward compatibility","Launch");
+/* BUSINESS, FINANCE & STRATEGY */
+T("unit economics","biz","Finance","The revenue and cost of a single unit, such as one customer or order, showing whether growth is profitable.","Unit economics: each customer costs $120 to acquire and yields $300 in margin.","CAC|LTV|contribution margin|payback period|scale","Aggregate totals only");
+T("CAC","biz","Finance","Customer Acquisition Cost: total sales and marketing spend divided by new customers won.","CAC rose to $180 as paid channels saturated.","LTV|payback period|unit economics|marketing spend|channel","Lifetime value");
+T("LTV","biz","Finance","Lifetime Value: the total margin expected from a customer over their relationship with you.","An LTV to CAC ratio above 3 is the usual rule of thumb.","CAC|churn|ARPU|retention|margin","CAC");
+T("ARR","biz","Finance","Annual Recurring Revenue: the yearly value of active subscriptions.","ARR grew 40% year on year.","MRR|NRR|churn|bookings|subscription","One-off revenue");
+T("MRR","biz","Finance","Monthly Recurring Revenue: subscription revenue normalised to a month.","New MRR was offset by churned MRR this month.","ARR|expansion revenue|contraction|net new MRR|churn","Non-recurring revenue");
+T("net revenue retention","biz","Finance","Revenue from existing customers now compared with a year ago, including upgrades, downgrades and churn.","Net revenue retention is 118%: expansion outweighs churn.","NRR|expansion|churn|ARR|cohort","Gross retention");
+T("gross margin","biz","Finance","Revenue minus the direct cost of delivering the product, as a percentage of revenue.","AI features lowered gross margin because inference is expensive.","COGS|contribution margin|unit economics|operating margin|cloud cost","Net margin");
+T("COGS","biz","Finance","Cost of goods sold: the direct costs of producing what you sell, such as hosting and support.","Cloud hosting sits in COGS, not in R&D.","gross margin|opex|direct cost|unit cost|margin","Operating expense");
+T("opex vs capex","biz","Finance","Opex is day-to-day running cost; capex is spending on long-lived assets.","Moving to the cloud shifts spend from capex to opex.","budget|depreciation|cloud|OPEX|investment","Single bucket of spend");
+T("burn rate","biz","Finance","How fast a company spends cash, usually per month.","Burn rate is $400k a month, giving us 18 months of runway.","runway|cash flow|profitability|funding|cost control","Positive cash flow");
+T("runway","biz","Finance","How long the company can operate with its current cash at the current burn rate.","With 14 months of runway, we need to hit profitability or raise.","burn rate|cash|funding|break-even|forecast","Cash-flow positive");
+T("break-even","biz","Finance","The point where revenue equals costs, so there is neither profit nor loss.","We break even at about 900 paying customers.","profit|margin|fixed cost|variable cost|contribution","Loss or profit");
+T("payback period","biz","Finance","How long it takes for a customer's margin to repay the cost of acquiring them.","Payback period is 11 months, which is too long for our runway.","CAC|LTV|margin|unit economics|cash flow","Immediate return");
+T("business case","biz","Strategy","A structured argument for an investment: costs, benefits, risks and alternatives.","The business case shows the automation pays back in eight months.","ROI|cost-benefit|assumptions|risk|options","Opinion with no numbers");
+T("build vs buy","biz","Strategy","The decision between developing something yourself or purchasing or licensing it.","Build vs buy: authentication isn't our differentiator, so we buy.","total cost of ownership|differentiator|vendor|maintenance|core competency","Always build");
+T("core vs context","biz","Strategy","Core is what differentiates you; context is necessary but undifferentiated work better bought or standardised.","Fraud scoring is core; payroll is context.","differentiator|build vs buy|focus|commodity|strategy","Treating everything as core");
+T("moat","biz","Strategy","A durable competitive advantage that protects a business from competitors.","Our data is the moat; the model itself is replaceable.","differentiation|network effects|switching cost|barrier to entry|proprietary data","Easily copied product");
+T("switching cost","biz","Strategy","The effort, money or risk a customer faces when moving to another provider.","Integration depth creates high switching cost.","lock-in|moat|retention|migration|stickiness","Frictionless switching");
+T("TAM SAM SOM","biz","Strategy","Total, Serviceable and Obtainable market: the whole market, the part you can serve, and the part you can realistically win.","The TAM is huge, but our SOM in year one is 2% of it.","market size|segment|addressable market|go-to-market|forecast","Unsized market");
+T("go-to-market","biz","Strategy","The plan for reaching customers and selling a product: audience, positioning, pricing and channels.","The go-to-market is partner-led in mid-market accounts.","positioning|pricing|channel|launch|segment","Build it and they will come");
+T("positioning","biz","Strategy","How a product is placed in customers' minds relative to alternatives.","Our positioning is the fastest setup for small teams, not the most powerful.","differentiation|value proposition|segment|messaging|competitor","Generic message");
+T("value proposition","biz","Strategy","A clear statement of the benefit customers get and why it's better than alternatives.","The value proposition: close the books in one day instead of five.","positioning|benefit|differentiator|pain point|messaging","Feature list");
+T("executive sponsor","biz","Communication","A senior leader who champions a project, removes obstacles and secures resources.","We need an executive sponsor to unblock the budget.","stakeholder|escalation|buy-in|governance|support","Unsupported side project");
+T("buy-in","biz","Communication","Agreement and commitment from the people involved.","We have buy-in from legal but not yet from security.","alignment|stakeholder|consensus|commitment|adoption","Resistance");
+T("trade-off analysis","biz","Strategy","Comparing options by what each gains and sacrifices against agreed criteria.","The trade-off analysis favoured speed over flexibility for this release.","decision matrix|criteria|opportunity cost|options|constraints","Single-option recommendation");
+T("mitigation vs contingency","biz","Governance","Mitigation reduces the chance or impact beforehand; contingency is the plan if the risk happens anyway.","Mitigation: test early. Contingency: a manual process if the API fails.","risk register|fallback|plan B|prevention|response","Doing nothing");
+T("SLA credit","biz","Governance","Compensation a provider gives when it misses its service level commitment.","The outage triggered a 10% SLA credit.","SLA|penalty|uptime|contract|remedy","No remedy");
+T("procurement","biz","Governance","The process of selecting and purchasing goods or services from vendors.","Procurement will need a security review before signing the vendor.","vendor|contract|due diligence|RFP|approval","Informal purchase");
+T("RFP","biz","Governance","Request For Proposal: a formal document inviting vendors to bid on a defined need.","We issued an RFP and scored responses against a rubric.","procurement|vendor|evaluation criteria|scoring|bid","Single-source purchase");
+T("due diligence","biz","Governance","Careful investigation before a decision or deal, covering finances, security and risk.","Due diligence found the vendor lacked SOC 2.","vetting|audit|risk|compliance|procurement","Taking claims at face value");
+T("NDA","biz","Governance","Non-Disclosure Agreement: a contract promising to keep shared information confidential.","Sign an NDA before sharing the architecture doc.","confidentiality|contract|IP|trade secret|disclosure","Open sharing");
+/* AI SAFETY, ETHICS & GOVERNANCE */
+T("disparate impact","eth","Fairness","A neutral-looking rule or model that disproportionately harms a protected group.","Disparate impact showed up even though gender wasn't a feature.","algorithmic bias|proxy variable|four-fifths rule|audit|fairness","Equal outcomes across groups");
+T("proxy variable","eth","Fairness","A feature that stands in for a sensitive attribute, such as postcode standing in for ethnicity.","Dropping race didn't help: postcode is a proxy variable.","protected attribute|bias|disparate impact|fairness|feature audit","Direct, legitimate predictor");
+T("fairness metric","eth","Fairness","A quantitative definition of fairness, such as demographic parity or equalised odds; they can conflict.","Demographic parity and equalised odds can't both hold here, so we documented the choice.","demographic parity|equalised odds|calibration|trade-off|protected group","Single accuracy number");
+T("demographic parity","eth","Fairness","A fairness criterion requiring the same positive-outcome rate across groups.","Demographic parity ignores differences in true base rates.","equalised odds|fairness metric|selection rate|protected group|disparate impact","Equalised odds");
+T("equalised odds","eth","Fairness","A fairness criterion requiring similar true-positive and false-positive rates across groups.","Equalised odds keeps error rates comparable between groups.","demographic parity|false positive rate|recall|fairness metric|calibration","Demographic parity");
+T("explainability","eth","Transparency","The ability to give understandable reasons for a model's output.","Regulators require explainability for credit decisions.","SHAP|interpretability|feature attribution|transparency|post-hoc explanation","Black box");
+T("datasheet for datasets","eth","Transparency","Documentation of how a dataset was collected, what it contains and what it should not be used for.","The datasheet warns the labels were crowdsourced and noisy.","model card|provenance|consent|documentation|data governance","Unlabelled data dump");
+T("human in the loop","eth","Oversight","A person reviews or approves automated decisions, especially high-stakes ones.","High-risk claims go to a human in the loop before payout.","human oversight|escalation|review queue|automation|accountability","Fully automated decision");
+T("reward hacking","eth","Safety","A system exploiting flaws in the objective to score highly without doing what was intended.","The agent used reward hacking: it gamed the metric instead of solving the task.","specification gaming|alignment|Goodhart's law|proxy metric|evaluation","Intended behaviour");
+T("Goodhart's law","eth","Safety","When a measure becomes a target, it stops being a good measure.","Rewarding ticket closures led to Goodhart's law: agents closed tickets without fixing problems.","reward hacking|proxy metric|incentives|KPI|perverse incentive","Metric that stays honest");
+T("guardrail","eth","Safety","A control that keeps a system within acceptable behaviour, such as input filters or output checks.","Guardrails block outputs containing personal data.","safety filter|policy|content moderation|validation|constraint","Unconstrained output");
+T("content moderation","eth","Safety","Reviewing and filtering content to remove harmful or policy-violating material.","Content moderation combines classifiers with human review.","trust and safety|classifier|policy|false positive|appeals","Unfiltered feed");
+T("anonymisation vs pseudonymisation","eth","Privacy","Anonymised data can't be linked back to a person; pseudonymised data replaces identifiers but can be re-linked with a key.","Hashed emails are pseudonymised, not anonymised, so GDPR still applies.","GDPR|PII|re-identification|hashing|tokenisation","Identifiable data");
+T("re-identification","eth","Privacy","Working out who a person is by combining supposedly anonymous data with other information.","Zip code, birth date and gender allowed re-identification.","k-anonymity|linkage attack|anonymisation|quasi-identifier|privacy","True anonymity");
+T("k-anonymity","eth","Privacy","Each record is indistinguishable from at least k-1 others on identifying attributes.","We enforce k-anonymity of 10 before releasing the table.","re-identification|quasi-identifier|generalisation|suppression|privacy","Unique records");
+T("data minimisation","eth","Privacy","Collecting and keeping only the data needed for a stated purpose.","Data minimisation: we don't store birth dates because we don't need them.","purpose limitation|retention|GDPR|privacy by design|least privilege","Collect everything");
+T("purpose limitation","eth","Privacy","Using personal data only for the purposes it was collected for.","Using support emails to train a sales model breaks purpose limitation.","consent|data minimisation|GDPR|lawful basis|secondary use","Repurposing data freely");
+T("consent","eth","Privacy","Freely given, specific, informed agreement to process personal data, which can be withdrawn.","Consent must be explicit and as easy to withdraw as to give.","lawful basis|opt-in|opt-out|GDPR|preference centre","Implied or assumed permission");
+T("right to erasure","eth","Privacy","A person's right to have their personal data deleted (the right to be forgotten) in many jurisdictions.","The right to erasure means we must purge them from backups and training sets where required.","GDPR|retention|deletion request|DSAR|data subject","Indefinite retention");
+T("DSAR","eth","Privacy","Data Subject Access Request: a person asking an organisation what data it holds about them.","Legal has 30 days to respond to the DSAR.","GDPR|right of access|data subject|compliance|erasure","Ignoring requests");
+T("data residency","eth","Privacy","Requirements about the country or region where data must be stored or processed.","Data residency means EU customer data stays in EU regions.","sovereignty|compliance|region|transfer|GDPR","Any-region storage");
+T("data governance","eth","Governance","The policies, roles and processes that keep data accurate, secure and used appropriately.","Data governance assigns an owner to each critical dataset.","data owner|data steward|catalogue|lineage|policy","Ungoverned data sprawl");
+T("data steward","eth","Governance","A person responsible for the quality and correct use of a dataset or domain.","The data steward approves changes to the definition of active user.","data owner|governance|data quality|catalogue|definition","Anonymous owner");
+T("audit trail","eth","Governance","A tamper-evident record of who did what and when.","The audit trail shows who exported the customer list.","logging|accountability|compliance|immutable log|forensics","No record");
+T("SOC 2","eth","Compliance","An audit report on a service provider's controls for security, availability and confidentiality.","Procurement requires the vendor's SOC 2 Type II report.","ISO 27001|compliance|audit|controls|trust","Unaudited claims");
+T("ISO 27001","eth","Compliance","An international standard for managing information security.","ISO 27001 certification supports enterprise sales.","SOC 2|ISMS|audit|risk management|controls","No formal standard");
+T("EU AI Act","eth","Compliance","European regulation that classifies AI systems by risk and sets obligations for high-risk uses.","Hiring tools are high-risk under the EU AI Act, so documentation and oversight are required.","risk tiers|high-risk system|conformity assessment|transparency|compliance","Unregulated deployment");
+T("responsible AI","eth","Governance","Building and deploying AI with attention to fairness, safety, privacy, transparency and accountability.","Our responsible AI review covers bias tests, a model card and a rollback plan.","ethics review|governance|fairness|transparency|accountability","Ship first, ask later");
+/* WORKPLACE LANGUAGE: verbs, idioms, hedges */
+T("circle back","wk","Idiom","Return to a topic later, once there is more information or time.","Let's circle back on pricing after we see the usage data.","follow up|revisit|table|park|defer","Resolve now");
+T("table (a topic)","wk","Idiom","In American English, to postpone discussion; in British English, to put forward for discussion. Clarify which you mean.","I'll table that until next week. (Check: do you mean postpone, or raise?)","park|defer|raise|bring up|postpone","Discuss now");
+T("take offline","wk","Idiom","Move a discussion out of the meeting to a smaller conversation.","This needs detail; let's take it offline and report back.","parking lot|follow up|side conversation|breakout|async","Discuss with everyone now");
+T("parking lot","wk","Idiom","A list of off-topic items to deal with later so the meeting stays on track.","Added the vendor question to the parking lot.","take offline|agenda|scope|follow-up|facilitation","Immediate tangent");
+T("deep dive","wk","Idiom","A detailed, thorough examination of a topic.","We'll do a deep dive on the churn model next week.","drill down|analysis|walkthrough|review|investigation","High-level overview");
+T("drill down","wk","Idiom","Move from a summary to finer detail.","Let's drill down by region to find where the drop is.","deep dive|break down|segment|slice|zoom in","Roll up");
+T("roll up","wk","Idiom","Combine detailed items into a summary, or summarise upward to leadership.","We roll up team metrics into one department view.","aggregate|summarise|consolidate|report|rollup","Drill down");
+T("bandwidth (workload)","wk","Idiom","Capacity of a person or team to take on more work.","I don't have the bandwidth to take that on this sprint.","capacity|availability|workload|headroom|stretched","Overloaded");
+T("low-hanging fruit","wk","Idiom","Easy wins that deliver value with little effort.","Fixing the slow query is low-hanging fruit.","quick win|easy win|prioritisation|effort|payoff","Hard, long-term work");
+T("quick win","wk","Idiom","A small improvement that shows value fast.","A quick win: add the missing index before the big redesign.","low-hanging fruit|early value|momentum|small change|incremental","Long-term project");
+T("boil the ocean","wk","Idiom","Attempt something impossibly large or try to fix everything at once.","Let's not boil the ocean: start with one pipeline.","scope creep|over-engineering|focus|incremental|MVP","Focused, scoped effort");
+T("move the needle","wk","Idiom","Make a meaningful difference to a key metric.","Faster loading will move the needle on conversion.","impact|material|significant|outcome|lever","Negligible effect");
+T("north star","wk","Idiom","A guiding goal or principle that directs decisions.","The north star is time to first insight.","guiding principle|strategy|goal|vision|metric","Drifting without direction");
+T("double-click","wk","Idiom","Go into more depth on a point.","Can we double-click on the data quality issue?","deep dive|expand|unpack|elaborate|drill down","Skim over");
+T("unpack","wk","Idiom","Break a complex idea into parts and explain each.","Let me unpack the assumptions behind that estimate.","break down|explain|decompose|elaborate|walk through","Gloss over");
+T("surface","wk","Idiom","Bring something to attention or make it visible, often a problem or insight.","Monitoring surfaced the latency issue within minutes.","flag|raise|highlight|expose|bring up","Bury");
+T("flag","wk","Idiom","Mark or point out something as needing attention.","I want to flag a risk: the vendor hasn't confirmed the date.","raise|highlight|call out|escalate|alert","Overlook");
+T("loop in","wk","Idiom","Include someone in communication or a decision.","I'll loop in security before we choose the vendor.","cc|inform|involve|stakeholder|notify","Leave out");
+T("ramp up","wk","Idiom","Increase gradually in pace, scale or readiness; or get a new person productive.","New hires ramp up over their first six weeks.","onboarding|scale up|build up|accelerate|get up to speed","Wind down");
+T("wind down","wk","Idiom","Gradually reduce or finish an activity or system.","We'll wind down the legacy pipeline over two quarters.","sunset|decommission|taper|retire|phase out","Ramp up");
+T("hand off","wk","Idiom","Pass responsibility or work to someone else with the context they need.","Write a hand-off doc so the on-call can pick this up.","handover|transfer|ownership|documentation|continuity","Keep and own");
+T("sign off","wk","Idiom","Give formal approval.","We need security to sign off before launch.","approve|green light|authorise|approval|review","Reject");
+T("green light","wk","Idiom","Give permission to proceed.","Leadership gave the green light to start the migration.","approve|go-ahead|sign off|authorise|clear","Red light");
+T("push back","wk","Idiom","Resist or challenge a request or decision, politely or firmly.","I'd push back on that deadline: it assumes no testing.","challenge|object|negotiate|disagree|counter","Go along with");
+T("on the same page","wk","Idiom","Sharing the same understanding.","Let's make sure we're on the same page about the definition of active user.","aligned|shared understanding|aligned expectations|clarify|consensus","At cross purposes");
+T("heads-up","wk","Idiom","An advance warning or notice.","Quick heads-up: the dashboard will be down for maintenance at 6pm.","notice|FYI|warning|early notice|alert","Surprise");
+T("sense check","wk","Idiom","A quick check that a result or plan is reasonable.","Sense check: does 40% month-on-month growth seem plausible?","sanity check|review|smell test|validate|spot check","Unchecked claim");
+T("sanity check","wk","Idiom","A basic test to make sure something isn't obviously wrong.","Run a sanity check: totals should match the source.","smoke test|sense check|validation|spot check|assertion","Blind trust");
+T("rule of thumb","wk","Idiom","A rough guide based on experience rather than precise calculation.","As a rule of thumb, budget 20% extra for testing.","heuristic|estimate|guideline|approximation|ballpark","Exact formula");
+T("ballpark","wk","Idiom","A rough estimate.","In the ballpark of 10,000 users, give or take.","rough estimate|order of magnitude|approximately|back of the envelope|estimate","Precise figure");
+T("back of the envelope","wk","Idiom","A rough calculation done quickly with simple assumptions.","Back-of-the-envelope: 1M requests a day is about 12 per second.","ballpark|estimate|order of magnitude|Fermi estimate|napkin math","Detailed model");
+T("order of magnitude","wk","Idiom","A factor of ten; used to compare sizes roughly.","This is an order of magnitude cheaper than the old approach.","ballpark|10x|scale|magnitude|rough","Marginal difference");
+T("blocking vs non-blocking","wk","Review","A blocking comment must be resolved before approval; a non-blocking one is optional.","Mark security concerns as blocking and style as non-blocking.","nit|approval|review|severity|LGTM","Optional suggestion");
+T("rubber duck","wk","Review","Explaining a problem aloud, even to an object, to find the solution yourself.","Rubber duck: explaining the bug out loud revealed the missing await.","debugging|explain|walk through|pair programming|problem solving","Struggling silently");
+T("strawman","wk","Argument","A weaker version of an argument set up to be easily knocked down.","That's a strawman: nobody proposed rewriting everything.","steelman|fallacy|misrepresentation|argument|debate","Steelman");
+T("steelman","wk","Argument","Present the strongest version of an opposing view before responding to it.","Let me steelman the case for microservices before we decide.","strawman|fair hearing|argument|devil's advocate|critical thinking","Strawman");
+T("devil's advocate","wk","Argument","Arguing the opposing position deliberately to test an idea.","Playing devil's advocate: what if the vendor shuts down?","challenge|steelman|stress test|pre-mortem|critique","Agreeing automatically");
+T("pre-mortem","wk","Argument","Imagining a project has failed and working backwards to identify why, before starting.","In the pre-mortem, the top risk was data quality.","postmortem|risk|failure modes|planning|mitigation","Postmortem");
+T("hedge","wk","Language","Soften a claim to show uncertainty or caution, with words like likely, appears or roughly.","Hedge appropriately: the data suggests, rather than proves, the effect.","caveat|qualifier|confidence level|nuance|uncertainty","State as certain");
+T("caveat","wk","Language","A warning or condition attached to a statement.","One caveat: the data excludes mobile users.","qualification|limitation|disclaimer|assumption|hedge","Unqualified claim");
+T("assumption","wk","Language","Something taken to be true without proof, on which a plan or analysis depends.","State your assumptions: we assume traffic grows 10% monthly.","premise|caveat|dependency|constraint|risk","Verified fact");
+T("constraint","wk","Language","A limit you must work within, such as time, budget, technology or regulation.","The constraint is the end-of-quarter freeze.","requirement|limitation|boundary|trade-off|dependency","Free choice");
+T("rationale","wk","Language","The reasoning behind a decision.","Document the rationale, not just the decision.","reasoning|justification|decision record|ADR|why","Unexplained decision");
+T("TL;DR","wk","Language","A one-line summary placed at the top of a long message.","TL;DR: roll back, then fix forward on Monday.","summary|executive summary|bottom line|BLUF|headline","Long preamble");
+T("BLUF","wk","Language","Bottom Line Up Front: start with the conclusion or ask, then give detail.","Use BLUF: 'We need a decision by Friday on vendor A or B', then explain.","TL;DR|executive summary|inverted pyramid|headline|ask","Burying the point");
+T("ask","wk","Language","A clear request for something specific from the reader.","The ask: approve the budget by Friday.","request|call to action|decision needed|deadline|BLUF","Rambling update");
+T("follow-up","wk","Language","A later message or action that continues or completes an earlier one.","Sending a follow-up with the notes and next steps.","next steps|action item|reminder|nudge|recap","Dropped thread");
+T("nudge","wk","Language","A gentle reminder to prompt action.","A quick nudge on the access request from last week.","reminder|follow-up|ping|chase|prompt","Silence");
+/* COMPUTER SCIENCE FUNDAMENTALS */
+T("time complexity","cs","Complexity","How the number of steps an algorithm takes grows with input size.","The nested loop has quadratic time complexity, which is why it dies at a million rows.","big-O|space complexity|loop|input size|optimisation","Space complexity");
+T("space complexity","cs","Complexity","How much extra memory an algorithm needs as input grows.","The approach is fast but has O(n) space complexity, so it won't fit in memory.","time complexity|big-O|memory|in-place|trade-off","Time complexity");
+T("amortised cost","cs","Complexity","The average cost per operation over a sequence, even if a few operations are expensive.","Appending to a dynamic array is amortised O(1) despite occasional resizes.","dynamic array|resizing|worst case|average case|big-O","Worst-case cost per operation");
+T("hash table","cs","Data structures","A structure that maps keys to values using a hash function, giving near constant-time lookups.","We use a hash table keyed by user ID for O(1) lookup.","hash function|collision|dictionary|load factor|bucket","Linear search through a list");
+T("hash collision","cs","Data structures","Two different keys hashing to the same slot, which the structure must resolve.","A bad hash function causes many collisions and slows lookups to linear.","hash table|chaining|open addressing|hash function|load factor","Unique hash for every key");
+T("linked list","cs","Data structures","A sequence of nodes where each points to the next; cheap inserts, slow random access.","A linked list is good for frequent inserts at the head, bad for lookups by index.","array|pointer|node|queue|cache locality","Array");
+T("stack and queue","cs","Data structures","A stack is last-in-first-out; a queue is first-in-first-out.","Undo uses a stack; a job system uses a queue.","LIFO|FIFO|deque|call stack|buffer","Random-access collection");
+T("heap (data structure)","cs","Data structures","A tree-based structure that always gives quick access to the smallest or largest item; used for priority queues.","A min-heap gives the next task in O(log n).","priority queue|min-heap|heapsort|top-k|tree","Unordered pile");
+T("priority queue","cs","Data structures","A queue where items come out by priority rather than arrival order.","The scheduler uses a priority queue to run urgent jobs first.","heap|scheduler|FIFO|top-k|Dijkstra","FIFO queue");
+T("graph","cs","Data structures","A set of nodes connected by edges, used to model networks, dependencies and relationships.","Dependencies between tasks form a graph, which is why a DAG ordering works.","node|edge|adjacency list|traversal|DAG","Flat list");
+T("binary search","cs","Algorithms","Finding an item in a sorted collection by repeatedly halving the search range.","Binary search finds the row in about 20 steps among a million.","sorted data|O(log n)|divide and conquer|linear search|index","Linear search");
+T("recursion","cs","Algorithms","A function that solves a problem by calling itself on smaller versions of it, with a stopping condition.","Walking a directory tree is naturally recursive.","base case|stack overflow|call stack|divide and conquer|iteration","Iteration");
+T("dynamic programming","cs","Algorithms","Solving a problem by breaking it into overlapping subproblems and storing their results to avoid recomputing.","Dynamic programming turned the exponential solution into a quadratic one.","memoisation|overlapping subproblems|optimal substructure|recursion|table","Brute-force recomputation");
+T("memoisation","cs","Algorithms","Caching a function's results by input so repeated calls return instantly.","Memoisation avoids recalculating the same price lookup.","caching|dynamic programming|pure function|cache key|trade-off","Recomputing every time");
+T("greedy algorithm","cs","Algorithms","Making the best local choice at each step, hoping it leads to a good overall solution.","Greedy works for making change with standard coins, but not for every problem.","local optimum|optimisation|heuristic|dynamic programming|approximation","Exhaustive search");
+T("divide and conquer","cs","Algorithms","Split a problem into smaller independent parts, solve them and combine the results.","Merge sort is divide and conquer, and it parallelises well.","recursion|merge sort|map reduce|parallelism|subproblem","Monolithic solve");
+T("NP-hard","cs","Complexity","A class of problems for which no known algorithm is fast on all inputs; in practice we use heuristics or approximations.","Optimal routing is NP-hard, so we use a good-enough heuristic.","heuristic|approximation|combinatorial|intractable|optimisation","Efficiently solvable");
+T("heuristic","cs","Algorithms","A practical shortcut that finds a good answer quickly without guaranteeing the best one.","We use a heuristic to route drivers: not optimal but fast.","approximation|rule of thumb|greedy|trade-off|NP-hard","Exact algorithm");
+T("thread safety","cs","Concurrency","Code that behaves correctly when called from multiple threads at once.","The counter isn't thread safe: two requests can overwrite each other's increment.","mutex|lock|atomic|race condition|immutability","Single-threaded assumption");
+T("mutex","cs","Concurrency","A lock allowing only one thread at a time into a critical section.","Wrap the update in a mutex so two threads don't write together.","lock|critical section|deadlock|semaphore|contention","Lock-free design");
+T("atomic operation","cs","Concurrency","An operation that completes entirely or not at all, with no visible in-between state.","An atomic increment avoids needing a lock for the counter.","compare-and-swap|lock-free|transaction|race condition|thread safety","Multi-step non-atomic update");
+T("async and await","cs","Concurrency","A style of writing non-blocking code that pauses a function while waiting, letting other work run.","The handler uses async and await so one slow API call doesn't block others.","non-blocking|event loop|promise|callback|I/O-bound","Blocking call");
+T("event loop","cs","Concurrency","A single-threaded loop that picks up and runs tasks as events arrive, used by JavaScript and Python's asyncio.","A long CPU task blocks the event loop and freezes everything.","async|callback|non-blocking|single-threaded|I/O","Thread per request");
+T("I/O-bound vs CPU-bound","cs","Concurrency","I/O-bound work waits on disk or network; CPU-bound work is limited by computation.","API calls are I/O-bound, so async helps; image processing is CPU-bound, so use processes.","async|multiprocessing|profiling|bottleneck|threads","Balanced workload");
+T("stack vs heap memory","cs","Memory","Stack memory holds short-lived function data automatically; heap memory holds longer-lived objects allocated dynamically.","Deep recursion overflows the stack; large objects live on the heap.","call stack|allocation|stack overflow|garbage collection|pointer","Static memory");
+T("cache locality","cs","Memory","Accessing data that sits close together in memory, which the CPU can fetch quickly.","Iterating an array has better cache locality than chasing linked-list pointers.","CPU cache|array|memory access|performance|prefetch","Scattered memory access");
+T("polymorphism","cs","Design","Different types responding to the same interface in their own way.","Polymorphism lets us treat card and bank payments through one interface.","interface|inheritance|abstraction|duck typing|object-oriented","Type-specific branching");
+T("composition over inheritance","cs","Design","Build behaviour by combining small parts rather than deep class hierarchies.","Composition over inheritance avoids the fragile base class problem.","inheritance|interface|coupling|dependency injection|design pattern","Deep inheritance trees");
+T("leaky abstraction","cs","Design","An abstraction whose hidden details show through and must be understood to use it correctly.","The ORM is a leaky abstraction: you still need to understand the SQL it generates.","abstraction|ORM|encapsulation|implementation detail|surprises","Clean abstraction");
+T("anti-pattern","cs","Design","A common solution that seems helpful but causes problems.","Catching all exceptions and ignoring them is an anti-pattern.","design pattern|code smell|technical debt|refactoring|pitfall","Best practice");
+T("regex","cs","Tools","Regular expression: a compact pattern for matching and extracting text.","A regex pulls order IDs out of the log lines.","pattern|match|capture group|parsing|validation","Plain string search");
+T("serialisation","cs","Tools","Converting data structures into a format that can be stored or sent, such as JSON or Protobuf.","Serialisation of the model failed on a custom class.","deserialisation|JSON|Protobuf|schema|marshalling","Deserialisation");
+T("Protobuf","cs","Tools","Protocol Buffers: a compact, schema-based binary serialisation format from Google.","Internal services exchange Protobuf messages for speed and strict schemas.","serialisation|gRPC|schema|binary format|backward compatibility","JSON text");
+T("Unicode and encoding","cs","Tools","Unicode assigns numbers to characters; an encoding like UTF-8 turns them into bytes. Mismatched encodings garble text.","The garbled names were an encoding problem: UTF-8 read as Latin-1.","UTF-8|ASCII|mojibake|byte|character set","ASCII-only assumption");
+T("floating-point error","cs","Tools","Tiny inaccuracies from storing decimals in binary, so 0.1 + 0.2 isn't exactly 0.3.","Never use floating-point for money; use integers of cents or decimals.","decimal|precision|rounding|IEEE 754|epsilon","Exact integer arithmetic");
+T("timezone and UTC","cs","Tools","Store and compute times in UTC, converting to local time only for display, to avoid daylight-saving and zone bugs.","Store timestamps in UTC; convert at the edge.","timestamp|DST|ISO 8601|epoch|local time","Naive local timestamps");
+/* OPERATING SYSTEMS, HARDWARE & PERFORMANCE */
+T("process vs thread","hw","Operating systems","A process is a running program with its own memory; threads are lightweight paths of execution that share a process's memory.","Threads share memory, so they need locks; processes are isolated but heavier.","scheduling|context switch|multiprocessing|memory|concurrency","Single sequential program");
+T("context switch","hw","Operating systems","The operating system pausing one task and resuming another, which costs time.","Too many threads cause constant context switching and lower throughput.","scheduler|thread|CPU time|overhead|preemption","Running to completion");
+T("system call","hw","Operating systems","A request from a program to the operating system for a service such as reading a file.","Each system call crosses into the kernel, which adds overhead.","kernel|user space|I/O|syscall|library","Pure in-process computation");
+T("kernel","hw","Operating systems","The core of the operating system that manages hardware, memory and processes.","A kernel panic crashed the server.","user space|driver|system call|OS|privilege","Application code");
+T("virtual memory","hw","Operating systems","A layer that gives each process its own address space, mapped to RAM or disk as needed.","Heavy swapping into virtual memory slowed the machine to a crawl.","paging|swap|RAM|page fault|address space","Direct physical addressing");
+T("swap","hw","Operating systems","Disk space used as overflow when RAM is full; far slower than memory.","The host is swapping, so latency has gone through the roof.","virtual memory|OOM|RAM|paging|memory pressure","Fits in RAM");
+T("OOM killer","hw","Operating systems","The mechanism that terminates processes when the system runs out of memory.","The OOM killer stopped the job at 99% progress.","out of memory|memory limit|cgroup|swap|resource limit","Sufficient memory");
+T("file descriptor","hw","Operating systems","A number the OS uses to track an open file, socket or pipe; processes have limits.","Too many open connections exhausted file descriptors.","socket|ulimit|resource leak|connection|I/O","Unbounded connections");
+T("IOPS","hw","Storage","Input/output operations per second: how many reads and writes storage can handle.","The database is IOPS-bound, so faster disks help more than extra CPUs.","throughput|latency|SSD|disk|provisioned IOPS","Bandwidth");
+T("SSD vs HDD","hw","Storage","SSDs use flash memory with fast random access; HDDs use spinning disks, cheaper per gigabyte but slower.","Move the index to SSD; archive cold data on HDD.","IOPS|latency|NVMe|storage tier|cost","Magnetic disk");
+T("NVMe","hw","Storage","A fast interface for SSDs that connects over PCIe, with much lower latency than older SATA.","NVMe storage cut query time in half.","SSD|PCIe|throughput|latency|SATA","SATA disk");
+T("RAID","hw","Storage","Combining several disks for redundancy, speed or both.","RAID 10 gives speed and survives a disk failure.","redundancy|mirroring|striping|parity|fault tolerance","Single disk");
+T("storage tiering","hw","Storage","Placing data on different storage classes by access pattern: hot on fast, cold on cheap.","Storage tiering moves month-old logs to cold storage.","hot data|cold data|archive|lifecycle policy|cost","Single storage class");
+T("hot vs cold data","hw","Storage","Hot data is accessed often and needs fast storage; cold data is rarely accessed and can sit on cheap storage.","Keep the last 30 days hot and archive the rest.","tiering|archive|retention|access pattern|cost","Uniform storage");
+T("throughput vs latency","hw","Performance","Throughput is work done per unit of time; latency is the time for one piece of work.","Batching increases throughput but also latency.","bandwidth|p99|queueing|capacity|trade-off","Single metric");
+T("saturation","hw","Performance","When a resource is fully used and work starts to queue.","CPU saturation at 95% means requests will queue.","utilisation|queueing|bottleneck|headroom|USE method","Idle capacity");
+T("headroom","hw","Performance","Spare capacity above current load to absorb spikes and failures.","We keep 40% headroom for traffic spikes.","capacity planning|saturation|buffer|autoscaling|peak","Running near the limit");
+T("load testing","hw","Performance","Simulating realistic or peak traffic to see how a system behaves.","Load testing found the database saturates at 2k RPS.","stress test|soak test|spike test|benchmark|capacity","Testing with one user");
+T("soak test","hw","Performance","Running a system under steady load for a long time to expose leaks and slow degradation.","The soak test revealed a memory leak after six hours.","load testing|memory leak|stability|endurance|stress test","Short burst test");
+T("flame graph","hw","Performance","A visual stack-trace summary showing which functions consume the most time.","The flame graph made the slow function obvious.","profiling|stack trace|hot path|CPU profile|sampling","Raw log of timings");
+T("hot path","hw","Performance","The code executed most often or on the critical latency route, where optimisation matters most.","Don't allocate in the hot path.","profiling|optimisation|bottleneck|critical path|latency","Rarely run code");
+T("premature optimisation","hw","Performance","Optimising before you know where the real bottleneck is, wasting effort and adding complexity.","Premature optimisation: we tuned a function that takes 1% of the time.","profiling|measure first|bottleneck|complexity|YAGNI","Measured, targeted optimisation");
+T("Amdahl's law","hw","Performance","The speed-up from parallelising is limited by the part that must remain sequential.","Amdahl's law: if 20% is serial, we can never exceed 5x speed-up.","parallelism|speed-up|serial fraction|scaling|diminishing returns","Perfect linear scaling");
+T("tail latency","hw","Performance","The slow end of the latency distribution, such as p99 or p99.9, which dominates user experience at scale.","Tail latency is high because one shard is slow.","p99|percentile|queueing|hedged requests|outliers","Median latency");
+T("hedged request","hw","Performance","Sending a duplicate request to another replica after a short wait, using whichever answers first, to cut tail latency.","Hedged requests trimmed p99 by a third at a 2% load cost.","tail latency|replica|idempotent|timeout|redundancy","Single attempt");
+T("queueing delay","hw","Performance","Time a request spends waiting for a busy resource, which rises sharply as utilisation nears 100%.","Latency exploded at 90% utilisation because of queueing delay.","utilisation|saturation|Little's law|backpressure|throughput","Immediate service");
+T("Little's law","hw","Performance","In a stable system, average items in the system equal arrival rate times average time spent.","By Little's law, 100 requests per second at 200 ms means about 20 in flight.","queueing|concurrency|throughput|latency|capacity","Unrelated metrics");
+T("GPU memory bandwidth","hw","Accelerators","How fast data moves between GPU memory and compute units; often the real limit for large models, not raw compute.","Inference is memory-bandwidth bound, so a faster-memory GPU helps more.","VRAM|FLOPS|HBM|inference|bottleneck","Compute-bound workload");
+T("FLOPS","hw","Accelerators","Floating-point operations per second, a measure of raw computing speed.","The cluster delivers about 2 petaFLOPS.","GPU|compute|throughput|training|utilisation","Memory-bound limit");
+T("mixed precision","hw","Accelerators","Using lower-precision numbers such as 16-bit for most calculations to speed up training and save memory.","Mixed precision doubled our training speed.","FP16|bfloat16|quantisation|memory|numerical stability","Full 32-bit precision");
+T("data parallelism vs model parallelism","hw","Accelerators","Data parallelism copies the model to many devices with different data; model parallelism splits one model across devices.","The model fits on one GPU, so data parallelism is enough.","distributed training|sharding|all-reduce|pipeline parallelism|multi-GPU","Single-device training");
+T("checkpointing","hw","Accelerators","Saving training state periodically so work can resume after a failure.","Spot instances are fine because we checkpoint every 10 minutes.","resume|spot instances|fault tolerance|training|state","No saved state");
+T("on-premises","hw","Infrastructure","Running systems on hardware you own and operate, not in a public cloud.","Regulated data stays on-premises; the rest runs in the cloud.","private cloud|hybrid cloud|data centre|capex|colocation","Public cloud");
+T("hybrid cloud","hw","Infrastructure","A mix of on-premises or private infrastructure and public cloud working together.","A hybrid cloud keeps sensitive data local and bursts compute to the cloud.","on-premises|multi-cloud|burst|data gravity|connectivity","Single environment");
+T("data gravity","hw","Infrastructure","Large datasets attract applications and services toward them because moving data is costly and slow.","Data gravity means we run analytics where the warehouse lives.","egress cost|locality|migration|latency|cloud","Easily portable data");
+T("base rate fallacy","sta","Inference","Ignoring how common something is overall when judging a specific case.","A 99% accurate test still yields mostly false positives when only 0.1% have the condition: base rate fallacy.","prior probability|Bayes theorem|precision|prevalence|false positive","Using the base rate");
+T("practical significance","sta","Inference","Whether an effect is large enough to matter in the real world, regardless of statistical significance.","It's statistically significant but not practically significant: it saves two seconds a year.","effect size|statistical significance|cost-benefit|impact|threshold","Statistical significance");
+T("outlier treatment","sta","Data prep","Deciding whether to remove, cap or keep extreme values based on whether they are errors or real.","Outlier treatment: winsorise at the 99th percentile rather than dropping real big customers.","winsorising|trimming|robust statistics|IQR|data cleaning","Leaving errors untouched");
+T("winsorising","sta","Data prep","Capping extreme values at a chosen percentile instead of removing them.","We winsorised revenue at p99 so one whale didn't dominate the mean.","outlier|trimming|robust|percentile|mean","Trimming");
+T("robust statistics","sta","Data prep","Methods that aren't distorted much by outliers, such as the median.","Use the median, a robust statistic, for skewed revenue.","median|MAD|outlier|trimmed mean|skew","Mean-based statistics");
+T("skewness","sta","Data prep","A measure of how lopsided a distribution is; income is right-skewed with a long tail of high values.","Heavy skewness means the mean is well above the median.","kurtosis|long tail|log transform|median|distribution","Symmetric distribution");
+T("log transform","sta","Data prep","Applying a logarithm to compress a long tail so skewed data behaves better in models.","A log transform made order values roughly normal.","skewness|scaling|power transform|multiplicative|distribution","Raw scale");
+T("rolling window","sta","Data prep","Computing a statistic over the most recent fixed period, moving forward over time.","Use a 7-day rolling window to smooth the weekly cycle.","moving average|smoothing|lag feature|window function|seasonality","Single global average");
+T("walk-forward validation","sta","Modelling","Training on the past and testing on the next period, repeating as time moves forward.","Walk-forward validation mimics how we'd actually retrain monthly.","backtesting|time series split|cross-validation|leakage|forecasting","Random shuffle split");
+T("A/A test","sta","Experiments","An experiment where both groups get the same experience, used to check that the testing system finds no false differences.","The A/A test flagged a bug in our randomisation.","A/B test|SRM|validation|false positive|instrumentation","A/B test");
+T("holdback","sta","Experiments","A small group deliberately kept from a feature to measure its long-term impact.","A 2% holdback measures the cumulative effect of all personalisation.","holdout|long-term effect|control group|A/B test|ramp","Full rollout");
+T("ramp-up","sta","Experiments","Gradually increasing the share of users exposed to a change while watching key metrics.","We ramp from 1% to 5% to 25% to 100% with guardrails at each step.","canary release|guardrail metric|rollout|percentage|safety","All-at-once launch");
+T("intention to treat","sta","Experiments","Analysing users by the group they were assigned to, even if they didn't follow it, to preserve randomisation.","Intention-to-treat analysis includes users who never saw the feature.","randomisation|compliance|treatment effect|per-protocol|bias","Per-protocol analysis");
+T("service mesh","ops","Networking","An infrastructure layer that handles service-to-service communication, such as retries, encryption and observability, via sidecar proxies.","The service mesh provides mTLS between services without code changes.","sidecar|mTLS|Istio|traffic management|observability","Library-based networking in each service");
+T("sidecar","ops","Containers","A helper container deployed alongside the main one to add capabilities like logging or proxying.","A sidecar ships logs from each pod.","service mesh|pod|proxy|logging|separation of concerns","Built into the app");
+T("mTLS","ops","Networking","Mutual TLS: both client and server authenticate each other with certificates.","mTLS ensures only known services can call the payment API.","TLS|certificate|zero trust|service mesh|authentication","One-way TLS");
+T("bulkhead","ops","Operations","Isolating resources so a failure in one part can't exhaust the others.","Separate thread pools per dependency act as bulkheads.","circuit breaker|isolation|blast radius|resilience|thread pool","Shared resource pool");
+T("failover","ops","Operations","Automatically switching to a standby system when the primary fails.","Failover to the replica took 40 seconds.","HA|replica|RTO|health check|standby","Outage until manual repair");
+T("RPO and RTO in practice","ops","Operations","RPO is how much data you can afford to lose; RTO is how long you can afford to be down.","With an RPO of 5 minutes and RTO of 30, replicate continuously and rehearse failover.","backup|replication|disaster recovery|failover|restore test","Untested backups");
+T("restore test","ops","Operations","Actually restoring from a backup to prove it works; an untested backup is only a hope.","The restore test failed, so the backups were silently corrupt.","backup|DR|RTO|verification|runbook","Assumed-good backups");
+T("canary analysis","ops","Deployment","Automatically comparing a canary's metrics with the baseline to decide whether to proceed or roll back.","Automated canary analysis halted the rollout when error rate rose.","canary release|baseline|rollback|SLO|progressive delivery","Eyeballing dashboards");
+T("progressive delivery","ops","Deployment","Releasing changes gradually with controls and automatic checks, such as canaries and feature flags.","Progressive delivery lowered our change failure rate.","canary release|feature flag|blue-green|ramp-up|DORA","Big-bang release");
+/* PHRASEBOOK 3 */
+P("The p-value is less than 0.05, so it works.","The result is statistically significant, but the effect is small: about 0.4%, with an interval from 0.1% to 0.7%. Is that worth shipping?","sta");
+P("We ran the test until it was significant.","We fixed the sample size and duration before launch, and we read the result once at the end.","sta");
+P("The model is biased.","The false positive rate is twice as high for group B. I'd like to review the features for proxies and agree which fairness metric we're targeting.","eth");
+P("Can we just store everything?","Let's keep only what we need for the stated purpose, and set a retention period. Otherwise we take on privacy risk and cost with no benefit.","eth");
+P("The API is slow.","p99 on the list endpoint is 2.4 s. Query plan shows a sequential scan. Adding a composite index should fix it.","web");
+P("The site loads weirdly.","Largest contentful paint is 4.8 s on mobile and the layout shifts when images load. We should reserve space and split the bundle.","web");
+P("Don't change the API, it'll break things.","This is a breaking change. Let's add the field as optional, version the endpoint and deprecate the old one on a published timeline.","web");
+P("The query joins everything.","The join fans out because the grain differs: orders are per line, payments per order. Aggregate payments first, then join.","db");
+P("Just add another database.","Before adding a database, can we check read replicas and caching? Sharding adds cross-shard queries and operational cost.","db");
+P("We deployed and it broke.","The 14:05 deploy introduced a 12% error rate. We rolled back through the flag at 14:11. Cause is under investigation.","ops");
+P("The cloud bill is huge.","Spend rose 38% month on month, driven by idle GPU instances and cross-region egress. Rightsizing and a schedule could cut roughly a third.","ops");
+P("We need to test it in production.","Let's release behind a feature flag to 5% of traffic, with a kill switch and alerts on error rate, so we can roll back instantly.","ops");
+P("We need more people.","The critical path runs through the integration work. A second engineer there would bring the date forward by about three weeks.","pm");
+P("It's almost done.","The remaining work is testing and documentation. I'd say two days, with a risk that the vendor API changes.","pm");
+P("The customer wants everything.","Let's separate must-haves from nice-to-haves with them, and trade scope against the date.","pm");
+P("It's too expensive.","It costs $42 per customer to serve against $35 of margin, so unit economics are negative. Caching could bring cost under $25.","biz");
+P("Why should we build this ourselves?","This isn't a differentiator, so buying costs less than maintaining it. We keep our effort for scoring, which is core.","biz");
+P("I'll do it later.","I can start Thursday and finish by the following Wednesday. Is that acceptable, or should I drop something else?","wk");
+P("That meeting was pointless.","We didn't leave with a decision or owners. Next time, send a one-page doc with the decision needed and options beforehand.","wk");
+P("The bug is the dev's fault.","The change passed review and tests, so the gap is in our test coverage. Let's add a regression test and a deploy check.","wk");
+P("It might work, I'm not sure.","I'm about 70% confident. The main unknown is how it behaves under load, which I'll test tomorrow.","wk");
+(function(){
+var TRACKS=[
+ {k:'sta',n:'Statistics & experiments'},
+ {k:'web',n:'Web, frontend & APIs'},
+ {k:'db',n:'Databases & modelling'},
+ {k:'ops',n:'DevOps, cloud & networking'},
+ {k:'pm',n:'Product, agile & delivery'},
+ {k:'biz',n:'Business & strategy'},
+ {k:'eth',n:'AI ethics, privacy & governance'},
+ {k:'wk',n:'Workplace language'},
+ {k:'cs',n:'CS fundamentals'},
+ {k:'hw',n:'OS, hardware & performance'}
+];
+var TN={};TRACKS.forEach(function(t){TN[t.k]=t.n});
+var TAUGHT={};
+/* none taught in this volume */
+TERMS.forEach(function(x){x.taught=!!TAUGHT[x.t.toLowerCase()]});
+
+var ALIAS={};
+TERMS.forEach(function(x){
+  var names=[x.t.toLowerCase(),x.t.replace(/\s*\([^)]*\)/,'').trim().toLowerCase()];
+  var m=x.t.match(/\(([^)]+)\)/);if(m)names.push(m[1].toLowerCase());
+  names.forEach(function(n){if(!ALIAS[n])ALIAS[n]=x.id});
+});
+var BYID={};TERMS.forEach(function(x){BYID[x.id]=x});
+
+var KEY='tvi3-status-v1';
+var ST={};
+try{var raw=localStorage.getItem(KEY);if(raw)ST=JSON.parse(raw)||{}}catch(e){ST={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}}
+function gs(id){return ST[id]||0}
+
+var S={view:'terms',track:'all',cat:'all',status:'all',q:''};
+var OPEN={};var allOpen=false;
+var $=function(i){return document.getElementById(i)};
+var LBL=['New','Shaky','Solid'];
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function trackCounts(){
+  var c={all:0};TRACKS.forEach(function(t){c[t.k]=0});
+  TERMS.forEach(function(x){c.all++;c[x.k]++});return c;
+}
+function buildTracks(){
+  var c=trackCounts();
+  var items=[{k:'all',n:'All',c:c.all}].concat(TRACKS.map(function(t){return{k:t.k,n:t.n,c:c[t.k]}}));
+  $('tracks').innerHTML=items.map(function(i){
+    return '<button class="chip" data-track="'+i.k+'" aria-pressed="'+(S.track===i.k)+'">'+esc(i.n)+'<small>'+i.c+'</small></button>';
+  }).join('');
+}
+function buildCats(){
+  var set={};
+  TERMS.forEach(function(x){if(S.track==='all'||x.k===S.track)set[x.c]=1});
+  var cats=Object.keys(set).sort();
+  if(cats.indexOf(S.cat)<0)S.cat='all';
+  $('cat').innerHTML='<option value="all">All categories</option>'+cats.map(function(c){return '<option value="'+esc(c)+'"'+(S.cat===c?' selected':'')+'>'+esc(c)+'</option>'}).join('');
+}
+function progress(){
+  var n=TERMS.length,solid=0,shaky=0;
+  TERMS.forEach(function(x){var s=gs(x.id);if(s===2)solid++;else if(s===1)shaky++});
+  var nw=n-solid-shaky;
+  $('bSolid').style.width=(solid/n*100)+'%';
+  $('bShaky').style.width=(shaky/n*100)+'%';
+  $('legend').innerHTML='<span><i class="dot" style="background:var(--st-solid)"></i><b>'+solid+'</b> solid</span><span><i class="dot" style="background:var(--st-shaky)"></i><b>'+shaky+'</b> shaky</span><span><i class="dot" style="background:var(--st-new)"></i><b>'+nw+'</b> new</span>';
+}
+
+function matches(x){
+  if(S.track!=='all'&&x.k!==S.track)return false;
+  if(S.cat!=='all'&&x.c!==S.cat)return false;
+  if(S.status==='taught'){if(!x.taught)return false}
+  else if(S.status!=='all'&&String(gs(x.id))!==S.status)return false;
+  if(S.q){
+    var h=(x.t+' '+x.c+' '+x.m+' '+x.e+' '+x.r.join(' ')+' '+x.o).toLowerCase();
+    var toks=S.q.toLowerCase().split(/\s+/).filter(Boolean);
+    for(var i=0;i<toks.length;i++){if(h.indexOf(toks[i])<0)return false}
+  }
+  return true;
+}
+
+function termHTML(x){
+  var s=gs(x.id);
+  var open=(allOpen||OPEN[x.id])?' open':'';
+  var rels=x.r.map(function(r){
+    var id=ALIAS[r.toLowerCase().trim()];
+    if(id&&id!==x.id)return '<button class="rel link" data-go="'+id+'">'+esc(r)+'</button>';
+    return '<span class="rel">'+esc(r)+'</span>';
+  }).join('');
+  return '<article class="term t-'+x.k+open+'" id="'+x.id+'">'+
+   '<div class="head">'+
+    '<button class="hit" data-toggle="'+x.id+'" aria-expanded="'+(!!open)+'">'+
+      '<span class="name"><span class="tt">'+esc(x.t)+'</span><span class="tag">'+esc(TN[x.k])+'</span><span class="tag cat">'+esc(x.c)+'</span>'+(x.taught?'<span class="tag taught">From our sessions</span>':'')+'</span>'+
+      '<span class="mean">'+esc(x.m)+'</span>'+
+    '</button>'+
+    '<button class="st st-'+s+'" data-st="'+x.id+'" aria-label="Status of '+esc(x.t)+': '+LBL[s]+'. Tap to change.">'+LBL[s]+'</button>'+
+   '</div>'+
+   '<div class="more">'+
+     '<div class="fld"><span class="lab">Example of usage</span><p class="ex">'+esc(x.e)+'</p></div>'+
+     '<div class="fld"><span class="lab">Related terms</span><div class="rels">'+rels+'</div></div>'+
+     '<div class="fld"><span class="lab">Opposite or contrast</span><p class="opp">'+esc(x.o)+'</p></div>'+
+   '</div>'+
+  '</article>';
+}
+
+function renderTerms(){
+  var list=TERMS.filter(matches);
+  var q=S.q.toLowerCase().trim();
+  list.sort(function(a,b){
+    if(q){var sa=a.t.toLowerCase().indexOf(q)>=0?0:1,sb=b.t.toLowerCase().indexOf(q)>=0?0:1;if(sa!==sb)return sa-sb}
+    return a.t.toLowerCase().localeCompare(b.t.toLowerCase());
+  });
+  $('count').textContent='Showing '+list.length+' of '+TERMS.length+' terms';
+  if(!list.length){$('list').innerHTML='<div class="empty">No terms match. Try fewer words or reset the filters.</div>';return}
+  var html='',last='';
+  list.forEach(function(x){
+    if(!q){
+      var L=x.t.charAt(0).toUpperCase();if(!/[A-Z]/.test(L))L='#';
+      if(L!==last){html+='<h2 class="letter">'+L+'</h2>';last=L}
+    }
+    html+=termHTML(x);
+  });
+  $('list').innerHTML=html;
+}
+
+function renderPhrase(){
+  var q=S.q.toLowerCase().trim();
+  var list=PH.filter(function(p){
+    if(S.track!=='all'&&p.k!==S.track)return false;
+    if(q&&(p.b+' '+p.s).toLowerCase().indexOf(q)<0)return false;
+    return true;
+  });
+  $('count').textContent='Showing '+list.length+' of '+PH.length+' phrase swaps';
+  if(!list.length){$('list').innerHTML='<div class="empty">No phrases match. Try fewer words or reset the filters.</div>';return}
+  $('list').innerHTML=list.map(function(p){
+    return '<div class="pb t-'+p.k+'"><div class="before"><span class="lab">Beginner</span><p>'+esc(p.b)+'</p></div><div class="after"><span class="lab">Senior <span class="tag" style="margin-left:6px">'+esc(TN[p.k])+'</span></span><p>'+esc(p.s)+'</p></div></div>';
+  }).join('');
+}
+
+function render(){
+  var isT=S.view==='terms';
+  $('tabTerms').setAttribute('aria-pressed',isT);
+  $('tabPhrase').setAttribute('aria-pressed',!isT);
+  $('cat').hidden=!isT;$('status').hidden=!isT;$('expand').hidden=!isT;
+  $('hint').textContent=isT?'Tap a term to open it. Tap its status to cycle New, Shaky, Solid.':'Same situation, said two ways. Borrow the senior phrasing.';
+  document.querySelectorAll('#tracks .chip').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-track')===S.track)});
+  if(isT)renderTerms();else renderPhrase();
+}
+
+function reset(){S.track='all';S.cat='all';S.status='all';S.q='';$('q').value='';$('status').value='all';buildCats();render()}
+
+function goTo(id){
+  var x=BYID[id];if(!x)return;
+  S.track='all';S.cat='all';S.status='all';S.q='';$('q').value='';$('status').value='all';
+  S.view='terms';OPEN[id]=true;buildCats();render();
+  var el=document.getElementById(id);
+  if(el){
+    var off=document.querySelector('.controls').offsetHeight+8;
+    window.scrollTo({top:el.getBoundingClientRect().top+window.pageYOffset-off,behavior:'smooth'});
+    el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');
+  }
+}
+
+$('list').addEventListener('click',function(e){
+  var st=e.target.closest('[data-st]');
+  if(st){
+    var id=st.getAttribute('data-st');ST[id]=(gs(id)+1)%3;save();progress();
+    if(S.status!=='all'&&S.status!=='taught'){renderTerms()}
+    else{var s=gs(id);st.className='st st-'+s;st.textContent=LBL[s];st.setAttribute('aria-label','Status of '+BYID[id].t+': '+LBL[s]+'. Tap to change.')}
+    return;
+  }
+  var go=e.target.closest('[data-go]');
+  if(go){goTo(go.getAttribute('data-go'));return}
+  var tg=e.target.closest('[data-toggle]');
+  if(tg){
+    var tid=tg.getAttribute('data-toggle');var art=document.getElementById(tid);
+    var isOpen=art.classList.toggle('open');
+    if(isOpen)OPEN[tid]=true;else{delete OPEN[tid];}
+    tg.setAttribute('aria-expanded',isOpen);
+  }
+});
+$('tracks').addEventListener('click',function(e){
+  var b=e.target.closest('[data-track]');if(!b)return;
+  S.track=b.getAttribute('data-track');S.cat='all';buildCats();render();
+});
+$('cat').addEventListener('change',function(){S.cat=this.value;render()});
+$('status').addEventListener('change',function(){S.status=this.value;render()});
+$('q').addEventListener('input',function(){S.q=this.value;render()});
+$('reset').addEventListener('click',reset);
+$('expand').addEventListener('click',function(){
+  allOpen=!allOpen;if(!allOpen)OPEN={};
+  this.textContent=allOpen?'Collapse all':'Expand all';render();
+});
+$('tabTerms').addEventListener('click',function(){S.view='terms';render()});
+$('tabPhrase').addEventListener('click',function(){S.view='phrase';render()});
+
+var sc=0;TERMS.forEach(function(x){sc++});
+$('sub').textContent=TERMS.length+' more terms across ten tracks: statistics, web and APIs, databases, DevOps and cloud, product delivery, business, AI ethics, workplace language, computer science and performance. Each has a meaning, an example, related terms and an opposite, plus '+PH.length+' beginner-to-senior phrase swaps.';
+buildTracks();buildCats();progress();render();
+})();
+</script>
+
+</body></html>

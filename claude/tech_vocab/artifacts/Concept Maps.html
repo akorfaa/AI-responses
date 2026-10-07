@@ -1,0 +1,303 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Concept Maps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout concept: a quiet practice room. One dashboard, then one task at a time: a single card or question, big type, clear next action. */
+:root{
+  --bg:#EDF1F5; --surface:#FFFFFF; --ink:#14212C; --muted:#586979; --line:#D3DCE5; --accent:#0A6A8A; --accent-ink:#FFFFFF; --focus:#0A6A8A;
+  --good:#17803D; --bad:#B3261E; --warn:#B26A00;
+  --c-ds:#2A5DB0; --c-ml:#5B49B8; --c-de:#0B7566; --c-dt:#7A6300; --c-sw:#A8501B; --c-ar:#A33A3A; --c-sys:#1B7A99; --c-se:#7B5A2E; --c-ai:#A12E63; --c-cm:#4F7A1E;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F171F; --surface:#16212B; --ink:#E5ECF2; --muted:#9AAAB8; --line:#2A3947; --accent:#52B6D6; --accent-ink:#071218; --focus:#52B6D6;
+    --good:#52C27B; --bad:#F2877F; --warn:#E6A93A;
+    --c-ds:#7DA6EC; --c-ml:#A99CF0; --c-de:#4CC2AE; --c-dt:#D9BB52; --c-sw:#E59A66; --c-ar:#EE8A8A; --c-sys:#6FC3E0; --c-se:#CFA878; --c-ai:#EE86B3; --c-cm:#A8CF72;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F171F; --surface:#16212B; --ink:#E5ECF2; --muted:#9AAAB8; --line:#2A3947; --accent:#52B6D6; --accent-ink:#071218; --focus:#52B6D6;
+  --good:#52C27B; --bad:#F2877F; --warn:#E6A93A;
+  --c-ds:#7DA6EC; --c-ml:#A99CF0; --c-de:#4CC2AE; --c-dt:#D9BB52; --c-sw:#E59A66; --c-ar:#EE8A8A; --c-sys:#6FC3E0; --c-se:#CFA878; --c-ai:#EE86B3; --c-cm:#A8CF72;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:0 56px;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin-inline:auto}
+header.top{padding-block:28px 12px;display:flex;flex-direction:column;gap:8px}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.1;font-weight:600;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.sub{margin:0;color:var(--muted);max-width:60ch}
+h2{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+button{font:inherit;color:inherit}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--line);margin-block:10px 22px}
+.stat{padding:14px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.stat + .stat{border-left:1px solid var(--line)}
+.stat b{font-family:var(--font-mono);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{font-size:12px;color:var(--muted)}
+.stat.due b{color:var(--accent)}
+.start{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:16px 18px;cursor:pointer;font-size:17px;font-weight:600;text-align:left}
+.start small{font-weight:400;font-size:13px;opacity:.9;display:block}
+.start:hover{filter:brightness(1.07)}
+.section{margin-top:26px}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.mode{all:unset;box-sizing:border-box;cursor:pointer;padding:14px 16px;display:flex;flex-direction:column;gap:3px;border-bottom:1px solid var(--line)}
+.mode:nth-child(odd){border-right:1px solid var(--line)}
+.mode:nth-last-child(-n+2){border-bottom:0}
+.mode:hover{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.mode:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.mode b{font-weight:600}
+.mode span{font-size:13px;color:var(--muted)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.chip{flex:0 0 auto;font-size:13px;background:transparent;border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.settings{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:12px;align-items:center;font-size:14px}
+.settings label{display:flex;align-items:center;gap:8px;color:var(--muted)}
+select{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent)}
+.note{margin:12px 0 0;color:var(--warn);font-size:14px}
+
+.tracks{display:flex;flex-direction:column}
+.trow{display:grid;grid-template-columns:minmax(0,170px) 1fr 64px;gap:12px;align-items:center;padding-block:7px;border-bottom:1px solid var(--line);font-size:14px}
+.trow .nm{overflow-wrap:anywhere}
+.tbar{display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--line)}
+.tbar i{display:block;height:100%}
+.tbar .m{background:var(--good)}.tbar .l{background:var(--warn)}
+.trow .ct{font-family:var(--font-mono);font-size:12px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:8px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+
+.sbar{display:flex;align-items:center;gap:12px;margin-block:18px 14px}
+.prog{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .2s}
+.sbar .n{font-family:var(--font-mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.linkbtn{background:none;border:0;color:var(--muted);cursor:pointer;font-size:14px;padding:6px 4px;text-decoration:underline}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:clamp(18px,4vw,30px);min-height:280px;display:flex;flex-direction:column;gap:16px}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:4px;color:var(--tc);background:color-mix(in srgb,var(--tc) 13%,transparent);white-space:nowrap}
+.tag.cat{color:var(--muted);background:transparent;border:1px solid var(--line)}
+.t-ds{--tc:var(--c-ds)}.t-ml{--tc:var(--c-ml)}.t-de{--tc:var(--c-de)}.t-dt{--tc:var(--c-dt)}.t-sw{--tc:var(--c-sw)}.t-ar{--tc:var(--c-ar)}.t-sys{--tc:var(--c-sys)}.t-se{--tc:var(--c-se)}.t-ai{--tc:var(--c-ai)}.t-cm{--tc:var(--c-cm)}
+.big{font-family:var(--font-mono);font-size:clamp(22px,5vw,30px);font-weight:600;line-height:1.2;margin:0;overflow-wrap:anywhere;text-wrap:balance}
+.q{font-size:clamp(17px,3.2vw,20px);line-height:1.45;margin:0;overflow-wrap:anywhere}
+.qlab{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.center{flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.hint{color:var(--muted);font-size:14px;margin:0}
+.fld{display:flex;flex-direction:column;gap:3px}
+.lab{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ex{margin:0;font-style:italic;overflow-wrap:anywhere}
+.rels{display:flex;flex-wrap:wrap;gap:5px}
+.rel{font-size:13px;padding:2px 9px;border-radius:4px;background:color-mix(in srgb,var(--muted) 14%,transparent)}
+.opp{margin:0;overflow-wrap:anywhere}
+.det{display:flex;flex-direction:column;gap:12px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.btn{font-size:15px;font-weight:500;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:11px 18px;cursor:pointer;flex:1 1 120px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.again{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}
+.btn.easy{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,var(--line))}
+.btn kbd{font-family:var(--font-mono);font-size:11px;opacity:.65;margin-left:6px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;cursor:pointer;overflow-wrap:anywhere}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt .k{font-family:var(--font-mono);font-size:12px;color:var(--muted);flex:0 0 auto;padding-top:2px}
+.opt.right{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.opt[disabled]{cursor:default}
+.verdict{font-weight:600}
+.verdict.ok{color:var(--good)}.verdict.no{color:var(--bad)}
+.fb{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line);padding-top:14px}
+.big2{font-family:var(--font-mono);font-size:44px;font-weight:600;line-height:1;margin:0;font-variant-numeric:tabular-nums}
+.miss{display:flex;flex-direction:column}
+.miss .mi{padding-block:10px;border-bottom:1px solid var(--line)}
+.miss .mi b{font-family:var(--font-mono);font-size:14px}
+.miss .mi p{margin:2px 0 0;color:var(--muted);font-size:14px}
+details.bk{margin-top:30px;color:var(--muted);font-size:14px}
+details.bk summary{cursor:pointer}
+details.bk textarea{width:100%;min-height:90px;margin-top:10px;font-family:var(--font-mono);font-size:12px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.small{font-size:13px;padding:7px 12px;flex:0 0 auto}
+footer{margin-top:26px;color:var(--muted);font-size:13px;max-width:62ch}
+@media (max-width:560px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(3){border-left:0}
+  .stat:nth-child(n+3){border-top:1px solid var(--line)}
+  .modes{grid-template-columns:1fr}
+  .mode:nth-child(odd){border-right:0}
+  .mode:nth-last-child(-n+2){border-bottom:1px solid var(--line)}
+  .mode:last-child{border-bottom:0}
+  .trow{grid-template-columns:minmax(0,1fr) 56px}
+  .trow .tbar{grid-column:1 / -1;order:3}
+}
+.mlist{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:8px;background:var(--surface);overflow:hidden}
+.mi2{all:unset;box-sizing:border-box;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;border-bottom:1px solid var(--line)}
+.mi2:last-child{border-bottom:0}
+.mi2:hover{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.mi2:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.mi2 b{font-weight:600}
+.mi2 .meta{grid-column:1;font-size:13px;color:var(--muted)}
+.mi2 .bs{grid-row:1 / span 2;grid-column:2;align-self:center;font-family:var(--font-mono);font-size:13px;color:var(--muted)}
+.flow{display:flex;gap:0;overflow-x:auto;padding-block:4px 12px;scrollbar-width:thin}
+.stg{flex:0 0 auto;display:flex;align-items:center}
+.sb{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:13px;font-weight:500;display:flex;gap:8px;align-items:center;white-space:nowrap}
+.sb .no{font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+.sb[aria-current="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sb[aria-current="true"] .no{color:var(--bg);opacity:.7}
+.arrow{color:var(--muted);padding-inline:6px;font-family:var(--font-mono)}
+.tl{display:flex;flex-direction:column}
+.tl .ti{padding-block:9px;border-bottom:1px solid var(--line)}
+.tl .ti:last-child{border-bottom:0}
+.tl .ti b{font-family:var(--font-mono);font-size:14px;font-weight:600}
+.tl .ti p{margin:2px 0 0;font-size:14px;color:var(--muted)}
+.fail{border-left:3px solid var(--bad);padding:8px 12px;background:color-mix(in srgb,var(--bad) 7%,transparent);border-radius:0 8px 8px 0}
+.fail p,.say p{margin:0;overflow-wrap:anywhere}
+.say{border-left:3px solid var(--good);padding:8px 12px;background:color-mix(in srgb,var(--good) 8%,transparent);border-radius:0 8px 8px 0}
+.say p{font-style:italic}
+.lbl{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:4px;display:inline-block}
+.lbl.g2{color:var(--good);background:color-mix(in srgb,var(--good) 14%,transparent)}
+.lbl.g0{color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.opt.g2{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.opt.g0{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.mono{font-family:var(--font-mono)}
+[hidden]{display:none!important}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Concept Maps</h1>
+    <p class="sub">Terms stick when you know where they sit. Walk through six end-to-end processes, stage by stage, then test yourself on which term belongs where.</p>
+  </header>
+  <main id="app"></main>
+  <footer>Best quiz scores are saved in this browser only.</footer>
+</div>
+<script>
+var MAPS=[];
+function M(title,k,intro,stages){MAPS.push({id:'m'+MAPS.length,title:title,k:k,intro:intro,stages:stages.map(function(s,i){return {id:'m'+MAPS.length+'_'+i,name:s[0],what:s[1],terms:s[2].map(function(t){var p=t.split('::');return {t:p[0],d:p[1]}}),fail:s[3],say:s[4]}})})}
+
+M("Machine learning project","ds","From a business question to a model that keeps working in production. Each stage has its own vocabulary and its own way to go wrong.",[
+ ["Frame the problem","Turn a business goal into a prediction task with a measurable success criterion.",["target variable::the thing you predict","baseline::the simple model or rule you must beat","success metric::the number that decides whether it worked","label::the known answer for a training example"],"Optimising a metric that does not match the business goal, such as accuracy on a 1% fraud rate. Name: metric mismatch.","Before modelling, let's agree on the success metric and the baseline we need to beat."],
+ ["Data and features","Collect, clean and transform raw data into inputs the model can learn from.",["feature engineering::creating informative inputs from raw data","imputation::filling missing values","leakage::information from the future or the label sneaking into features","class imbalance::very unequal class sizes"],"A feature that is only known after the outcome, so offline scores are excellent and production fails. Name: data leakage.","I'm checking for leakage: every feature must be available at prediction time."],
+ ["Split and train","Divide the data and fit the model's parameters.",["train/validation/test split::three disjoint sets for fitting, tuning and final checking","hyperparameter::a setting chosen before training, such as depth","cross-validation::rotating validation folds for a stable estimate","regularization::a penalty that discourages overfitting"],"Tuning on the test set until it looks good, so the final score is optimistic. Name: test-set contamination.","We tuned on validation and touched the test set exactly once."],
+ ["Evaluate","Measure performance on unseen data with the right metrics.",["precision::of the predicted positives, how many are right","recall::of the actual positives, how many are found","AUC::ranking quality across thresholds","calibration::whether predicted probabilities match real frequencies"],"A high AUC but poorly calibrated probabilities, so thresholds and expected-value calculations are wrong. Name: miscalibration.","The ranking is good, but the scores aren't calibrated, so I'd recalibrate before using them as probabilities."],
+ ["Deploy","Serve the model so applications can use its predictions.",["batch inference::scoring many records on a schedule","online inference::scoring one request in real time","shadow deployment::running the new model silently beside the old one","canary release::sending a small share of traffic to the new version"],"Training-serving skew: features are computed differently offline and online. Name: skew.","We'll run it in shadow first and compare against the current model before a canary."],
+ ["Monitor and retrain","Watch for degradation and refresh the model.",["data drift::input distribution changes","concept drift::the input-output relationship changes","feedback loop::predictions influence future training data","retraining trigger::the rule that starts a retrain"],"Performance quietly decays because the world changed and nobody was watching. Name: drift.","I'd alert on input drift and track a delayed-label metric, with a retraining trigger."]
+]);
+
+M("Request through a web service","sys","What happens between a user clicking and a response arriving, and where each reliability problem lives.",[
+ ["Client and DNS","The browser looks up the server's address and opens a connection.",["DNS::translates names to IP addresses","TTL::how long a record may be cached","TLS handshake::agreeing on encryption","latency::time for a request to complete"],"Slow or stale DNS sends users to an old address. Name: DNS propagation delay.","Cut the TTL ahead of the migration so cutover is quick."],
+ ["Edge and CDN","Cached content is served from a location near the user.",["CDN::edge servers that cache content","cache hit ratio::share of requests served from cache","cache invalidation::removing stale entries","origin::the real backend behind the cache"],"Stale content served after a change. Name: cache invalidation problem.","The assets are cacheable at the edge; we purge by version, not by hand."],
+ ["Load balancer and gateway","Traffic is spread across healthy servers; requests are authenticated and limited.",["load balancer::distributes requests across instances","health check::probe that removes bad instances","rate limiting::capping requests per client","API gateway::single entry point for APIs"],"All retries arrive at once after a blip. Name: thundering herd.","Add jittered exponential backoff so retries don't synchronise."],
+ ["Application service","Business logic runs and calls other services.",["timeout::how long to wait before giving up","circuit breaker::stops calling a failing dependency","idempotent::safe to repeat with the same result","backpressure::telling upstream to slow down"],"One slow dependency ties up all threads, so the service fails as well. Name: cascading failure.","Put a timeout and a circuit breaker on that dependency so it can't take us down."],
+ ["Data layer","State is read from caches and databases.",["cache-aside::app reads cache first, then database","read replica::copy that serves reads","index::structure that speeds lookups","connection pool::reused database connections"],"Many small queries instead of one. Name: N+1 query.","The hot path is read-heavy, so a cache and a read replica come before sharding."],
+ ["Observe and respond","Telemetry shows what happened and drives action.",["SLI/SLO::measured indicator and its target","error budget::allowed unreliability","p99 latency::tail latency experienced by 1% of requests","alert fatigue::too many low-value alerts"],"Averages hide the pain. Name: tail latency.","Alert on SLO burn rate and p99, not on average latency."]
+]);
+
+M("Data pipeline","de","Raw events to trusted numbers on a dashboard, and the points at which numbers go wrong.",[
+ ["Sources","Operational systems, events and third-party feeds produce data.",["OLTP::transaction systems","event::a record of something that happened","schema::the structure of the data","CDC::streaming row-level changes"],"A source team changes a column and nobody tells you. Name: schema drift.","We need a data contract with the source team so schema changes are announced."],
+ ["Ingest","Data is pulled or pushed into the platform.",["batch::scheduled bulk load","streaming::continuous processing","at-least-once::delivery that may duplicate","exactly-once::each record effectively processed once"],"Retries create duplicates. Name: duplicate delivery.","Delivery is at-least-once, so the consumer must be idempotent."],
+ ["Store","Raw data lands in a lake or warehouse.",["data lake::cheap storage for raw files","data warehouse::modelled store for analytics","partitioning::splitting data by key such as date","Parquet::columnar file format"],"Small files and bad partitioning make queries slow. Name: small-files problem.","Partition by event date and compact small files."],
+ ["Transform","Raw data becomes modelled tables.",["ELT::load first, transform in the warehouse","DAG::tasks with dependencies","dbt::tool for SQL transformations","incremental model::processing only new data"],"A rerun double-counts. Name: non-idempotent job.","Make the job idempotent so a backfill can be re-run safely."],
+ ["Quality and lineage","Checks and lineage build trust.",["data quality test::assertion on freshness, nulls or uniqueness","lineage::where data came from and where it goes","SLA on freshness::promise about how current data is","data contract::agreed shape and meaning of data"],"Dashboards show numbers nobody trusts. Name: trust gap.","Add freshness and uniqueness tests and publish the lineage."],
+ ["Serve","Consumers read through BI, features or APIs.",["semantic layer::single definition of each metric","BI::business intelligence tools","feature store::shared store of ML features","single source of truth::one agreed place for a number"],"Two dashboards give two revenue numbers. Name: metric definition drift.","Define revenue once in the semantic layer and point both dashboards at it."]
+]);
+
+M("LLM application","ai","How a question becomes a grounded, evaluated answer, and what to say about each part.",[
+ ["Prompt and context","The instructions and data given to the model.",["system prompt::standing instructions","context window::maximum tokens the model sees","few-shot::examples in the prompt","token::unit of text the model processes"],"Important text is lost in a long prompt. Name: lost in the middle.","I'd trim the context and put the key instructions at the start and end."],
+ ["Retrieval","Relevant documents are found and added.",["embedding::numeric vector capturing meaning","vector index::fast nearest-neighbour search","chunking::splitting documents into pieces","reranker::reorders retrieved results by relevance"],"The right passage is never retrieved, so the model improvises. Name: retrieval miss.","Check recall at k on the retriever before blaming the model."],
+ ["Generation","The model writes the answer.",["temperature::randomness in sampling","hallucination::fluent but unsupported output","grounding::tying answers to sources","structured output::forcing a schema such as JSON"],"Confident text with no support. Name: hallucination.","Require citations and refuse when the retrieved sources don't answer."],
+ ["Tools and agents","The model calls functions and acts.",["tool calling::model requests a function call","agent::loop of reasoning and tool use","guardrail::rule that limits behaviour","prompt injection::hostile text that hijacks instructions"],"Retrieved text tells the model to ignore its rules. Name: prompt injection.","Treat retrieved content as data, not instructions, and gate sensitive tools."],
+ ["Evaluate","Measure quality before and after changes.",["eval set::fixed test questions with expected behaviour","LLM-as-judge::using a model to grade outputs","regression::quality drops after a change","human review::spot-checking by people"],"Changing the prompt with no eval, so improvements are guesses. Name: vibes-based evaluation.","We need an eval set and a regression check before changing the prompt."],
+ ["Operate","Run it reliably and affordably.",["TTFT::time to first token","token budget::cap on tokens per request","caching::reusing responses or prefixes","fallback model::cheaper or backup model for failures"],"Cost grows faster than usage. Name: runaway token spend.","Add a token budget, prompt caching and a cheaper model for easy requests."]
+]);
+
+M("Incident lifecycle","sys","What good looks like from the first alert to the lessons learned.",[
+ ["Detect","Monitoring notices something is wrong.",["alert::automatic notification","SLO burn rate::how fast the error budget is spent","MTTD::mean time to detect","paging::waking someone up"],"Customers report it before alerts do. Name: detection gap.","Our MTTD is long because we alert on averages; let's alert on burn rate."],
+ ["Triage","Decide severity and who leads.",["severity::how bad it is","incident commander::person coordinating the response","blast radius::how much is affected","war room::shared channel or call"],"Everyone investigates, nobody communicates. Name: no single owner.","I'm incident lead; Sam is comms; severity 2 for now."],
+ ["Mitigate","Stop the harm first.",["rollback::restore the previous version","feature flag::switch a feature off","failover::move to a standby","workaround::temporary avoidance"],"Debugging live while users are still failing. Name: fix before mitigate.","Mitigate first by rolling back; we'll find the cause after."],
+ ["Communicate","Keep people informed honestly.",["status page::public incident updates","impact statement::who is affected and how","ETA::estimated time to resolution","next update time::promised time of next message"],"Silence, or promising a fix time you can't keep. Name: false certainty.","I can't promise a fix time; next update at 10:30."],
+ ["Resolve and verify","Confirm recovery.",["recovery::back to normal service","verification::checking real metrics","monitoring window::watching after the fix","all-clear::formal end of the incident"],"Declaring victory while errors continue. Name: premature all-clear.","Error rate has been below SLO for 30 minutes; I'm calling it resolved."],
+ ["Learn","Write it up and improve.",["postmortem::written review","blameless::focusing on systems not people","root cause analysis::finding underlying causes","action item::a follow-up with owner and date"],"A postmortem that blames a person and produces no changes. Name: blame culture.","The contributing factors were a missing alert and an unsafe deploy path; here are three owned actions."]
+]);
+
+M("Experiment","ds","How to run and read an A/B test without fooling yourself.",[
+ ["Hypothesis","State what you expect and why.",["null hypothesis::no effect","alternative hypothesis::there is an effect","primary metric::the one metric that decides","guardrail metric::metric that must not get worse"],"Choosing the metric after seeing results. Name: p-hacking.","Primary metric and guardrails are fixed before launch."],
+ ["Design","Decide size, duration and randomisation.",["randomisation unit::what gets assigned","power::chance of detecting a real effect","MDE::smallest effect worth detecting","sample size::users needed"],"Too few users to detect anything. Name: underpowered test.","At this baseline we need about 40k users per arm to detect a 2% lift."],
+ ["Run","Collect data without interference.",["SRM::sample ratio mismatch","novelty effect::early lift that fades","peeking::checking results repeatedly and stopping early","holdout::group kept unexposed"],"Stopping the moment p dips below 0.05. Name: peeking.","We'll run for two full weeks and not decide on interim p-values."],
+ ["Analyse","Estimate the effect and its uncertainty.",["p-value::chance of data this extreme under no effect","confidence interval::plausible range for the effect","effect size::how big the difference is","multiple comparisons::many tests inflate false positives"],"Significant but trivially small. Name: statistical vs practical significance.","It's significant but the interval is 0.1% to 0.4%, so is that worth shipping?"],
+ ["Decide","Ship, iterate or stop.",["ship::roll out to everyone","iterate::refine and retest","opportunity cost::what you give up by choosing","rollout::gradual release"],"Shipping on a flat result because of sunk cost. Name: sunk-cost fallacy.","The result is flat, so I'd stop and reuse the capacity."],
+ ["Follow up","Check results persist.",["long-term holdout::group kept out for months","heterogeneous effect::effect differs by segment","replication::repeating the test","learning log::record of what was learned"],"A lift that disappears after launch. Name: novelty effect.","We'll keep a 5% holdout for a month to confirm the lift persists."]
+]);
+var NAMES={ds:'Data science',de:'Data eng.',sw:'Software',sys:'Systems',ai:'LLM / AI'};
+var KEY='map-v1',st={best:{}},app=document.getElementById('app'),cur=null,si=0,quiz=null;
+try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&o.best)st=o}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function tag(k){return '<span class="tag t-'+k+'">'+esc(NAMES[k]||k)+'</span>'}
+function home(){
+  cur=null;quiz=null;
+  var h='<h2>Pick a process</h2><div class="mlist">';
+  MAPS.forEach(function(m){var b=st.best[m.id];h+='<button class="mi2" data-id="'+m.id+'"><b>'+esc(m.title)+'</b><span class="meta">'+tag(m.k)+' &nbsp;'+m.stages.length+' stages · '+m.stages.reduce(function(a,s){return a+s.terms.length},0)+' terms</span><span class="bs">'+(b===undefined?'quiz: –':'quiz '+b+'/8')+'</span></button>'});
+  h+='</div>';app.innerHTML=h;
+  app.querySelectorAll('.mi2').forEach(function(b){b.onclick=function(){cur=MAPS.filter(function(m){return m.id===b.dataset.id})[0];si=0;view()}});
+  window.scrollTo(0,0);
+}
+function view(){
+  var m=cur,s=m.stages[si];
+  var h='<div class="actions" style="margin-top:0"><button class="btn small" id="bk">All maps</button><button class="btn small primary" id="qz">Quiz this map</button></div>'
+   +'<div class="section" style="margin-top:16px"><div class="tags">'+tag(m.k)+'</div><h2 style="margin:8px 0 4px;font-size:22px;text-transform:none;letter-spacing:0;color:var(--ink)">'+esc(m.title)+'</h2><p class="hint">'+esc(m.intro)+'</p></div>'
+   +'<div class="flow" role="tablist" aria-label="Stages">';
+  m.stages.forEach(function(x,i){h+='<div class="stg"><button class="sb" role="tab" data-i="'+i+'" aria-current="'+(i===si)+'"><span class="no">'+(i+1)+'</span>'+esc(x.name)+'</button>'+(i<m.stages.length-1?'<span class="arrow" aria-hidden="true">&rarr;</span>':'')+'</div>'});
+  h+='</div><div class="card"><div><span class="qlab">Stage '+(si+1)+' of '+m.stages.length+'</span><h2 style="margin:4px 0 0;font-size:20px;text-transform:none;letter-spacing:0;color:var(--ink)">'+esc(s.name)+'</h2></div><p class="q" style="font-size:16px">'+esc(s.what)+'</p>'
+   +'<div><span class="lab">Terms at this stage</span><div class="tl">'+s.terms.map(function(t){return '<div class="ti"><b>'+esc(t.t)+'</b><p>'+esc(t.d)+'</p></div>'}).join('')+'</div></div>'
+   +'<div class="fail"><span class="lab">Where it goes wrong</span><p>'+esc(s.fail)+'</p></div>'
+   +'<div class="say"><span class="lab">Say it like this</span><p>“'+esc(s.say)+'”</p></div></div>'
+   +'<div class="actions"><button class="btn" id="pv"'+(si===0?' disabled':'')+'>Previous</button><button class="btn primary" id="nx"'+(si===m.stages.length-1?' disabled':'')+'>Next stage</button></div>';
+  app.innerHTML=h;
+  document.getElementById('bk').onclick=home;document.getElementById('qz').onclick=startQ;
+  document.getElementById('pv').onclick=function(){si--;view()};document.getElementById('nx').onclick=function(){si++;view()};
+  app.querySelectorAll('.sb').forEach(function(b){b.onclick=function(){si=+b.dataset.i;view()}});
+  var cb=app.querySelector('.sb[aria-current="true"]');if(cb&&cb.scrollIntoView)cb.scrollIntoView({block:'nearest',inline:'center'});
+}
+function startQ(){
+  var m=cur,qs=[];
+  m.stages.forEach(function(s,i){s.terms.forEach(function(t){qs.push({kind:'t',si:i,t:t})});qs.push({kind:'f',si:i})});
+  qs=shuffle(qs).slice(0,8);quiz={qs:qs,i:0,score:0,miss:[],ans:false};ask();
+}
+function ask(){
+  var m=cur,q=quiz.qs[quiz.i];quiz.ans=false;
+  var opts=shuffle(m.stages.map(function(s,i){return {i:i,n:s.name}}));
+  var stem=q.kind==='t'?'At which stage do you meet <b class="mono">'+esc(q.t.t)+'</b>?<br><span class="hint">'+esc(q.t.d)+'</span>':'Where in the process does this problem happen?<br><span class="hint">'+esc(m.stages[q.si].fail)+'</span>';
+  q.opts=opts;
+  var h='<div class="sbar"><div class="prog"><i style="width:'+(quiz.i/quiz.qs.length*100)+'%"></i></div><span class="n">'+(quiz.i+1)+'/'+quiz.qs.length+'</span><button class="linkbtn" id="qt">Quit</button></div><div class="card"><div class="tags">'+tag(m.k)+'</div><p class="q">'+stem+'</p><div class="opts">'
+   +opts.map(function(o,j){return '<button class="opt" data-j="'+j+'"><span class="k">'+(j+1)+'</span><span>'+esc(o.n)+'</span></button>'}).join('')+'</div><div id="fb"></div></div>';
+  app.innerHTML=h;document.getElementById('qt').onclick=function(){quiz=null;view()};
+  app.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){pick(+b.dataset.j)}});window.scrollTo(0,0);
+}
+function pick(j){
+  if(!quiz||quiz.ans)return;quiz.ans=true;
+  var m=cur,q=quiz.qs[quiz.i],ok=q.opts[j].i===q.si,s=m.stages[q.si];
+  if(ok)quiz.score++;else quiz.miss.push(q);
+  app.querySelectorAll('.opt').forEach(function(b,k){b.disabled=true;if(q.opts[k].i===q.si)b.classList.add('g2');else if(k===j)b.classList.add('g0')});
+  var last=quiz.i===quiz.qs.length-1;
+  document.getElementById('fb').innerHTML='<div class="fb"><div><span class="lbl '+(ok?'g2':'g0')+'">'+(ok?'Correct':'Not quite')+'</span></div><p style="margin:0">'+(q.kind==='t'?'<b class="mono">'+esc(q.t.t)+'</b> belongs to <b>'+esc(s.name)+'</b>. '+esc(q.t.d)+'.':'This is a <b>'+esc(s.name)+'</b> problem.')+'</p><p class="reuse" style="margin:0;font-style:italic">“'+esc(s.say)+'”</p><div class="actions"><button class="btn primary" id="nq">'+(last?'See result':'Next')+'</button></div></div>';
+  var nq=document.getElementById('nq');nq.onclick=function(){quiz.i++;last?fin():ask()};nq.focus();
+}
+function fin(){
+  var m=cur,n=quiz.qs.length,sc=quiz.score;
+  if(st.best[m.id]===undefined||sc>st.best[m.id])st.best[m.id]=sc;save();
+  var h='<div class="card"><p class="big2">'+sc+'/'+n+'</p><p class="q">'+(sc===n?'You can place every term.':sc>=6?'Good. Revisit the stages you missed.':'Walk the map once more, then retry.')+'</p>';
+  if(quiz.miss.length){h+='<div><h2>To review</h2><div class="tl">'+quiz.miss.map(function(q){var s=m.stages[q.si];return '<div class="ti"><b>'+esc(q.kind==='t'?q.t.t:'Problem')+'</b><p>'+esc(s.name)+(q.kind==='t'?' · '+esc(q.t.d):' · '+esc(s.fail))+'</p></div>'}).join('')+'</div></div>'}
+  h+='</div><div class="actions"><button class="btn" id="mp">Back to map</button><button class="btn primary" id="rt">Retry</button></div>';
+  app.innerHTML=h;document.getElementById('mp').onclick=function(){quiz=null;view()};document.getElementById('rt').onclick=startQ;window.scrollTo(0,0);
+}
+document.addEventListener('keydown',function(e){if(quiz&&!quiz.ans&&e.key>='1'&&e.key<='6')pick(+e.key-1)});
+home();
+</script>
+
+</body></html>
